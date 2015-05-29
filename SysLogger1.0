@@ -2,6 +2,7 @@
 #compiled by: MrAmbig
 #Script Type:Powercli 5.8
 #Description-set syslog servers and set syslog settings.
+#ambitech.blogspot.in/2015/04/set-multiple-syslog-servers-on-multiple.html?
 ########################################################
 #connect to vcenter
 connect-viserver
