@@ -16,5 +16,4 @@ get-vmhost | Set-VmHostAdvancedConfiguration -Name Syslog.loggers.fdm.rotate -Va
 get-vmhost | Set-VmHostAdvancedConfiguration -Name Syslog.loggers.vpxa.rotate -Value 20 -Confirm:$false
 get-vmhost | Set-VmHostAdvancedConfiguration -Name Syslog.global.defaultRotate -Value 20 -Confirm:$false
 get-vmhost | Set-VmHostAdvancedConfiguration -Name Syslog.global.defaultSize -Value 10240 -Confirm:$false
-get-vmhost | Set-VmHostAdvancedConfiguration -Name Syslog.global.logHost -Value $SyslogHost -Confirm:$false
 get-vmhost | Set-VMHostFirewallException -Name "syslog" -enabled:$true
