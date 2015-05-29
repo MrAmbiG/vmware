@@ -1,0 +1,21 @@
+#syslogger1.1
+#compiled by: MrAmbig
+#Script Type:Powercli 5.5+(using advanced setting cmdlts instead of vmhostadvancedconfiguration except the firewall setting)
+#Description-set syslog servers and set syslog settings.
+#ambitech.blogspot.in/2015/04/set-multiple-syslog-servers-on-multiple.html?
+########################################################
+#connect to vcenter
+connect-viserver
+
+#set the syslog servers
+Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.global.logHost | Set-AdvancedSetting –Value "1.1.1.1,8.8.8.8"
+Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.loggers.hostd.rotate | Set-AdvancedSetting –Value 80
+Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.loggers.hostd.size | Set-AdvancedSetting –Value 10240
+Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.loggers.vmkernel.rotate | Set-AdvancedSetting –Value 80
+Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.loggers.vmkernel.size | Set-AdvancedSetting –Value 10240
+Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.loggers.fdm.rotate | Set-AdvancedSetting –Value 80
+Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.loggers.vpxa.rotate | Set-AdvancedSetting –Value 20
+Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.global.defaultRotate | Set-AdvancedSetting –Value 20
+Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.global.defaultSize | Set-AdvancedSetting –Value 10240
+Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.global.logHost | Set-AdvancedSetting –Value
+get-vmhost | Set-VMHostFirewallException -Name "syslog" -enabled:$true
