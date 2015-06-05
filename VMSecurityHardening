@@ -1,6 +1,6 @@
 #Security Hardening for VMs /begin
 #Uses the new recommended method to set the security settings for the VMs
-#MrAmbiG1 / ambitech.blogspot.com
+#MrAmbiG1 / http://ambitech.blogspot.in/2015/06/vm-security-settings-hardening-for.html
 
 $vms = get-vm
 foreach($vm in $vms)
