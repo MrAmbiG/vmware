@@ -9,13 +9,14 @@
 connect-viserver
 
 #set the syslog servers
-Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.global.logHost | Set-AdvancedSetting –Value "1.1.1.1,8.8.8.8"
-Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.loggers.hostd.rotate | Set-AdvancedSetting –Value 80
-Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.loggers.hostd.size | Set-AdvancedSetting –Value 10240
-Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.loggers.vmkernel.rotate | Set-AdvancedSetting –Value 80
-Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.loggers.vmkernel.size | Set-AdvancedSetting –Value 10240
-Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.loggers.fdm.rotate | Set-AdvancedSetting –Value 80
-Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.loggers.vpxa.rotate | Set-AdvancedSetting –Value 20
-Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.global.defaultRotate | Set-AdvancedSetting –Value 20
-Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.global.defaultSize | Set-AdvancedSetting –Value 10240
-get-vmhost | Set-VMHostFirewallException -Name "syslog" -enabled:$true
+Get-VMHost | Get-AdvancedSetting –Name Syslog.global.logHost | Set-AdvancedSetting –Value "1.1.1.1,8.8.8.8"
+Get-VMHost | Get-AdvancedSetting –Name Syslog.loggers.hostd.rotate | Set-AdvancedSetting –Value 80
+Get-VMHost | Get-AdvancedSetting –Name Syslog.loggers.hostd.size | Set-AdvancedSetting –Value 10240
+Get-VMHost | Get-AdvancedSetting –Name Syslog.loggers.vmkernel.rotate | Set-AdvancedSetting –Value 80
+Get-VMHost | Get-AdvancedSetting –Name Syslog.loggers.vmkernel.size | Set-AdvancedSetting –Value 10240
+Get-VMHost | Get-AdvancedSetting –Name Syslog.loggers.fdm.rotate | Set-AdvancedSetting –Value 80
+Get-VMHost | Get-AdvancedSetting –Name Syslog.loggers.vpxa.rotate | Set-AdvancedSetting –Value 20
+Get-VMHost | Get-AdvancedSetting –Name Syslog.global.defaultRotate | Set-AdvancedSetting –Value 20
+Get-VMHost | Get-AdvancedSetting –Name Syslog.global.defaultSize | Set-AdvancedSetting –Value 10240
+Get-VMHost | Get-AdvancedSetting –Name Syslog.global.logHost | Set-AdvancedSetting –Value
+Get-VMHost | Set-VMHostFirewallException -Name "syslog" -enabled:$true
