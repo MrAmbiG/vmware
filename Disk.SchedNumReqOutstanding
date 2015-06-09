@@ -8,6 +8,7 @@
     You have to run the esxcli storage core device set -d naa.******* -O 256
 	against each naa id after listing them all on a host. It eases the same process
 	by automating certain aspects of the process.
+	Plans to use plink.exe and powercli in the next release.wish me luck.
 .NOTES
     File Name      : Disk.SchedNumReqOutstanding.txt
     Author         : ambig1;twitter/MrAmbiG1 (jean-paul_blanc@silogix-fr.com)
