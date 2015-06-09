@@ -17,5 +17,4 @@ Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.loggers.fdm.rotate | Set
 Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.loggers.vpxa.rotate | Set-AdvancedSetting –Value 20
 Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.global.defaultRotate | Set-AdvancedSetting –Value 20
 Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.global.defaultSize | Set-AdvancedSetting –Value 10240
-Get-AdvancedSetting -Entity (Get-VMHost) –Name Syslog.global.logHost | Set-AdvancedSetting –Value
 get-vmhost | Set-VMHostFirewallException -Name "syslog" -enabled:$true
