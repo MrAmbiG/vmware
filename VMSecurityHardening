@@ -2,39 +2,33 @@
 #Uses the new recommended method to set the security settings for the VMs
 #MrAmbiG1 / http://ambitech.blogspot.in/2015/06/vm-security-settings-hardening-for.html
 
-$vms = get-vm
-foreach($vm in $vms)
-{
-Write-Host -ForegroundColor yellow "Performing Security Harderning on $($vm.name)"
 
-Get-AdvancedSetting -Name "isolation.tools.diskWiper.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-AdvancedSetting -Name "isolation.tools.diskShrink.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-AdvancedSetting -Name "RemoteDisplay.maxConnections" | Set-AdvancedSetting -Value "1" -Confirm:$false
-Get-AdvancedSetting -Name "isolation.tools.copy.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-AdvancedSetting -Name "isolation.tools.paste.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-AdvancedSetting -Name "solation.tools.setGUIOptions.enable" | Set-AdvancedSetting -Value "false" -Confirm:$false
-Get-AdvancedSetting -Name "isolation.tools.dnd.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-AdvancedSetting -Name "isolation.device.connectable.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-AdvancedSetting -Name "isolation.device.edit.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-AdvancedSetting -Name "vmci0.unrestricted" | Set-AdvancedSetting -Value "false" -Confirm:$false
-Get-AdvancedSetting -Name "log.rotateSize" | Set-AdvancedSetting -Value "1000000" -Confirm:$false
-Get-AdvancedSetting -Name "log.keepOld" | Set-AdvancedSetting -Value "10" -Confirm:$false
-Get-AdvancedSetting -Name "tools.setInfo.sizeLimit" | Set-AdvancedSetting -Value "1048576" -Confirm:$false
-Get-AdvancedSetting -Name "guest.command.enabled" | Set-AdvancedSetting -Value "false" -Confirm:$false
-Get-AdvancedSetting -Name "tools.guestlib.enableHostInfo" | Set-AdvancedSetting -Value "false" -Confirm:$false
-Get-AdvancedSetting -Name "isolation.tools.unity.push.update.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-AdvancedSetting -Name "isolation.tools.ghi.launchmenu.change" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-AdvancedSetting -Name "isolation.tools.memSchedFakeSampleStats.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-AdvancedSetting -Name "floppyX.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
-Get-AdvancedSetting -Name "SerialX.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
-Get-AdvancedSetting -Name "parallelX.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
-Get-AdvancedSetting -Name "usb.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
-Get-AdvancedSetting -Name "ideX:Y.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.tools.diskWiper.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.tools.diskShrink.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "RemoteDisplay.maxConnections" | Set-AdvancedSetting -Value "1" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.tools.copy.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.tools.paste.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "solation.tools.setGUIOptions.enable" | Set-AdvancedSetting -Value "false" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.tools.dnd.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.device.connectable.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.device.edit.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "vmci0.unrestricted" | Set-AdvancedSetting -Value "false" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "log.rotateSize" | Set-AdvancedSetting -Value "1000000" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "log.keepOld" | Set-AdvancedSetting -Value "10" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "tools.setInfo.sizeLimit" | Set-AdvancedSetting -Value "1048576" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "guest.command.enabled" | Set-AdvancedSetting -Value "false" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "tools.guestlib.enableHostInfo" | Set-AdvancedSetting -Value "false" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.tools.unity.push.update.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.tools.ghi.launchmenu.change" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.tools.memSchedFakeSampleStats.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "floppyX.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "SerialX.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "parallelX.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "usb.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "ideX:Y.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
 
 
-Write-Host -ForegroundColor green "Security Harderning on $($vm.name) is Complete"
-}
 
 #http://www.stigviewer.com/stig/vmware_esxi_version_5_virtual_machine/2013-12-18/
 #https://toti3.wordpress.com/tag/get-advancedsetting/
-#Security hardening for VMs is /complete
+#Security hardening for VMs is complete
