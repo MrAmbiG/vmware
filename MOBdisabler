@@ -49,5 +49,7 @@ ForEach ($VMHost in $VMhosts)
 {
 $PSScriptRoot;\plink.exe -ssh $VMHost -P 22 -l $root -pw $rootPW
 echo | y
+Write-Host "Disable mob on $VMHost" -ForegroundColor Yellow
 $PSScriptRoot;\plink.exe -ssh $VMHost -P 22 -l $root -pw $rootPW $mob
+Write-Host "Disabled mob on $VMHost" -ForegroundColor Green
 }
