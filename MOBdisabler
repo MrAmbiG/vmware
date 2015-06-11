@@ -1,0 +1,53 @@
+<#
+.SYNOPSIS
+    This uses the method of getting plink and setting the working directory as the resource directyr by alan from
+    http://www.virtu-al.net/2013/01/07/ssh-powershell-tricks-with-plink-exe/
+
+.DESCRIPTION
+    A detailed description of the function or script. This keyword can be
+    used only once in each topic.
+.NOTES
+    File Name      : MOBdisabler.ps1
+    Author         : gajendra d ambi
+    Prerequisite   : PowerShell V3 and powercli 5.x over Vista and upper.
+    Copyright 2015 - None
+.LINK
+    Script posted over:
+    http://ambitech.blogspot.in
+#>
+
+
+$PlinkLocation = $PSScriptRoot + "\Plink.exe"
+If (-not (Test-Path $PlinkLocation)){
+   Write-Host "Plink.exe not found, trying to download..."
+   $WC = new-object net.webclient
+   $WC.DownloadFile("http://the.earth.li/~sgtatham/putty/latest/x86/plink.exe",$PlinkLocation)
+   If (-not (Test-Path $PlinkLocation)){
+      Write-Host "Unable to download plink.exe, please download from the following URL and add it to the same folder as this script: http://the.earth.li/~sgtatham/putty/latest/x86/plink.exe"
+      Exit
+   } Else {
+      $PlinkEXE = Get-ChildItem $PlinkLocation
+      If ($PlinkEXE.Length -gt 0) {
+         Write-Host "Plink.exe downloaded, continuing script"
+      } Else {
+         Write-Host "Unable to download plink.exe, please download from the following URL and add it to the same folder as this script: http://the.earth.li/~sgtatham/putty/latest/x86/plink.exe"
+         Exit
+      }
+   }  
+}
+
+#connect to vcenter server
+connect-viserver
+
+#credentials for the hosts
+$VMHosts = Get-VMhost
+$root = Read-Host "type the username for the hosts"
+$rootPW = Read-Host "type the password for the hosts"
+$mob = ‘vim-cmd proxysvc/remove_service "/mob" "httpsWithRedirect"‘
+
+ForEach ($VMHost in $VMhosts)
+{
+$PSScriptRoot;\plink.exe -ssh $VMHost -P 22 -l $root -pw $rootPW
+echo | y
+$PSScriptRoot;\plink.exe -ssh $VMHost -P 22 -l $root -pw $rootPW $mob
+}
