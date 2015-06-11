@@ -45,11 +45,18 @@ $root = Read-Host "type the username for the hosts"
 $rootPW = Read-Host "type the password for the hosts"
 $mob = ‘vim-cmd proxysvc/remove_service "/mob" "httpsWithRedirect"‘
 
+#enable SSH on all hosts
+Write-Host "Enabling SSH on all hosts"
+Get-VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Start-VMHostService
+
 ForEach ($VMHost in $VMhosts)
 {
-$PSScriptRoot;\plink.exe -ssh $VMHost -P 22 -l $root -pw $rootPW
-echo | y
+$PSScriptRoot;\plink.exe -ssh $VMHost -P 22 -l $root -pw $rootPW | Write-Host "y"
 Write-Host "Disable mob on $VMHost" -ForegroundColor Yellow
 $PSScriptRoot;\plink.exe -ssh $VMHost -P 22 -l $root -pw $rootPW $mob
 Write-Host "Disabled mob on $VMHost" -ForegroundColor Green
 }
+
+#Disable SSH on all hosts
+Write-Host "Disabling SSH on all hosts"
+Get-VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Stop-VMHostService
