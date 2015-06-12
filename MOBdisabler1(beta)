@@ -17,7 +17,10 @@
 #>
 
 
-$PlinkLocation = $PSScriptRoot + "\Plink.exe"
+
+
+$myDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$PlinkLocation = $myDir + "\Plink.exe"
 If (-not (Test-Path $PlinkLocation)){
    Write-Host "Plink.exe not found, trying to download..."
    $WC = new-object net.webclient
@@ -36,27 +39,25 @@ If (-not (Test-Path $PlinkLocation)){
    }  
 }
 
-#connect to vcenter server
-connect-viserver
+Copy-Item $PSScriptRoot\plink.exe C:\
 
-#credentials for the hosts
-$VMHosts = Get-VMhost
-$root = Read-Host "type the username for the hosts"
-$rootPW = Read-Host "type the password for the hosts"
-$mob = ‘vim-cmd proxysvc/remove_service "/mob" "httpsWithRedirect"‘
+# Use SSH / plink to configure host with some additional script
+$VMHost = "1.1.1.1"
+$pass = ""
 
-#enable SSH on all hosts
-Write-Host "Enabling SSH on all hosts"
-Get-VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Start-VMHostService
+$cmd0 = "touch /tmp/mob.txt"
+$cmd1 = "echo 'vim-cmd proxysvc/remove_service mob httpsWithRedirect' >> /tmp/mob.txt"
 
-ForEach ($VMHost in $VMhosts)
-{
-$PSScriptRoot;\plink.exe -ssh $VMHost -P 22 -l $root -pw $rootPW | Write-Host "y"
-Write-Host "Disable mob on $VMHost" -ForegroundColor Yellow
-$PSScriptRoot;\plink.exe -ssh $VMHost -P 22 -l $root -pw $rootPW $mob
-Write-Host "Disabled mob on $VMHost" -ForegroundColor Green
-}
+#now add quotes to the word mob and httpsWithRedirect using sed
+$cmd2 = echo "sed 's/\bmob\b/"mob"/' -i /tmp/mob.txt"
+$cmd3 = echo "sed 's/\bhttpsWithRedirect\b/"httpsWithRedirect"/' -i /tmp/mob.txt"
+$cmd4 = "sh /tmp/mob.txt"
 
-#Disable SSH on all hosts
-Write-Host "Disabling SSH on all hosts"
-Get-VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Stop-VMHostService
+echo Y | F:\folder\plink.exe -ssh $hostIP -l root -pw gajuambi
+C:\plink.exe -ssh -v $VMHost -l root -pw $pass $cmd0
+C:\plink.exe -ssh -v $VMHost -l root -pw $pass $cmd1
+C:\plink.exe -ssh -v $VMHost -l root -pw $pass $cmd2
+C:\plink.exe -ssh -v $VMHost -l root -pw $pass $cmd3
+C:\plink.exe -ssh -v $VMHost -l root -pw $pass $cmd4
+
+Remove-Item C:\plink.exe
