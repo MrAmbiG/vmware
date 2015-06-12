@@ -8,7 +8,7 @@ Get-VM | Get-AdvancedSetting -Name "isolation.tools.diskShrink.disable" | Set-Ad
 Get-VM | Get-AdvancedSetting -Name "RemoteDisplay.maxConnections" | Set-AdvancedSetting -Value "1" -Confirm:$false
 Get-VM | Get-AdvancedSetting -Name "isolation.tools.copy.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
 Get-VM | Get-AdvancedSetting -Name "isolation.tools.paste.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "solation.tools.setGUIOptions.enable" | Set-AdvancedSetting -Value "false" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.tools.setGUIOptions.enable" | Set-AdvancedSetting -Value "false" -Confirm:$false
 Get-VM | Get-AdvancedSetting -Name "isolation.tools.dnd.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
 Get-VM | Get-AdvancedSetting -Name "isolation.device.connectable.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
 Get-VM | Get-AdvancedSetting -Name "isolation.device.edit.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
