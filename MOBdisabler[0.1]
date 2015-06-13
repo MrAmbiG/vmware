@@ -39,25 +39,23 @@ If (-not (Test-Path $PlinkLocation)){
    }  
 }
 
-Copy-Item $PSScriptRoot\plink.exe C:\
+#Copy-Item $PSScriptRoot\plink.exe C:\
 
 # Use SSH / plink to configure host with some additional script
-$VMHost = "1.1.1.1"
-$pass = ""
+$VMHost = "192.168.2.197"
+$pass = "p@55"
+$user = "root"
 
-$cmd0 = "touch /tmp/mob.txt"
-$cmd1 = "echo 'vim-cmd proxysvc/remove_service mob httpsWithRedirect' >> /tmp/mob.txt"
+$cmd0 = "echo 'vmware-vim-cmd proxysvc/remove_service */mob* *httpsWithRedirect*' >> /tmp/mob.txt"
+$cmd1 = "sed -i 's/*/\""/g' /tmp/mob.txt"
+#$mob = "sh /tmp/mob.txt"
+$clean = "rm -rf /tmp/mob.txt"
 
-#now add quotes to the word mob and httpsWithRedirect using sed
-$cmd2 = echo "sed 's/\bmob\b/"mob"/' -i /tmp/mob.txt"
-$cmd3 = echo "sed 's/\bhttpsWithRedirect\b/"httpsWithRedirect"/' -i /tmp/mob.txt"
-$cmd4 = "sh /tmp/mob.txt"
+echo Y | C:\folder\plink.exe -ssh $VMHost -l root -pw gajuambi
 
-echo Y | F:\folder\plink.exe -ssh $hostIP -l root -pw gajuambi
-C:\plink.exe -ssh -v $VMHost -l root -pw $pass $cmd0
-C:\plink.exe -ssh -v $VMHost -l root -pw $pass $cmd1
-C:\plink.exe -ssh -v $VMHost -l root -pw $pass $cmd2
-C:\plink.exe -ssh -v $VMHost -l root -pw $pass $cmd3
-C:\plink.exe -ssh -v $VMHost -l root -pw $pass $cmd4
+C:\plink.exe -ssh -v $VMHost -l $user -pw $pass $cmd0
+C:\plink.exe -ssh -v $VMHost -l $user -pw $pass $cmd1
+C:\plink.exe -ssh -v $VMHost -l $user -pw $pass $mob
+C:\plink.exe -ssh -v $VMHost -l $user -pw $pass $clean
 
-Remove-Item C:\plink.exe
+#Remove-Item C:\plink.exe
