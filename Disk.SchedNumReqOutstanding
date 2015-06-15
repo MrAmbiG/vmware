@@ -21,7 +21,7 @@
 #>
 
 #list the naa numbers and then export/append to a file
-esxcli storage core path list | grep -i "Device: mpx" | cut -c 11-99 >> /opt/naa.txt
+esxcli storage core path list | grep -i "Device: mpx" | cut -c 12-99 >> /opt/naa.txt
 
 #set the Disk.SchedNumReqOutstanding to 256
 esxcli storage core device set -d "$(< /opt/naa.txt)" -O 256
