@@ -32,5 +32,7 @@ sh /tmp/naa.txt
 #check the resuls
 esxcli storage core device list -d "$(< /tmp/naa.txt)" | grep -i "outstanding"
 
+#If all the naa IDs have the default value then run the contents of the /tmp/naa.txt on the host manually on hosts of the cluster.
+
 #remove the naa.txt
 rm /opt/naa.txt
