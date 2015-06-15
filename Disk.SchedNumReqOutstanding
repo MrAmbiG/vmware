@@ -26,5 +26,11 @@ esxcli storage core path list | grep -i "Device: mpx" | cut -c 11-99 >> /opt/naa
 #set the Disk.SchedNumReqOutstanding to 256
 esxcli storage core device set -d "$(< /opt/naa.txt)" -O 256
 
+#run it in the shell
+sh /tmp/naa.txt
+
+#check the resuls
+esxcli storage core device list -d "$(< /tmp/naa.txt)" | grep -i "outstanding"
+
 #remove the naa.txt
 rm /opt/naa.txt
