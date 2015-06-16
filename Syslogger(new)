@@ -1,3 +1,19 @@
+
+<#
+.SYNOPSIS
+    This powercli script should set many of the commonly used syslog settings as per the industry stanards or suggested by VMware.
+.DESCRIPTION
+    This script uses the newer cmdlts of powercli to call the advanced settings and set it.
+.NOTES
+    File Name      : Syslogger(new).ps1
+    Author         : gajendra d ambi
+    Prerequisite   : PowerShell V3, Powercli 5.5+ over Vista and upper.
+    Copyright     - None
+.LINK
+    Script posted over:
+    ambitech.blogspot.in/2015/04/set-multiple-syslog-servers-on-multiple.html?
+#>
+
 #connect to vcenter
 connect-viserver
 
