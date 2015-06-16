@@ -1,0 +1,15 @@
+#connect to vcenter
+connect-viserver
+
+$Syslogs = "1.1.1.1,2.2.2.2"
+
+get-vmhost | Get-AdvancedSetting -Name Syslog.loggers.hostd.rotate | Set-AdvancedSetting -Value 80 -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name Syslog.loggers.hostd.size | Set-AdvancedSetting -Value 10240 -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name Syslog.loggers.vmkernel.rotate | Set-AdvancedSetting -Value 80 -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name Syslog.loggers.vmkernel.size | Set-AdvancedSetting -Value 10240 -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name Syslog.loggers.fdm.rotate | Set-AdvancedSetting -Value 80 -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name Syslog.loggers.vpxa.rotate | Set-AdvancedSetting -Value 20 -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name Syslog.global.defaultRotate | Set-AdvancedSetting -Value 20 -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name Syslog.global.defaultSize | Set-AdvancedSetting -Value 10240 -Confirm:$false
+#get-vmhost | Get-AdvancedSetting -Name Syslog.global.logHost | Set-AdvancedSetting -Value $Syslogs -Confirm:$false
+get-vmhost | Set-VMHostFirewallException -Name "syslog" -enabled:$true
