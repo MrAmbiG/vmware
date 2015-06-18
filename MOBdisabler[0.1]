@@ -1,26 +1,27 @@
 <#
 .SYNOPSIS
-    This uses the method of getting plink and setting the working directory as the resource directyr by alan from
-    http://www.virtu-al.net/2013/01/07/ssh-powershell-tricks-with-plink-exe/
+    Disable mob on esxi hosts.
 
 .DESCRIPTION
-    A detailed description of the function or script. This keyword can be
-    used only once in each topic.
+    It will create a shell script on the host and then delete that script from the host once the script is run.
+    Add the line below to the kickstart file when you are doing an automated install of ESXi hosts.
+    vim-cmd proxysvc/remove_service "/mob" "httpsWithRedirect"
+    Using alan's script from http://www.virtu-al.net/2013/01/07/ssh-powershell-tricks-with-plink-exe/ to get/use the plink.
+    JUst right click and run the script (from powershell) or drag and drop it on powercli.
+
 .NOTES
     File Name      : MOBdisabler.ps1
     Author         : gajendra d ambi
-    Prerequisite   : PowerShell V3 and powercli 5.x over Vista and upper.
-    Copyright 2015 - None
+    Prerequisite   : PowerShell V3, powercli 5.x over Vista and upper.
+    Copyright      - None
+
 .LINK
     Script posted over:
     http://ambitech.blogspot.in/2015/06/disable-mob-security-hardening-for.html
 #>
 
 
-
-
-$myDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$PlinkLocation = $myDir + "\Plink.exe"
+$PlinkLocation = $PSScriptRoot + "\Plink.exe"
 If (-not (Test-Path $PlinkLocation)){
    Write-Host "Plink.exe not found, trying to download..."
    $WC = new-object net.webclient
@@ -39,23 +40,52 @@ If (-not (Test-Path $PlinkLocation)){
    }  
 }
 
-#Copy-Item $PSScriptRoot\plink.exe C:\
 
-# Use SSH / plink to configure host with some additional script
-$VMHost = "192.168.2.197"
-$pass = "p@55"
-$user = "root"
+#If using in powershell then add snapins below
+Add-PSSnapin VMware.VimAutomation.Core -ea "SilentlyContinue"
 
-$cmd0 = "echo 'vmware-vim-cmd proxysvc/remove_service */mob* *httpsWithRedirect*' >> /tmp/mob.txt"
+#Connect to the vcenter server
+connect-viserver
+
+#copy plink to c:\ for now
+Copy-Item $PSScriptRoot\plink.exe C:\
+
+#Variables
+$pass = Read-Host "Type the esxi password"
+$user = Read-Host "Type the esxi username which is usually root"
+$VMHosts = Get-VMHost
+
+##create a shell script on the esxi host
+#create a text file on the host with the script
+$cmd0 = "echo 'vim-cmd proxysvc/remove_service */mob* *httpsWithRedirect*' >> /tmp/mob.txt"
 $cmd1 = "sed -i 's/*/\""/g' /tmp/mob.txt"
-#$mob = "sh /tmp/mob.txt"
-$clean = "rm -rf /tmp/mob.txt"
+#convert the text to a shell script by just renaming
+$rename = "mv /tmp/mob.txt /tmp/mob.sh"
+#make the shell script executibel
+$chmod = "chmod +x /tmp/mob.sh"
+#run the mob shell script
+$mob = "/tmp/mob.sh"
+#remove the shell script
+$clean = "rm -rf /tmp/mob.sh"
 
-echo Y | C:\folder\plink.exe -ssh $VMHost -l root -pw gajuambi
+#Enable SSH on all hosts
+Get-VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Start-VMHostService
 
-C:\plink.exe -ssh -v $VMHost -l $user -pw $pass $cmd0
-C:\plink.exe -ssh -v $VMHost -l $user -pw $pass $cmd1
-C:\plink.exe -ssh -v $VMHost -l $user -pw $pass $mob
-C:\plink.exe -ssh -v $VMHost -l $user -pw $pass $clean
+ForEach ($VMHost in $VMHosts)
+{
+echo y | C:\plink.exe -ssh $user@$VMHost -pw $pass "exit"
+C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass $cmd0
+C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass $cmd1
+C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass $rename
+C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass $chmod
+C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass $mob
+C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass $clean
+}
 
-#Remove-Item C:\plink.exe
+#Disable SSH on all hosts
+Get-VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Stop-VMHostService
+
+#delete plink from c:\
+Remove-Item C:\plink.exe
+
+#End Of Script
