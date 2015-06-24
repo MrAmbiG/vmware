@@ -11,9 +11,9 @@
 	Plans to use plink.exe and powercli in the next release.wish me luck.
 .NOTES
     File Name      : Disk.SchedNumReqOutstanding.txt
-    Author         : ambig1;twitter/MrAmbiG1 (jean-paul_blanc@silogix-fr.com)
+    Author         : ambig1;twitter/MrAmbiG1
     Prerequisite   : esxi shell
-    Copyright      - None/Free
+    Copyright      - None
 .LINK
     Script posted over: 
     
