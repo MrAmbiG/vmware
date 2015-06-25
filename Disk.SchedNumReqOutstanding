@@ -33,6 +33,9 @@ $esxcli.storage.core.device.set($null, $device.Device, $null, $null, $null, $nul
 }
 
 #QA of Disk.SchedNumReqOutstanding of xtremIO to 256
+#connect to the vcenter server
+connect-viserver
+
 $VMHosts = get-vmhost
 foreach ($VMHost in $VMHosts)
 {
