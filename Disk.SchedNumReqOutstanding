@@ -1,7 +1,7 @@
 
 <#
 .SYNOPSIS
-    set and set the Disk.SchedNumReqOutstanding of xtremIO to 256
+    set and test the Disk.SchedNumReqOutstanding of xtremIO to 256
 .DESCRIPTION
     Disk.SchedNumReqOutstanding is the maximum number of I/Os one VM can issue all the way down to the LUN
     when there is more than one VM pushing I/O to the same LUN.
