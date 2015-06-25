@@ -8,7 +8,7 @@
 .NOTES
     File Name      : Disk.SchedNumReqOutstanding.ps1
     Author         : davidring
-    Prerequisite   : PowerShell V2 over Vista and upper.
+    Prerequisite   : PowerCli 5.x over Vista and upper.
     Copyright      - 
 .LINK
     Script posted over:
