@@ -25,7 +25,7 @@ $esxcli = get-vmhost $VMHost | Get-EsxCli
 $devices = $esxcli.storage.core.device.list()
 foreach ($device in $devices)
 {
-if ($device.Model -like "Xtrem")
+if ($device.Model -like "XtremApp")
 {
 $esxcli.storage.core.device.set($null, $device.Device, $null, $null, $null, $null, $null, 256, $null)
 }
