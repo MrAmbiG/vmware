@@ -5,6 +5,7 @@
 .DESCRIPTION
     Disk.SchedNumReqOutstanding is the maximum number of I/Os one VM can issue all the way down to the LUN
     when there is more than one VM pushing I/O to the same LUN.
+    Please neglect any errors while you are run this if the script is not exiting abruptly
 .NOTES
     File Name      : Disk.SchedNumReqOutstanding.ps1
     Author         : davidring
@@ -21,6 +22,7 @@
 $VMHosts = get-vmhost
 foreach ($VMHost in $VMHosts)
 {
+Write-Host "setting values for $VMHost"
 $esxcli = get-vmhost $VMHost | Get-EsxCli
 $devices = $esxcli.storage.core.device.list()
 foreach ($device in $devices)
@@ -32,6 +34,7 @@ $esxcli.storage.core.device.set($null, $device.Device, $null, $null, $null, $nul
 }
 }
 
+#The part below needs a bit fixing to get it to work.
 #QA of Disk.SchedNumReqOutstanding of xtremIO to 256
 #connect to the vcenter server
 connect-viserver
