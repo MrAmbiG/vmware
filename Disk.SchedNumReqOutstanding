@@ -5,7 +5,7 @@
 .DESCRIPTION
     Disk.SchedNumReqOutstanding is the maximum number of I/Os one VM can issue all the way down to the LUN
     when there is more than one VM pushing I/O to the same LUN.
-    Please neglect any errors while you are run this if the script is not exiting abruptly
+    Please neglect any errors while you are run this if the script is not exiting abruptly after the error
 .NOTES
     File Name      : Disk.SchedNumReqOutstanding.ps1
     Author         : davidring
