@@ -34,7 +34,7 @@ $esxcli.storage.core.device.set($null, $device.Device, $null, $null, $null, $nul
 }
 }
 
-#The part below needs a bit fixing to get it to work.
+#The part below needs a bit fixing to get it to work. Delete the below portion to avoid errors till it get fixed.
 #QA of Disk.SchedNumReqOutstanding of xtremIO to 256
 #connect to the vcenter server
 connect-viserver
