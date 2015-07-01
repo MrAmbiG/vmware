@@ -8,7 +8,7 @@
 .NOTES
     File Name      : AddLun[beta].ps1
     Author         : gajendra d ambi
-    Prerequisite   : PowerShell V2 over Vista and upper.
+    Prerequisite   : Powercli 5.x, PowerShell V2 over Vista and upper.
     Copyright      - None
 .LINK
     Script posted over:
