@@ -1,0 +1,172 @@
+<#
+.SYNOPSIS
+    configure settings for your datacenter as a whole or one setting at a time.
+.DESCRIPTION
+    A detailed description of the function or script. This keyword can be
+    used only once in each topic.
+.NOTES
+    File Name      : VIsettings(beta).ps1
+    Author         : gajendra d ambi
+    Prerequisite   : Powercli 5.x, PowerShell V2 over Vista and upper.
+    Copyright      - None
+.LINK
+    Script posted over:
+    https://github.com/gajuambi/vmware
+#>
+
+#connect to vcenter
+
+connect-viserver
+$VMHosts = Get-VMHost | sort
+#populate multiple value to the variable below by separating them with commas
+$Syslogs = ""
+$ntp = ""
+$dns = ""
+$domain_name = ""
+$string = ""
+$communities = ""
+$snmplocation = ""
+$DumpTarget = ""
+$TcpipHeapSize = ""
+$TcpipHeapMax = ""
+$MaxVolumes = ""
+$HeartbeatFrequency = ""
+$HeartbeatTimeout = ""
+$HeartbeatDelta = ""
+$HeartbeatMaxFailures = ""
+
+#start syslog function
+Function syslog {
+get-vmhost | Get-AdvancedSetting -Name Syslog.loggers.hostd.rotate | Set-AdvancedSetting -Value 80 -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name Syslog.loggers.hostd.size | Set-AdvancedSetting -Value 10240 -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name Syslog.loggers.vmkernel.rotate | Set-AdvancedSetting -Value 80 -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name Syslog.loggers.vmkernel.size | Set-AdvancedSetting -Value 10240 -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name Syslog.loggers.fdm.rotate | Set-AdvancedSetting -Value 80 -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name Syslog.loggers.vpxa.rotate | Set-AdvancedSetting -Value 20 -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name Syslog.global.defaultRotate | Set-AdvancedSetting -Value 20 -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name Syslog.global.defaultSize | Set-AdvancedSetting -Value 10240 -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name Syslog.global.logHost | Set-AdvancedSetting -Value $Syslogs -Confirm:$false
+get-vmhost | Get-VMHostFirewallException -Name "syslog" | Set-VMHostFirewallException -enabled:$true
+} #end syslog function
+
+#start ntp function
+Function ntp {
+get-vmhost | add-vmhostntpserver -ntpserver $ntp
+} #end ntp function
+
+#start dns function
+Function dns {
+get-vmhost | Get-VMHostNetwork | Set-VMHostNetwork -DNSAddress $dns
+} #end ntp function
+
+#start domain_name function
+Function domain_name {
+get-vmhost | Get-VMHostNetwork | Set-VMHostNetwork -DomainName $domain_name
+} #end function
+
+#start firewall function
+Function firewall {
+Get-VmhostFirewallException -VMhost $VMhost -Name "netDump" | Set-VMHostFirewallException -enabled:$true
+Get-VmhostFirewallException -VMhost $VMhost -Name "syslog" | Set-VMHostFirewallException -enabled:$true
+Get-VmhostFirewallException -VMhost $VMhost -Name "SSH Client" | Set-VMHostFirewallException -enabled:$true
+Get-VmhostFirewallException -VMhost $VMhost -Name "NTP Client" | Set-VMHostFirewallException -enabled:$true
+Get-VmhostFirewallException -VMhost $VMhost -Name "vCenter Update Manager" | Set-VMHostFirewallException -enabled:$true
+} #end firewall function
+
+#start VMSecurity function
+Function VMSecurity {
+Get-VM | Get-AdvancedSetting -Name "isolation.tools.diskWiper.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.tools.diskShrink.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "RemoteDisplay.maxConnections" | Set-AdvancedSetting -Value "1" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.tools.copy.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.tools.paste.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.tools.setGUIOptions.enable" | Set-AdvancedSetting -Value "false" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.tools.dnd.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.device.connectable.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.device.edit.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "vmci0.unrestricted" | Set-AdvancedSetting -Value "false" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "log.rotateSize" | Set-AdvancedSetting -Value "1000000" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "log.keepOld" | Set-AdvancedSetting -Value "10" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "tools.setInfo.sizeLimit" | Set-AdvancedSetting -Value "1048576" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "guest.command.enabled" | Set-AdvancedSetting -Value "false" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "tools.guestlib.enableHostInfo" | Set-AdvancedSetting -Value "false" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.tools.unity.push.update.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.tools.ghi.launchmenu.change" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "isolation.tools.memSchedFakeSampleStats.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "floppyX.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "SerialX.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "parallelX.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "usb.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
+Get-VM | Get-AdvancedSetting -Name "ideX:Y.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
+} #end VMSecurity function
+
+#start SNMP function
+Function SNMP {
+$esxcli = Get-EsxCli
+$esxcli.system.snmp.set($null,$communities,"true",$null,$null,$null,$null,$null,$null,$null,$null,$null,$snmplocation)
+$esxcli.system.snmp.get()
+} #end SNMP function
+
+#Start CoreDump function
+Function CoreDump {
+Get-VMHost | Set-VMHostDumpCollector -HostVNic "vmk0" -NetworkServerIP $DumpTarget -NetworkServerPort 6500
+} #end CoreDump function
+
+#Start funcion TCP
+Function TCP {
+get-vmhost | Get-AdvancedSetting -Name Net.TcpipHeapSize | Set-AdvancedSetting -Value $TcpipHeapSize -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name Net.TcpipHeapMax | Set-AdvancedSetting -Value $TcpipHeapMax -Confirm:$false
+} #end function
+#Stop function TCP
+
+#Start funcion NFS
+Function NFS {
+get-vmhost | Get-AdvancedSetting -Name NFS.MaxVolumes | Set-AdvancedSetting -Value $MaxVolumes -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name NFS.HeartbeatFrequency | Set-AdvancedSetting -Value $HeartbeatFrequency -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name NFS.HeartbeatTimeout | Set-AdvancedSetting -Value $HeartbeatTimeout -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name NFS.HeartbeatDelta | Set-AdvancedSetting -Value $HeartbeatDelta -Confirm:$false
+get-vmhost | Get-AdvancedSetting -Name NFS.HeartbeatMaxFailures | Set-AdvancedSetting -Value $HeartbeatMaxFailures -Confirm:$false
+} #end function NFS
+
+
+Write-Host = "Below are your options
+1 syslog 
+2 ntp
+3 dns 
+4 domain_name 
+5 firewall 
+6 VMSecurity 
+7 SNMP
+8 CoreDump
+9 TCP
+10 All of the above
+"
+$option = Read-Host "choose a number between 0 to 10"
+
+switch ($option) 
+    { 
+        1 {syslog} 
+        2 {ntp} 
+        3 {dns} 
+        4 {domain_name} 
+        5 {firewall} 
+        6 {VMSecurity} 
+        7 {SNMP}
+        8 {CoreDump}
+        9 {TCP}
+        10 {NFS}
+        0 {
+        {syslog}
+        {ntp}
+        {dns}
+        {domain_name}
+        {firewall}
+        {VMSecurity}
+        {SNMP}
+        {CoreDump}
+        {TCP}
+        {NFS}
+        }
+    }
+
+#End of Script
