@@ -55,6 +55,9 @@ $pass = Read-Host "Type the esxi password"
 $user = Read-Host "Type the esxi username which is usually root"
 $VMHosts = Get-VMHost
 
+#you may # out the above line and use the below line instead of you wan to apply this for a cluster
+#$VMHosts = Get-Cluster "Cluster_Name" | Get-VMHost | Sort Name
+
 ##create a shell script on the esxi host
 #create a text file on the host with the script
 $cmd0 = "echo 'vim-cmd proxysvc/remove_service */mob* *httpsWithRedirect*' >> /tmp/mob.txt"
