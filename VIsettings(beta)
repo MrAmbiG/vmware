@@ -245,6 +245,9 @@ switch ($option)
         8 {CoreDump}
         9 {TCP}
         10 {NFS}
+        11 {EnableSSH}
+        12 {DisableSSH}
+        13 {MOB}
         0 {
         {syslog}
         {ntp}
