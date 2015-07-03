@@ -139,7 +139,8 @@ Write-Host = "Below are your options
 7 SNMP
 8 CoreDump
 9 TCP
-10 All of the above
+10 NFS
+0 All of the above
 "
 $option = Read-Host "choose a number between 0 to 10"
 
