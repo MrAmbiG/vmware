@@ -5,20 +5,23 @@
     select a target host of the cluster and use a csv file to get the naa ID and the datastore name to be named as.
     If you have multiple cluster then put all datastore names and naa IDs against just one host of the cluster in the CSV. When
     the rescaning of all HBAs of all hosts is done, the respctive members of the cluster will see all the datastores.
-    If you want you can use the individual command as mentioned below
-    new-datastore -vmhost "$VMHost" -Name "$DatastoreName" -path "naa.6006016054303c009430d2accaf8e411" -vmfs
+    below is the original command
+    new-datastore -vmhost $VMHost -Name $DatastoreName -path naa.xxxxxx -vmfs
+    In the above command $VMHost, $DatastoreName and naa.xxxxxx are something to be replaced. They are variables.
 .NOTES
     File Name      : AddLun[beta].ps1
     Author         : gajendra d ambi
-    Prerequisite   : Powercli 5.x, PowerShell V2 over Vista and upper.
+    Prerequisite   : PowerShell V2 over Vista and upper.
     Copyright      - None
 .LINK
     Script posted over:
     https://github.com/gajuambi/vmware
 #>
-#$csv_path = Read-Host "Paste the location of the csv file"
-#$naa_info = Import-Csv $csv_path\*.csv
-$naa_info = Import-Csv c:\naa\naa.csv
+
+Write-Host "Next command is going to ask you for the path of the csv file. make sure that path containts only one csv file"
+$csv_path = Read-Host "Paste the location of the csv file"
+$naa_info = Import-Csv $csv_path\*.csv
+#$naa_info = Import-Csv c:\naa\naa.csv
 
 foreach ($line in $naa_info)
 {
