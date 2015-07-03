@@ -8,6 +8,10 @@
     below is the original command
     new-datastore -vmhost $VMHost -Name $DatastoreName -path naa.xxxxxx -vmfs
     In the above command $VMHost, $DatastoreName and naa.xxxxxx are something to be replaced. They are variables.
+
+    pending improvements
+    ---------------------
+    1. copy csv file from the directory where the script is being run.
 .NOTES
     File Name      : AddLun[beta].ps1
     Author         : gajendra d ambi
