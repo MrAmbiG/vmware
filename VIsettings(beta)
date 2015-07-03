@@ -128,6 +128,92 @@ get-vmhost | Get-AdvancedSetting -Name NFS.HeartbeatDelta | Set-AdvancedSetting 
 get-vmhost | Get-AdvancedSetting -Name NFS.HeartbeatMaxFailures | Set-AdvancedSetting -Value $HeartbeatMaxFailures -Confirm:$false
 } #end function NFS
 
+#Start function SSH_Enable
+Function EnableSSH {
+Get-VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Start-VMHostService
+}
+#End function EnableSSH
+
+#Stop function SSH_Disable
+Function DisableSSH {
+Get-VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Start-VMHostService
+}
+#End function DisableSSH
+
+#start function MOB
+Function MOB {
+#Get Plink
+$PlinkLocation = $PSScriptRoot + "\Plink.exe"
+If (-not (Test-Path $PlinkLocation)){
+   Write-Host "Plink.exe not found, trying to download..."
+   $WC = new-object net.webclient
+   $WC.DownloadFile("ftp://10.12.209.140/build-utils/putty/PLINK.EXE",$PlinkLocation)
+   If (-not (Test-Path $PlinkLocation)){
+      Write-Host "Unable to download plink.exe, please download from the following URL and add it to the same folder as this script: ftp://10.12.209.140/build-utils/putty/PLINK.EXE"
+      Exit
+   } Else {
+      $PlinkEXE = Get-ChildItem $PlinkLocation
+      If ($PlinkEXE.Length -gt 0) {
+         Write-Host "Plink.exe downloaded, continuing script"
+      } Else {
+         Write-Host "Unable to download plink.exe, please download from the following URL and add it to the same folder as this script: ftp://10.12.209.140/build-utils/putty/PLINK.EXE"
+         Exit
+      }
+   }  
+}
+
+
+#If using in powershell then add snapins below
+Add-PSSnapin VMware.VimAutomation.Core -ea "SilentlyContinue"
+
+#Connect to the vcenter server
+connect-viserver
+
+#copy plink to c:\ for now
+Copy-Item $PSScriptRoot\plink.exe C:\
+
+#Variables
+$pass = Read-Host "Type the esxi password"
+$user = Read-Host "Type the esxi username which is usually root"
+$VMHosts = Get-VMHost
+
+##create a shell script on the esxi host
+#create a text file on the host with the script
+$cmd0 = "echo 'vim-cmd proxysvc/remove_service */mob* *httpsWithRedirect*' >> /tmp/mob.txt"
+$cmd1 = "sed -i 's/*/\""/g' /tmp/mob.txt"
+#convert the text to a shell script by just renaming
+$rename = "mv /tmp/mob.txt /tmp/mob.sh"
+#make the shell script executibel
+$chmod = "chmod +x /tmp/mob.sh"
+#run the mob shell script
+$mob = "/tmp/mob.sh"
+#remove the shell script
+$clean = "rm -rf /tmp/mob.sh"
+
+#Enable SSH on all hosts
+Get-VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Start-VMHostService
+
+ForEach ($VMHost in $VMHosts)
+{
+echo y | C:\plink.exe -ssh $user@$VMHost -pw $pass "exit"
+C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass $cmd0
+C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass $cmd1
+C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass $rename
+C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass $chmod
+C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass $mob
+C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass $clean
+}
+
+#Disable SSH on all hosts
+Get-VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Stop-VMHostService
+
+#delete plink from c:\
+Remove-Item C:\plink.exe
+
+#mob script below
+#vim-cmd proxysvc/remove_service "/mob" "httpsWithRedirect"
+}
+#End function MOB
 
 Write-Host = "Below are your options
 1 syslog 
@@ -140,7 +226,10 @@ Write-Host = "Below are your options
 8 CoreDump
 9 TCP
 10 NFS
-0 All of the above
+11 EnableSSH
+12 DisableSSH
+13 MOB
+0 All of the above(except those in 11,12,13)
 "
 $option = Read-Host "choose a number between 0 to 10"
 
