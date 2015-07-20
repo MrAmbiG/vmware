@@ -24,8 +24,9 @@ Add-PSSnapin VMware.VimAutomation.Core -ea "SilentlyContinue"
 #Generate a list of host file alter the values to look like an url
 $path = "$PSScriptRoot"
 $vc = Read-Host "address of the vcenter"
+$user = Read-Host "username of the vcenter"
 $pass = Read-Host "password to the vcenter"
-Connect-VIServer $vc -user administrator@vsphere.local -Password $pass
+Connect-VIServer $vc -user $user -Password $pass
 $file = "$path\hosts.txt"
 $vmhosts = get-vmhost | sort | select name | Out-File $file -force
 $a = get-content $file
