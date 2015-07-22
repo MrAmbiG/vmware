@@ -1,34 +1,76 @@
-#Security Hardening for VMs /begin
-#Uses the new recommended method to set the security settings for the VMs
-#MrAmbiG1 / http://ambitech.blogspot.in/2015/06/vm-security-settings-hardening-for.html
+<#
+.SYNOPSIS
+    Configure VM security hardening for your VMs
+.DESCRIPTION
+    Thanks to andrew for the idea of creating a VM spec and pushing it to all the VMs. This
+    will create a VM spec using some security hardening best practices.
+.NOTES
+    File Name      : VMSecurityHardening.ps1
+    Author         : andrew > gajendra d ambi
+    Prerequisite   : Powercli 5.x, PowerShell V2 over Vista and upper.
+    Copyright      - None
+.LINK
+    Script posted over:
+    concept : http://practical-admin.com/blog/powercli-update-vmx-configuration-parameters-in-mass/
+    adaptation : http://tinyurl.com/ambigitvmware
+    http://www.stigviewer.com/stig/vmware_esxi_version_5_virtual_machine/2013-12-18/
+#>
 
+#Disconnect any other hosts or vcenters if they are already connected.
+Write-Host "Let us disconnect any other ESXi hosts or vcenters if they are connected"
+Disconnect-VIServer *
 
-Get-VM | Get-AdvancedSetting -Name "isolation.tools.diskWiper.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "isolation.tools.diskShrink.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "RemoteDisplay.maxConnections" | Set-AdvancedSetting -Value "1" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "isolation.tools.copy.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "isolation.tools.paste.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "isolation.tools.setGUIOptions.enable" | Set-AdvancedSetting -Value "false" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "isolation.tools.dnd.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "isolation.device.connectable.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "isolation.device.edit.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "vmci0.unrestricted" | Set-AdvancedSetting -Value "false" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "log.rotateSize" | Set-AdvancedSetting -Value "1000000" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "log.keepOld" | Set-AdvancedSetting -Value "10" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "tools.setInfo.sizeLimit" | Set-AdvancedSetting -Value "1048576" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "guest.command.enabled" | Set-AdvancedSetting -Value "false" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "tools.guestlib.enableHostInfo" | Set-AdvancedSetting -Value "false" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "isolation.tools.unity.push.update.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "isolation.tools.ghi.launchmenu.change" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "isolation.tools.memSchedFakeSampleStats.disable" | Set-AdvancedSetting -Value "true" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "floppyX.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "SerialX.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "parallelX.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "usb.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
-Get-VM | Get-AdvancedSetting -Name "ideX:Y.present" | Set-AdvancedSetting -Value "false" -Confirm:$false
+#connect to the host or vcenter server
+Write-Host "Let us connect to the target host or vCenter"
+connect-viserver
 
+#start VMSecurity function
+Function Fun_VMSecurity {
+$ExtraOptions = @{
+#http://practical-admin.com/blog/powercli-update-vmx-configuration-parameters-in-mass/ 
+    "isolation.tools.diskWiper.disable"="true";
+    "isolation.tools.diskShrink.disable"="true";
+	"RemoteDisplay.maxConnections"="1";
+	"isolation.tools.copy.disable"="true";
+	"isolation.tools.paste.disable"="true";
+	"isolation.tools.setGUIOptions.enable"="false";
+	"isolation.tools.dnd.disable"="true";
+	"isolation.device.connectable.disable"="true";
+	"isolation.device.edit.disable"="true";
+	"vmci0.unrestricted"="false";
+	"log.rotateSize"="1000000";
+	"log.keepOld"="10";
+	"tools.setInfo.sizeLimit"="1048576";
+	"guest.command.enabled"="false";
+	"tools.guestlib.enableHostInfo"="false";
+	"isolation.tools.unity.push.update.disable"="true";
+	"isolation.tools.ghi.launchmenu.change"="true";
+	"isolation.tools.memSchedFakeSampleStats.disable"="true";
+	"isolation.tools.getCreds.disable"="true";
+	"floppyX.present"="false";
+	"SerialX.present"="false";
+	"parallelX.present"="false";
+	"usb.present"="false";
+	"ideX:Y.present"="false";
+}
+ 
+# build our configspec using the hashtable from above.
+$vmConfigSpec = New-Object VMware.Vim.VirtualMachineConfigSpec
+# note we have to call the GetEnumerator before we can iterate through
+Foreach ($Option in $ExtraOptions.GetEnumerator()) {
+    $OptionValue = New-Object VMware.Vim.optionvalue
+    $OptionValue.Key = $Option.Key
+    $OptionValue.Value = $Option.Value
+    $vmConfigSpec.extraconfig += $OptionValue
+}
+# Get all vm's not including templates
+$VMs = Get-View -ViewType VirtualMachine -Property Name -Filter @{"Config.Template"="false"}
+ 
+# Apply the new virtual machine spec with security hardening parameters
+foreach($vm in $vms){
+    $vm.ReconfigVM_Task($vmConfigSpec)
+    Write-Host "Security hardening for $VM is complete"
+}
+} #End VMSecurity function
+Fun_VMSecurity
 
-
-#http://www.stigviewer.com/stig/vmware_esxi_version_5_virtual_machine/2013-12-18/
-#https://toti3.wordpress.com/tag/get-advancedsetting/
-#Security hardening for VMs is complete
