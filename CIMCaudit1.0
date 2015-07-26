@@ -7,6 +7,7 @@
 .NOTES
     File Name      : CIMCaudit.ps1
     Author         : gajendra d ambi
+    Date           : July 2015
     Prerequisite   : PowerShell V2, powertool 1+ over Vista and upper.
     Copyright      - None
 .LINK
