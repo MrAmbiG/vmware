@@ -1,15 +1,17 @@
 
 <#
 .SYNOPSIS
-    Generate Cisco IMC configuration report
+    CIMCaudit1.0.1
 .DESCRIPTION
-    It should get you the detailed Cisco IMC report for your internal or external audit. 
+    This will log into the Cisco IMC and pull the details and generate an html report.
+    It does not make any changes but reports the requested facts of the CIMC.
 .NOTES
     File Name      : CIMCaudit.ps1
     Author         : gajendra d ambi
     Date           : July 2015
-    Prerequisite   : PowerShell V2, powertool 1+ over Vista and upper.
+    Prerequisite   : PowerShell V2+, powertool 1+ over Vista and upper.
     Copyright      - None
+    ver 1.0.1      : Hostname; ExtGw; ExtIp; ExtMask;PCI ROM IP Blocking; admin state of ssh,http,https; kvm; vMedia; boot & running firmware; date & time; BIOS version 
 .LINK
     Script posted over:
     http://ambitech.blogspot.in/2015/07/cisco-imb-cimc-reporting.html
@@ -27,98 +29,135 @@ $a = $a + "</style>"
 $path = "C:\"
 
 #connect to the cisco IMC
-Connect-Imc
+#Connect-Imc
+
+#CIMC MainInfo
+$imcinfo = Get-ImcStatus
+$imc = $imcinfo | Select-Object Name, Model, ProductName, Serial, Vendor, VirtualIpv4Address, BiosVersion, DhcpEnable, DnsAlternate, DnsPreferred, DnsUsingDhcp, ExtGateway, ExtIp, ExtMask, FirmwareVersion, MacAddress, Mode | ConvertTo-HTML -Fragment -PreContent '<p4> <font face="Algerian" size="9" color="navy"><p align="center"><u><b>CISCO IMC[CIMC] AUDIT REPORT</b></u></font> </p4><p>      </p> <p3> <font color="#1A1B1C"><b>CIMC Main Info<b></font> </p3>' | Out-String
+
+##Firmware
+#Running Firmware
+$rfirminfo = Get-ImcFirmwareRunning
+$rfirm = $rfirminfo | Select-Object Imc, Description, Type, Version | ConvertTo-HTML -Fragment -PreContent '<p>      </p><p3> <font color="#1A1B1C"><b>RUNNING FIRMWARE<b></font> </p3>' | Out-String
+
+#Boot Firmware
+$bfirminfo = Get-ImcFirmwareRunning
+$bfirm = $bfirminfo | Select-Object Imc, Description, Type, Version | ConvertTo-HTML -Fragment -PreContent '<p>      </p><p3> <font color="#1A1B1C"><b>BOOT FIRMWARE<b></font> </p3>' | Out-String
 
 #Network
 $network = Get-ImcMgmtIf
-$nw = $network | Select-Object DdnsDomain, DnsPreferred, DnsAlternate, DnsUsingDhcp, Mac, NicMode, NicRedundancy  | ConvertTo-HTML -Fragment -PreContent '<p4> <font face="Algerian" size="9" color="navy"><p align="center"><u><b>CISCO IMC[CIMC] AUDIT REPORT</b></u></font> </p4><p>      </p> <p3> <font color="#1A1B1C"><b>NETWORK<b></font> </p3>' | Out-String
+$nw = $network | Select-Object Imc, Hostname, DdnsDomain, NicMode, NicRedundancy | ConvertTo-HTML -Fragment -PreContent '<p>      </p><p3> <font color="#1A1B1C"><b>NETWORK<b></font> </p3>' | Out-String
+
+#IP Blocking
+$ipblockinfo = Get-ImcIpBlocking
+$block = $ipblockinfo | Select-Object Imc, Enable, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p><p3> <font color="#1A1B1C"><b>IP Blocking<b></font> </p3>' | Out-String
+
 
 #Syslog
 $syslog = Get-ImcSyslogClient
-$sys = $syslog | Select-Object AdminState, Hostname, Port | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>SYSLOG<b></font> </p3>' | Out-String
+$sys = $syslog | Select-Object Imc, AdminState, Hostname, Port | ConvertTo-HTML -Fragment -PreContent '<p>      </p><p3> <font color="#1A1B1C"><b>SYSLOG<b></font> </p3>' | Out-String
 
 #NTP
 $ntpinfo = Get-ImcNtpServer
-$ntp = $ntpinfo | Select-Object NtpServer1, NtpServer2, NtpServer3 | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>NTP<b></font> </p3>' | Out-String
+$ntp = $ntpinfo | Select-Object Imc, NtpServer1, NtpServer2, NtpServer3 | ConvertTo-HTML -Fragment -PreContent '<p>      </p><p3> <font color="#1A1B1C"><b>NTP<b></font> </p3>' | Out-String
 
 #SNMP
 $snmpinfo = Get-ImcSnmp
-$snmp = $snmpinfo | Select-Object Descr, AdminState, Com2Sec, Community, Port, SysContact, SysLocation, TrapCommunity | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>SNMP<b></font> </p3>' | Out-String
+$snmp = $snmpinfo | Select-Object Imc, Descr, AdminState, Com2Sec, Community, Port, SysContact, SysLocation, TrapCommunity | ConvertTo-HTML -Fragment -PreContent '<p>      </p><p3> <font color="#1A1B1C"><b>SNMP<b></font> </p3>' | Out-String
 
-#ACCESS
+##ACCESS
+#ssh
 $sshinfo = Get-ImcSsh
-$ssh = $sshinfo | Select-Object Descr, Proto, Port, Status | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>SSH<b></font> </p3>' | Out-String
+$ssh = $sshinfo | Select-Object Imc, Name, Descr, Proto, Port, AdminState | ConvertTo-HTML -Fragment -PreContent '<p>      </p><p3> <font color="#1A1B1C"><b>SSH<b></font> </p3>' | Out-String
+#http
 $httpinfo = Get-ImcHttp
-$http = $httpinfo | Select-Object Descr, Proto, Port, Status | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>HTTP<b></font> </p3>' | Out-String
+$http = $httpinfo | Select-Object Imc, Name, Descr, Proto, Port, AdminState | ConvertTo-HTML -Fragment -PreContent '<p>      </p><p3> <font color="#1A1B1C"><b>HTTP<b></font> </p3>' | Out-String
+#https
 $httpsinfo = Get-ImcHttps
-$https = $httpsinfo |  Select-Object Descr, Proto, Port, Status | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>HTTPS<b></font> </p3>' | Out-String
+$https = $httpsinfo |  Select-Object Imc, Name, Descr, Proto, Port, AdminState | ConvertTo-HTML -Fragment -PreContent '<p>      </p><p3> <font color="#1A1B1C"><b>HTTPS<b></font> </p3>' | Out-String
+#KVM
+$kvminfo = ImcCommKvm
+$kvm = $kvminfo | Select-Object Imc, Rn, AdminState, EncryptionState, LocalVideoState, Port, ActiveSessions, TotalSessions | ConvertTo-HTML -Fragment -PreContent '<p>      </p> <p3> <font color="#1A1B1C"><b>Kvm<b></font> </p3>' | Out-String
+#vMedia
+$vmediainfo = ImcCommVMedia
+$vmedia = $vmediainfo | Select-Object Imc, Rn, AdminState, EncryptionState | ConvertTo-HTML -Fragment -PreContent '<p>      </p> <p3> <font color="#1A1B1C"><b>Virtual Media<b></font> </p3>' | Out-String
 
 ##boot
 #1st
 $bootsdinfo = Get-ImcLsbootSd
-$bootsd = $bootsdinfo | Select-Object Order, Type, Name, State  | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>BOOT FROM SD<b></font> </p3>' | Out-String
+$bootsd = $bootsdinfo | Select-Object Imc, Order, Type, Name, State  | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>BOOT FROM SD<b></font> </p3>' | Out-String
 #2nd
 $bootvminfo = Get-ImcLsbootVMedia
-$bootvm = $bootvminfo | Select-Object Order, Type, Name, State  | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>BOOT FROM VIRTUAL MEDIA<b></font> </p3>' | Out-String
+$bootvm = $bootvminfo | Select-Object Imc, Order, Type, Name, State  | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>BOOT FROM VIRTUAL MEDIA<b></font> </p3>' | Out-String
 #3rd
 $bootPxeinfo = Get-ImcLsbootPxe
-$bootPxe = $bootPxeinfo | Select-Object Order, Type, Name, State  | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>BOOT FROM VIRTUAL PXE<b></font> </p3>' | Out-String
+$bootPxe = $bootPxeinfo | Select-Object Imc, Order, Type, Name, State  | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>BOOT FROM VIRTUAL PXE<b></font> </p3>' | Out-String
 #4th
 $bootuefioinfo = Get-ImcLsbootUefiShell
-$bootuefio = $bootuefioinfo | Select-Object Order, Type, Name, State  | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>BOOT FROM VIRTUAL PXE<b></font> </p3>' | Out-String
+$bootuefio = $bootuefioinfo | Select-Object Imc, Order, Type, Name, State  | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>BOOT FROM VIRTUAL PXE<b></font> </p3>' | Out-String
 
 ##BIOS
 #CPU Configuration
+#CPU
+$cpuinfo = Get-ImcProcessorUnit
+$cpu = $cpuinfo | Select-Object Imc, SocketDesignation, Rn, Dn, Vendor, Arch, Cores, CoresEnabled, Id, Model, OperState, Presence, Speed, Stepping, Threads  | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>CPU Main Info<b></font> </p3>' | Out-String
  $IntVttinfo = Get-ImcBiosVfIntelVirtualizationTechnology
- $IntVtt = $IntVttinfo | Select-Object VpIntelVirtualizationTechnology, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>INTEL VT<b></font> </p3>' | Out-String
+ $IntVtt = $IntVttinfo | Select-Object Imc, VpIntelVirtualizationTechnology, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>INTEL VT<b></font> </p3>' | Out-String
  $IntVtIOinfo = Get-ImcBiosIntelDirectedIO
- $IntVtIO = $IntVtIOinfo | Select-Object VpIntelVTForDirectedIO, Rn  | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>INTEL VT DIRECTED IO<b></font> </p3>' | Out-String
+ $IntVtIO = $IntVtIOinfo | Select-Object Imc, VpIntelVTForDirectedIO, Rn  | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>INTEL VT DIRECTED IO<b></font> </p3>' | Out-String
  $htinfo = Get-ImcBiosHyperThreading
- $ht = $htinfo | Select-Object VpIntelHyperThreadingTech, Rn  | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>INTEL HT<b></font> </p3>' | Out-String
+ $ht = $htinfo | Select-Object Imc, VpIntelHyperThreadingTech, Rn  | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>INTEL HT<b></font> </p3>' | Out-String
  $exdisbitinfo = Get-ImcBiosExecuteDisabledBit
- $exdisbit = $exdisbitinfo | Select-Object VpExecuteDisableBit, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>INTEL HT<b></font> </p3>' | Out-String
+ $exdisbit = $exdisbitinfo | Select-Object Imc, VpExecuteDisableBit, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>INTEL HT<b></font> </p3>' | Out-String
  $vfhpinfo = Get-ImcBiosVfHardwarePrefetch
- $vfhp = $vfhpinfo | Select-Object VpHardwarePrefetch, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>INTEL HARDWARE PREFETCH<b></font> </p3>' | Out-String
+ $vfhp = $vfhpinfo | Select-Object Imc, VpHardwarePrefetch, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>INTEL HARDWARE PREFETCH<b></font> </p3>' | Out-String
  $vcpuffinfo = Get-ImcBiosVfCPUFrequencyFloor
- $vcpuff = $vcpuffinfo | Select-Object VpCPUFrequencyFloor, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>CPU FREQUENCY FLOOR SETTING<b></font> </p3>' | Out-String
+ $vcpuff = $vcpuffinfo | Select-Object Imc, VpCPUFrequencyFloor, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>CPU FREQUENCY FLOOR SETTING<b></font> </p3>' | Out-String
  $vpc1einfo = Get-ImcBiosVfProcessorC1E
- $vpc1e =  $vpc1einfo | Select-Object VpProcessorC1E, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>C1 POWERSTATE<b></font> </p3>' | Out-String
+ $vpc1e =  $vpc1einfo | Select-Object Imc, VpProcessorC1E, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>C1 POWERSTATE<b></font> </p3>' | Out-String
  $vpc6rinfo = Get-ImcBiosVfProcessorC6Report
- $vpc6r =  $vpc6rinfo | Select-Object VpProcessorC6Report, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>CPU C6 STATE<b></font> </p3>' | Out-String
+ $vpc6r =  $vpc6rinfo | Select-Object Imc, VpProcessorC6Report, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>CPU C6 STATE<b></font> </p3>' | Out-String
  $vcpuepinfo = Get-ImcBiosVfCPUEnergyPerformance
- $vcpuep = $vcpuepinfo | Select-Object VpCPUEnergyPerformance, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>CPU ENERGY SETTING<b></font> </p3>' | Out-String
+ $vcpuep = $vcpuepinfo | Select-Object Imc, VpCPUEnergyPerformance, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>CPU ENERGY SETTING<b></font> </p3>' | Out-String
  $vcmpinfo = Get-ImcBiosVfCoreMultiProcessing
- $vcmp =  $vcmpinfo | Select-Object VpCoreMultiProcessing, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>MULTI CORE PROCESSING<b></font> </p3>' | Out-String
+ $vcmp =  $vcmpinfo | Select-Object Imc, VpCoreMultiProcessing, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>MULTI CORE PROCESSING<b></font> </p3>' | Out-String
 
  #Memory Configuration
  $vdramctinfo = Get-ImcBiosVfDRAMClockThrottling
- $vdramct = $vdramctinfo | Select-Object VpDRAMClockThrottling, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>DRAM CLOCK THROTTLING<b></font> </p3>' | Out-String
+ $vdramct = $vdramctinfo | Select-Object Imc, VpDRAMClockThrottling, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>DRAM CLOCK THROTTLING<b></font> </p3>' | Out-String
  $numainfo = Get-ImcBiosNUMA
- $numa =  $numainfo | Select-Object VpNUMAOptimized, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>NUMA STATUS<b></font> </p3>' | Out-String
+ $numa =  $numainfo | Select-Object Imc, VpNUMAOptimized, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>NUMA STATUS<b></font> </p3>' | Out-String
  $vdrrinfo = Get-ImcBiosVfDramRefreshRate
- $vdrr =  $vdrrinfo | Select-Object VpDramRefreshRate, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>MEMORY REFRESH RATE<b></font> </p3>' | Out-String
+ $vdrr =  $vdrrinfo | Select-Object Imc, VpDramRefreshRate, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>MEMORY REFRESH RATE<b></font> </p3>' | Out-String
  $vmiinfo = Get-ImcBiosVfMemoryInterleave
- $vmi =  $vmiinfo | Select-Object VpChannelInterLeave, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>MEMORY CHANNEL INTERLEAVE<b></font> </p3>' | Out-String
+ $vmi =  $vmiinfo | Select-Object Imc, VpChannelInterLeave, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>MEMORY CHANNEL INTERLEAVE<b></font> </p3>' | Out-String
  $vpsinfo = Get-ImcBiosVfPatrolScrub
- $vps =  $vpsinfo | Select-Object VpPatrolScrub, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>MEMORY SCRUBBING<b></font> </p3>' | Out-String
+ $vps =  $vpsinfo | Select-Object Imc, VpPatrolScrub, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>MEMORY SCRUBBING<b></font> </p3>' | Out-String
  $vsmrascinfo = Get-ImcBiosVfSelectMemoryRASConfiguration
- $vsmrasc =  $vsmrascinfo | Select-Object VpSelectMemoryRASConfiguration, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>MEMORY RAS<b></font> </p3>' | Out-String
+ $vsmrasc =  $vsmrascinfo | Select-Object Imc, VpSelectMemoryRASConfiguration, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>MEMORY RAS<b></font> </p3>' | Out-String
+
+ #PCI ROM info
+$pcirominfo = ImcBiosVfPCISlotOptionROMEnable
+$pcirom = $pcirominfo | Select-Object Imc, Rn, VpSlot1State, VpSlot2State, VpSlotMezzState  | ConvertTo-HTML -Fragment -PreContent '</p> <p3> <font color="#1A1B1C"><b>PCI ROM<b></font> </p3>' | Out-String
 
  #USB Configuration
  $vlusbsinfo = Get-ImcBiosVfLegacyUSBSupport
- $vlusbs = $vlusbsinfo | Select-Object VpLegacyUSBSupport, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>USB LEGACY SUPPORT<b></font> </p3>' | Out-String
+ $vlusbs = $vlusbsinfo | Select-Object Imc, VpLegacyUSBSupport, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>USB LEGACY SUPPORT<b></font> </p3>' | Out-String
  $vusbeinfo = Get-ImcBiosVfUSBEmulation
- $vusbe =  $vusbeinfo | Select-Object VpUSBEmul6064, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>USB EMULATION<b></font> </p3>' | Out-String
+ $vusbe =  $vusbeinfo | Select-Object Imc, VpUSBEmul6064, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>USB EMULATION<b></font> </p3>' | Out-String
  $vusbpcinfo = Get-ImcBiosVfUSBPortsConfig
- $vusbpc = $vusbpcinfo | Select-Object VpAllUsbDevices, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>USB DEVICES<b></font> </p3>' -PostContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>END OF REPORT<b></font> </p3>'| Out-String
+ $vusbpc = $vusbpcinfo | Select-Object Imc, VpAllUsbDevices, Rn | ConvertTo-HTML -Fragment -PreContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>USB DEVICES<b></font> </p3>' -PostContent '<p>      </p></p> <p3> <font color="#1A1B1C"><b>END OF REPORT<b></font> </p3>'| Out-String
 
 #merge all fragments into one html
-ConvertTo-HTML -head $a -body "$nw $sys $ntp $snmp $ssh $http $https $bootsd $bootvm $bootPxe $bootuefio $IntVtt $IntVtt $IntVtIO $ht $exdisbit $vfhp $vcpuff $vpc1e $vpc6r $vcpuep $vcmp $vdramct $numa $vdrr $vmi $vps $vsmrasc $vlusbs $vusbe $vusbpc" | Out-File $path\cimc.html
+ConvertTo-HTML -head $a -body "$imc $nw $block $rfirm $bfirm $sys $ntp $snmp $ssh $http $https $kvm $vmedia $bootsd $bootvm $bootPxe $bootuefio $cpu $IntVtt $IntVtt $IntVtIO $ht $exdisbit $vfhp $vcpuff $vpc1e $vpc6r $vcpuep $vcmp $vdramct $numa $vdrr $vmi $vps $vsmrasc $pcirom $vlusbs $vusbe $vusbpc" | Out-File $path\cimc.html
 
 #move the .html file from C drive to the location of the script that you are running
 mi $path\cimc.html $PSScriptRoot -force
 
 #let us open the above report in a default browser
 ii $PSScriptRoot\cimc.html
+
+#Disconnect from Cisco IMC
+#Disconnect-Imc *
 
 #End of Script
