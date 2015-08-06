@@ -43,7 +43,7 @@ If (-not (Test-Path $PlinkLocation)){
 
 
 #If using in powershell then add snapins below
-Add-PSSnapin VMware.VimAutomation.Core -ea "SilentlyContinue"
+Add-PSSnapin VMware.VimAutomation.Core -ErrorAction SilentlyContinue
 
 #Connect to the vcenter server
 connect-viserver
