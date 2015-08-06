@@ -11,7 +11,7 @@
     Author         : gajendra d ambi
     Date           : Auguest 2015
     Prerequisite   : PowerShell V3, powercli 5+ over Vista and upper.
-    Copyright      - None
+    Copyright      - ambitech.blogspot.in
 .LINK
     Script posted over:
     
