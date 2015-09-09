@@ -1,0 +1,19 @@
+<#
+.SYNOPSIS
+    check whether mob is disable don the esxi host or not.
+.DESCRIPTION
+    it connects to the vcenter server, creates a list of hostnames and converts them into the urls to check mob.
+    unfortunately it is not working the way i intended. someone can help me use the output of the url to 
+    confirm mob or till then use it the way it is.
+    If the output contains (404) not found then mob is disabled.
+    anything other than that means mob is enabled.
+.NOTES
+    File Name      : MobChecker.ps1
+    Author         : gajendra d ambi
+    Prerequisite   : PowerShell V2 over Vista and upper.
+    Copyright      - None
+.LINK
+    Script posted over:
+    https://github.com/gajuambi/vmware/
+#>
+get-vmhost | get-advancedsetting Config.HostAgent.plugins.solo.enableMob | Select-Object Entity, Value
