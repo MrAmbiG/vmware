@@ -12,4 +12,4 @@
     Script posted over:
     https://github.com/gajuambi/vmware/
 #>
-get-vmhost | get-advancedsetting Config.HostAgent.plugins.solo.enableMob | Select-Object Entity, Value
+get-vmhost | get-advancedsetting Config.HostAgent.plugins.solo.enableMob | Select-Object Entity, @{Expression="Value";Label="MOb Disabled"}
