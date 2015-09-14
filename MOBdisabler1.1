@@ -8,14 +8,15 @@
     vim-cmd proxysvc/remove_service "/mob" "httpsWithRedirect"
     Using alan's script from http://www.virtu-al.net/2013/01/07/ssh-powershell-tricks-with-plink-exe/ to get/use the plink.
     JUst right click and run the script (from powershell) or drag and drop it on powercli.
-    Please note it works only in powershell and not in powercli.
+    vSphere 6 comes with this service disabled so no need to run this.It gives you the status of mob before and after
+    you run this.
 
 .NOTES
     File Name      : MOBdisabler.ps1
     Author         : gajendra d ambi
     Prerequisite   : PowerShell V3, powercli 5.x over Vista and upper.
     Copyright      - None
-
+    
 .LINK
     Script posted over:
     http://ambitech.blogspot.in/2015/06/disable-mob-security-hardening-for.html
@@ -47,6 +48,9 @@ Add-PSSnapin VMware.VimAutomation.Core -ErrorAction SilentlyContinue
 
 #Connect to the vcenter server
 connect-viserver
+
+#Display the status of MOB on all hosts
+get-vmhost | get-advancedsetting Config.HostAgent.plugins.solo.enableMob | Select-Object Entity, @{Expression="Value";Label="MOb Disabled"}
 
 #copy plink to c:\ for now
 Copy-Item $PSScriptRoot\plink.exe C:\
@@ -86,8 +90,11 @@ C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass $mob
 C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass $clean
 }
 
+#Display the status of MOB on all hosts
+get-vmhost | get-advancedsetting Config.HostAgent.plugins.solo.enableMob | Select-Object Entity, @{Expression="Value";Label="MOb Disabled"}
+
 #Disable SSH on all hosts
-Get-VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Stop-VMHostService
+Get-VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Stop-VMHostService -confirm:$false
 
 #delete plink from c:\
 Remove-Item C:\plink.exe
