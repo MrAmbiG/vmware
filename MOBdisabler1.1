@@ -50,7 +50,7 @@ Add-PSSnapin VMware.VimAutomation.Core -ErrorAction SilentlyContinue
 connect-viserver
 
 #Display the status of MOB on all hosts
-get-vmhost | get-advancedsetting Config.HostAgent.plugins.solo.enableMob | Select-Object Entity, @{Expression="Value";Label="MOb Disabled"}
+get-vmhost | get-advancedsetting Config.HostAgent.plugins.solo.enableMob | Select-Object Entity, @{Expression="Value";Label="MOb Enabled"}
 
 #copy plink to c:\ for now
 Copy-Item $PSScriptRoot\plink.exe C:\
@@ -91,7 +91,7 @@ C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass $clean
 }
 
 #Display the status of MOB on all hosts
-get-vmhost | get-advancedsetting Config.HostAgent.plugins.solo.enableMob | Select-Object Entity, @{Expression="Value";Label="MOb Disabled"}
+get-vmhost | get-advancedsetting Config.HostAgent.plugins.solo.enableMob | Select-Object Entity, @{Expression="Value";Label="MOb Enabled"}
 
 #Disable SSH on all hosts
 Get-VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Stop-VMHostService -confirm:$false
