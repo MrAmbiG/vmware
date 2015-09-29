@@ -56,8 +56,8 @@ $pass = Read-Host "Host's password?"
 Copy-Item $PSScriptRoot\plink.exe C:\
 
 #variables
-#put the name of the cluster between quotes. Enter multiple cluster names & separate them by a comma (no space in between)
-$cluster = ""
+#put the name of the cluster between quotes (replacing star). Enter multiple cluster names & separate them by a comma (no space in between)
+$cluster = "*"
 $VMHosts = get-cluster $cluster | Get-VMHost | sort
 
 #Enable SSH on all hosts
