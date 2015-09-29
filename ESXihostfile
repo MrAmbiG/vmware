@@ -17,6 +17,7 @@
     http://www.virtu-al.net/2013/01/07/ssh-powershell-tricks-with-plink-exe/
     https://github.com/gajuambi/vmware
 #>
+#Start of Script
 
 #Get Plink
 #http://www.virtu-al.net/2013/01/07/ssh-powershell-tricks-with-plink-exe/
@@ -81,4 +82,4 @@ Remove-Item C:\plink.exe
 #Disable SSH on all hosts
 get-cluster $cluster | Get-VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Stop-VMHostService -confirm:$false
 
-#####additional sources#####
+#End of Script
