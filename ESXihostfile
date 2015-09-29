@@ -52,11 +52,11 @@ connect-viserver
 $user = Read-Host "Host's username?"
 $pass = Read-Host "Host's password?"
 
-#copy plink & pscp to c:\ for now
+#copy plink to c:\ for now
 Copy-Item $PSScriptRoot\plink.exe C:\
 
 #variables
-#put the name of the cluster between quotes. Enter multiple cluster's names & separate them by a comma (no space in between)
+#put the name of the cluster between quotes. Enter multiple cluster names & separate them by a comma (no space in between)
 $cluster = ""
 $VMHosts = get-cluster $cluster | Get-VMHost | sort
 
@@ -67,7 +67,7 @@ ForEach ($VMHost in $VMHosts)
 {
 echo y | C:\plink.exe -ssh $user@$VMHost -pw $pass "exit"
 
-#replace the 'someline' with the value that you want.
+#replace the "someline" with the value that you want.
 #To add multiple lines repeat the below command multiple times with the respective values instead of someline (enclose entries within "")
 C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass 'echo "someline" >> /etc/hosts'
 
