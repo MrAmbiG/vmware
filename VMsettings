@@ -1,10 +1,9 @@
 <#
 .SYNOPSIS
-    A brief description of the function or script. This keyword can be used
-    only once in each topic.
+    It will change the VM's hardware resources and set the annotations.
 .DESCRIPTION
-    A detailed description of the function or script. This keyword can be
-    used only once in each topic.
+    This requires you to provide the target vm names to apply the settings.
+    check the variables section to update the values.
 .NOTES
     File Name      : VMsettings.ps1
     Author         : gajendra d ambi
@@ -20,6 +19,11 @@
 $vc = ""
 $db = ""
 $um = ""
+
+#annotations
+$vc_annotation = "vcenter"
+$db_annotation = "Database Server"
+$um_annotation = "update Manager"
 
 #If using in powershell then add snapins below
 Add-PSSnapin VMware.VimAutomation.Core -ErrorAction SilentlyContinue
@@ -42,6 +46,8 @@ get-vm $vc | Set-VM -NumCpu 6 -MemoryGB 20 -Confirm:$false
 #add 2 additional hard disks and provision them as thin
 New-HardDisk -vm $vc -CapacityGB 40 -StorageFormat Thin -Confirm:$false
 New-HardDisk -vm $vc -CapacityGB 40 -StorageFormat Thin -Confirm:$false
+#set annotation
+set-vm -vm $vc -Notes "$vc_annotation" -confirm:$false
 Write-host ""
 
 #database server
@@ -52,6 +58,8 @@ get-vm $db | Set-VM -NumCpu 4 -MemoryGB 16 -Confirm:$false
 (Get-HardDisk -vm $db)[1] | Set-HardDisk -CapacityGB 60 -Confirm:$false
 (Get-HardDisk -vm $db)[2] | Set-HardDisk -CapacityGB 60 -Confirm:$false
 (Get-HardDisk -vm $db)[3] | Set-HardDisk -CapacityGB 60 -Confirm:$false
+#set annotation
+set-vm -vm $db -Notes "$db_annotation" -confirm:$false
 Write-host ""
 
 #update manager
@@ -60,4 +68,6 @@ get-vm $um | Set-VM -NumCpu 4 -MemoryGB 8 -Confirm:$false
 #grow harddisks
 (Get-HardDisk -vm $um)[0] | Set-HardDisk -CapacityGB 50 -Confirm:$false
 (Get-HardDisk -vm $um)[1] | Set-HardDisk -CapacityGB 50 -Confirm:$false
+#set annotation
+set-vm -vm $um -Notes "$um_annotation" -confirm:$false
 Write-host ""
