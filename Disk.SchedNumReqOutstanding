@@ -34,15 +34,3 @@ $esxcli.storage.core.device.set($null, $device.Device, $null, $null, $null, $nul
 }
 }
 
-#The part below needs a bit fixing to get it to work. Delete the below portion to avoid errors till it get fixed.
-#QA of Disk.SchedNumReqOutstanding of xtremIO to 256
-#connect to the vcenter server
-connect-viserver
-
-$VMHosts = get-vmhost
-foreach ($VMHost in $VMHosts)
-{
-$esxcli = get-vmhost $VMHost | Get-EsxCli
-$esxcli.system.hostname.get() | ft Hostname | Out-file -Append -Noclobber "c:\XtremIO\xio.txt"
-$esxcli.storage.core.device.list() | Where-Object {$_.Model -like "Xtrem"} | ft Vendor,Device,Size, NoofoutstandingIOswithcompetingworlds | Out-file -Append -Noclobber "c:\XtremIO\xio.txt"
-}
