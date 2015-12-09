@@ -10,8 +10,8 @@
     Prerequisite   : PowerShell v3+, powercli 6+ over Vista and upper.
     Copyright      - None
 .LINK
-    Script posted over:
-    
+    Script posted over: http://ambitech.blogspot.in/
+    https://github.com/gajuambi/vmware
 #>
 
 ##Variables##
