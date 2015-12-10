@@ -29,6 +29,7 @@ Write-Host "updating the XtremIO settings for $VMHost"
 (get-vmhost $VMHost | Get-EsxCli).storage.core.device.set($null, $device.Device, $null, $null, $null, $null, $null, 256, $null)
 }
 }
+}
 
 #check the settings
 foreach ($VMHost in (get-vmhost | sort))
