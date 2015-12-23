@@ -12,11 +12,11 @@
 .LINK
     Script posted over: github.com/gajuambi/vmware
 #>
-#Start of script
-
+#start of script
 #variables
 $cluster   = "*"
-$portgroup = "VMkernel"
+Write-Host Name of the portgroup to remove?
+$portgroup = Read-host ""
 
 #Connect to vcenter server or a single host or hosts
 Connect-VIServer
@@ -31,11 +31,12 @@ if ($pgs -match "VMkernel")
   Write-Host removing vmkernel $vmk on $vmhost -ForegroundColor Green
 
   #removing vmkernel
+  Write-Host removing the vmkernel $vmk from portgrop $portgroup on the host $vmhost -ForegroundColor Green
   Remove-VMHostNetworkAdapter -Nic $vmk -confirm:$false
 
   #removing portgroup
+  Write-Host removing the portgrop $portgroup on the host $vmhost -ForegroundColor Blue
   get-virtualportgroup -Name $portgroup | Remove-VirtualPortGroup -Confirm:$false
  }
 }
-
-#End of script
+#end of script
