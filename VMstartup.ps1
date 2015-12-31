@@ -26,9 +26,12 @@ Add-PSSnapin VMware.VimAutomation.Core -ea "SilentlyContinue"
 Write-Host please make sure you are connected only to the esxi host with the VMs in it -ForegroundColor Green
 
 #variables
-$vm         = "vmname"
-$order      = "startuporder"
-$startdelay = "startupdelay in seconds"
+#name of the vm below
+$vm         = ""
+#order at which the vm should start. mention a number/integer ex:- 3
+$order      = ""
+#mention a number/integer. this value is in seconds. ex:- 60
+$startdelay = ""
 Set-VMStartPolicy -StartPolicy (Get-VMStartPolicy -VM $vm) `
         -StartAction PowerOn -StartOrder $order -StartDelay $startdelay
 
