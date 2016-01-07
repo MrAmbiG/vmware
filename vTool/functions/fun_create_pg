@@ -16,9 +16,9 @@
 #start of script
 #start of function
 Function fun_create_pg {
-Write-Host "options"              -foregroundcolor Yellow 
-Write-Host "1 VM Portgroup"       -foregroundcolor Yellow
-Write-Host "2 VMKernel Portgroup" -foregroundcolor Yellow
+Write-Host "options
+           1 VM Portgroup 
+           2 VMKernel Portgroup" -ForegroundColor Yellow
 
 $type     = Read-Host "type 1 or 2"
 
