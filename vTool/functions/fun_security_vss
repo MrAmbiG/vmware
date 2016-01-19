@@ -1,0 +1,42 @@
+<#
+.SYNOPSIS
+    update security settings on vswitchs.
+.DESCRIPTION
+    this will update the MTU assigned for a vswitch
+.NOTES
+    File Name      : fun_security_vss.ps1
+    Author         : gajendra d ambi
+    Date           : January 2016
+    recommended    : PowerShell v4+, powercli 6+ over win7 and upper.
+    Copyright      - None
+.LINK
+    Script posted over: github.com/gajuambi/vmware   
+#>
+
+#Start of script
+
+Function fun_security_vss {
+$cluster = Read-Host "name of the cluster(hint:type * to include all cluster):"
+$vss     = Read-Host "name of the vswitch(hint:type * to include all vswitchs):"
+Write-Host "
+1 - enable AllowPromiscuous
+2 - enable ForgedTransmits
+3 - enable MacChanges
+4 - disable AllowPromiscuous
+5 - disable ForgedTransmits
+6 - disable MacChanges
+choose between 1 to 6
+"
+$option  = Read-Host ":"
+  foreach ($vmhost in (get-cluster $cluster | get-vmhost))
+  { Write-Host "Applying security settings on $vmhost"
+   if ($option -eq 1) {get-vmhost $vmhost | get-virtualswitch -name $vss | Get-SecurityPolicy | Set-SecurityPolicy -AllowPromiscuous $true   -confirm:$false}
+   if ($option -eq 2) {get-vmhost $vmhost | get-virtualswitch -name $vss | Get-SecurityPolicy | Set-SecurityPolicy -ForgedTransmits  $true   -confirm:$false}
+   if ($option -eq 3) {get-vmhost $vmhost | get-virtualswitch -name $vss | Get-SecurityPolicy | Set-SecurityPolicy -MacChanges       $true   -confirm:$false}
+   if ($option -eq 4) {get-vmhost $vmhost | get-virtualswitch -name $vss | Get-SecurityPolicy | Set-SecurityPolicy -AllowPromiscuous $false  -confirm:$false}
+   if ($option -eq 5) {get-vmhost $vmhost | get-virtualswitch -name $vss | Get-SecurityPolicy | Set-SecurityPolicy -ForgedTransmits  $false  -confirm:$false}
+   if ($option -eq 6) {get-vmhost $vmhost | get-virtualswitch -name $vss | Get-SecurityPolicy | Set-SecurityPolicy -MacChanges       $false  -confirm:$false}
+  }
+}
+
+#End of script
