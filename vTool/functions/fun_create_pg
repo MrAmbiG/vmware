@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    unction to create portgroups on all vmware esxi hosts.
+    create portgroups on all vmware esxi hosts.
 .DESCRIPTION
     This will create vswitchs on all of your hosts of a vcenter
 .NOTES
