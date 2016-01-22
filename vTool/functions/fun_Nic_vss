@@ -28,5 +28,5 @@ $Nic     = Read-Host "vmnic?(ex:vmnic1 or vmnic3 enter only 1 value at a time)"
    Get-VirtualSwitch $vss | Add-VirtualSwitchPhysicalNetworkAdapter -VMHostPhysicalNic $vmnic 
   }
 }
-
+fun_Nic_vss
 #End of script
