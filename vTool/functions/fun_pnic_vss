@@ -14,7 +14,7 @@
 #>
 
 #Start of script
-
+#start of functioin
 Function fun_nic_pg {
 $cluster = Read-Host "name of the cluster(hint:type * to include all cluster)"
 $vss     = Read-Host "name of the vswitch(hint:type * to include all vswitchs)"
@@ -26,3 +26,6 @@ $vmnic   = Read-Host "name of the vmnic to add(hint:ex:-vmnic5;only 1 at a time"
    #get-vmhost $vmhost | Get-VirtualSwitch -Name $vss | Set-VirtualSwitch -Nic $vmnic -Confirm:$false 
   }
 }
+#end of function
+fun_nic_pg
+#end of script
