@@ -14,7 +14,7 @@
 #>
 
 #start of script
-
+#start of function
 Function fun_remove_pg {
  #variables
  $cluster = Read-Host "name of the cluster(hint:type * to include all cluster):"
@@ -38,5 +38,6 @@ Function fun_remove_pg {
   }
  }
 }
-
+#end of function
+fun_remove_pg
 #end of script
