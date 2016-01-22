@@ -41,4 +41,5 @@ $csv
  }
 }
 #End of function
+fun_cluster_addhosts
 #End of script
