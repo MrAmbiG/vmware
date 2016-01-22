@@ -23,4 +23,5 @@ $cluster = Read-Host "name of the cluster?"
  Get-Datacenter -Name $dc | New-Cluster -Name $cluster -Confirm:$false
 }
 #End of function
+fun_create_cluster
 #End of script
