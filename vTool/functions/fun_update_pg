@@ -14,7 +14,7 @@
 #>
 
 #Start of script
-
+#start of function
 Function fun_update_pg {
 $cluster = Read-Host "name of the cluster(hint-type * to include all cluster):"
 $pg      = Read-Host "name of the portgroup:"
@@ -92,5 +92,6 @@ $pg      = Read-Host "name of the portgroup:"
     }
   }
 }
-
+#end of function
+fun_update_pg
 #End of script
