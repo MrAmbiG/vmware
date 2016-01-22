@@ -24,5 +24,5 @@ $mtu     = Read-Host "mtu?"
    get-vmhost $vmhost | get-virtualswitch -Name $vss | Set-VirtualSwitch -Mtu $mtu -Confirm:$false
   }
 }
-
+fun_mtu_vss
 #End of script
