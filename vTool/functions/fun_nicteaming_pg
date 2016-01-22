@@ -14,7 +14,7 @@
 #>
 
 #Start of script
-
+#start of function
 Function fun_nicteaming_vss {
 $cluster = Read-Host "name of the cluster(hint:type * to include all clusters)"
 $pg      = Read-Host "name of the portgroup(hint:type * to include all portgroups)"
@@ -46,3 +46,7 @@ $option = Read-Host "choose your option:"
     if ($option -eq "7") {Get-VMHost $vmhost | Get-Virtualportgroup -Name $pg | Get-NicTeamingPolicy | Set-NicTeamingPolicy -MakeNicActive  $vmnic0 -MakeNicActive  $vmnic1 -Confirm:$false}
   }
 }
+
+#End of function
+fun_nicteaming_vss
+#End of Script
