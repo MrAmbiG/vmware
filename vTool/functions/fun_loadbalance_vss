@@ -40,5 +40,5 @@ $vss     = Read-Host "name of the vswitch(hint:type * to include all vswitchs):"
    if ($option -eq '5') {get-vmhost $vmhost | get-virtualswitch -Name $vss | Get-NicTeamingPolicy | Set-NicTeamingPolicy -LoadBalancingPolicy ExplicitFailover     -Confirm:$false}
   }
 }
-
+fun_loadbalance_vss
 #End of script
