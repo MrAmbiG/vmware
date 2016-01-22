@@ -25,4 +25,5 @@ get-cluster -Name $cluster | Set-Cluster -HAEnabled:$true -DRSEnabled:$true -DRS
  }
 }
 #End of function
+fun_cluster_HaDrs
 #End of script
