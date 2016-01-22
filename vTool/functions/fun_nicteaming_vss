@@ -14,7 +14,7 @@
 #>
 
 #Start of script
-
+#start of function
 Function fun_nicteaming_vss {
 $cluster = Read-Host "name of the cluster(hint:type * to include all clusters)"
 $vss     = Read-Host "name of the vswitch(hint:type * to include all vswitchs)"
@@ -44,3 +44,6 @@ $option = Read-Host "choose your option:"
   if ($option -eq "7") {Get-VMHost $vmhost | Get-Virtualswitch -Name $vss | Get-NicTeamingPolicy | Set-NicTeamingPolicy -MakeNicActive  $vmnic0 -MakeNicActive  $vmnic1 -Confirm:$false}
  }
 }
+#end of function
+fun_nicteaming_vss
+#end of script
