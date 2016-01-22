@@ -14,7 +14,7 @@
 #>
 
 #Start of script
-
+#start of function
 Function fun_NumPorts_vss {
 $cluster = Read-Host "name of the cluster(hint:type * to include all cluster)"
 $vss     = Read-Host "name of the vswitch(hint:type * to include all vswitchs)"
@@ -24,5 +24,6 @@ $ports   = Read-Host "number of ports?"
    get-vmhost | get-virtualswitch -Name $vss | set-virtualswitch -NumPorts $ports -Confirm:$false    
   }
 }
-
+#end of function
+fun_NumPorts_vss
 #End of script
