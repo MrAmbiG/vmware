@@ -14,7 +14,7 @@
 #>
 
 #Start of script
-
+#start of function
 Function fun_security_vss {
 $cluster = Read-Host "name of the cluster(hint:type * to include all cluster):"
 $vss     = Read-Host "name of the vswitch(hint:type * to include all vswitchs):"
@@ -38,5 +38,6 @@ $option  = Read-Host ":"
    if ($option -eq 6) {get-vmhost $vmhost | get-virtualswitch -name $vss | Get-SecurityPolicy | Set-SecurityPolicy -MacChanges       $false  -confirm:$false}
   }
 }
-
+#end of function
+fun_security_vss
 #End of script
