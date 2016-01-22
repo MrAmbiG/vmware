@@ -15,7 +15,7 @@
 #>
 
 #start of  script
-
+#start of function
 function fun_create_vss {
 write-host "type * if you want this to be performed on all hosts of all clusters 
 or 
@@ -29,6 +29,7 @@ $vmnic   = Read-Host ":"
 Get-Cluster $cluster | get-vmhost | New-VirtualSwitch -Name $vss -Mtu $mtu -Confirm:$false
 Get-cluster $cluster | get-vmhost | get-virtualswitch -Name $vss | Set-VirtualSwitch -Nic $vmnic -Confirm:$false
 }
+#end of function
 fun_create_vss
 #End of script
 
