@@ -19,6 +19,7 @@ Function fun_ntp {
  write-host "Type 1 ntp server, Rerun the same script to add another ntp server"
  $ntp = Read-Host
  Add-VMHostNTPServer -NtpServer $ntp -VMHost (Get-VMHost) -Confirm:$false
+ Get-VMHostService -VMHost (Get-VMHost) | where Key -eq "ntpd" | Restart-VMHostService | Set-VMHostService -policy "on" -Confirm:$false
 }
 #end of function
 fun_ntp
