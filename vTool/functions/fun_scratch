@@ -18,25 +18,19 @@
 #start of script
 #start of function
 function fun_scratch {
-$keyword = '*-localstorage'
 foreach ($vmhost in (get-vmhost | sort)) {
  $vmhost        = (get-vmhost $vmhost).Name
  $scratchfolder = '.locker_'+(get-vmhost $vmhost).Name.Split('.')[0]
- $ds            = (Get-VMHost $vmhost | get-datastore | where name -match $keyword).Name
+ $ds            = (Get-VMHost $vmhost | get-datastore | where name -match '-localstorage').Name
   if ($ds -ne $null) {
   write-host "found a datastore with localstorage in it's name on $vmhost, a scratch partition will be configured on this host" -ForegroundColor Green
-  New-PSDrive -Name $vmhost -Root \ -PSProvider VimDatastore -Datastore (Get-Datastore $ds)
-  Set-Location $vmhost":\"
+  $location = $vmhost+"location"
+  New-PSDrive -Name $location -Root \ -PSProvider VimDatastore -Datastore (Get-Datastore $ds)
+  Set-Location $location":"
   ni $scratchfolder -ItemType directory -ErrorAction SilentlyContinue
+  #$path = "/vmfs/volumes/$ds/$scratchfolder"
   Get-VMhost $vmhost | Get-AdvancedSetting -Name "ScratchConfig.ConfiguredScratchLocation" | Set-AdvancedSetting -Value "/vmfs/volumes/$ds/$scratchfolder" -confirm:$false
-  
-  #undo some variables
-  Set-Location $null
-  Remove-PSDrive $vmhost
   }
- if ($ds -ne $null) {
-  write-host "found NO datastore with localstorage in it's name on $vmhost, skipping this host" -ForegroundColor yellow
- }
  }
 }
 #End of script
