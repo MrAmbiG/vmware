@@ -17,7 +17,7 @@
 
 #start of script
 #start of function
-fun_scratch {
+function fun_scratch {
 $keyword = '*-localstorage'
 foreach ($vmhost in (get-vmhost | sort)) {
  $vmhost        = (get-vmhost $vmhost).Name
@@ -40,4 +40,5 @@ foreach ($vmhost in (get-vmhost | sort)) {
  }
 }
 #End of script
+fun_scratch
 #End of function
