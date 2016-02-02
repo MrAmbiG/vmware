@@ -19,21 +19,19 @@
 #start of function
 function fun_scratch {
 $resetloc = get-location
-foreach ($vmhost in (get-vmhost | sort)) {
+foreach ($vmhost in (get-cluster | get-vmhost | sort)) {
  $vmhost        = (get-vmhost $vmhost).Name
- $scratchfolder = '.locker_'+(get-vmhost $vmhost).Name.Split('.')[0]
- $ds            = (Get-VMHost $vmhost | get-datastore | where name -match '-localstorage').Name
-  $location = $vmhost+"location"
+ $scratchfolder = '.locker_'+($vmhost.Split('.')[0])
+ $ds            = (Get-VMHost -name $vmhost | get-datastore | where name -match '-localstorage').Name
+  $location = 'location'
   $null = New-PSDrive -Name $location -Root \ -PSProvider VimDatastore -Datastore (Get-Datastore $ds) -Scope global
   Set-Location $location":"
   $null = ni $scratchfolder -ItemType directory -ErrorAction SilentlyContinue
   $null = Get-VMhost $vmhost | Get-AdvancedSetting -Name "ScratchConfig.ConfiguredScratchLocation" | Set-AdvancedSetting -Value "/vmfs/volumes/$ds/$scratchfolder" -confirm:$false 
-  Write-Host "The scratch config details of $vmhost are.." -ForegroundColor Green
-  (Get-VMhost $vmhost | Get-AdvancedSetting -Name "ScratchConfig.ConfiguredScratchLocation").Value
-  Set-Location $resetloc 
+  Set-Location $resetloc
   Remove-PSDrive $location
  }
- Write-host "Please neglect the following errors" -ForegroundColor yellow
+ Get-VMhost | Get-AdvancedSetting -Name "ScratchConfig.ConfiguredScratchLocation" | select Entity, Value | fl
 }
 #End of script
 fun_scratch
