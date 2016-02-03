@@ -61,14 +61,15 @@ Write-Host "
 8. Reenable SSH/Shell warning
 " -ForegroundColor Yellow
 Write-Host "choose one of the above" -ForegroundColor Yellow
-$option = Read-Host ":"
+$option  = Read-Host ""
+$cluster = "*"
 
-if ($option -eq 1) {get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | Start-VMHostService}
-if ($option -eq 2) {get-vmhost | Get-VMHostService | where Key -EQ TSM-SSH | Start-VMHostService | Set-VMHostService -Policy On}
-if ($option -eq 3) {get-vmhost | Get-VMHostService | where Key -EQ TSM-SSH | Stop-VMHostService | Set-VMHostService -Policy Off}
-if ($option -eq 4) {get-vmhost | get-vmhostservice | where Key -EQ TSM | Start-VMHostService}
-if ($option -eq 5) {get-vmhost | get-vmhostservice | where Key -EQ TSM | Start-VMHostService | Set-VMHostService -Policy On}
-if ($option -eq 6) {get-vmhost | get-vmhostservice | where Key -EQ TSM | Stop-VMHostService | Set-VMHostService -Policy Off}
+if ($option -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | Start-VMHostService}
+if ($option -eq 2) {get-cluster $cluster | get-vmhost | Get-VMHostService | where Key -EQ TSM-SSH | Start-VMHostService | Set-VMHostService -Policy On}
+if ($option -eq 3) {get-cluster $cluster | get-vmhost | Get-VMHostService | where Key -EQ TSM-SSH | Stop-VMHostService | Set-VMHostService -Policy Off}
+if ($option -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM | Start-VMHostService}
+if ($option -eq 5) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM | Start-VMHostService | Set-VMHostService -Policy On}
+if ($option -eq 6) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM | Stop-VMHostService | Set-VMHostService -Policy Off}
 if ($option -eq 7) {
 #X server's credentials
 $user = Read-Host "Host's username?"
@@ -79,7 +80,6 @@ Copy-Item $PSScriptRoot\plink.exe C:\
 
 ##variables
 #put the name of the cluster between quotes (replacing star). Enter multiple cluster names & separate them by a comma (no space in between)
-$cluster = "*"
 $VMHosts = get-cluster $cluster | Get-VMHost | sort
 
 ForEach ($VMHost in $VMHosts){
