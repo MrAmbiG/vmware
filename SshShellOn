@@ -114,21 +114,21 @@ Copy-Item $PSScriptRoot\plink.exe C:\
 $cluster = "*"
 $VMHosts = get-cluster $cluster | Get-VMHost | sort
 
-ForEach ($VMHost in $VMHosts){
-#Enable SSH on all hosts
-get-cluster $cluster | Get-VMHost $VMHost | Get-VMHostService | where Key -EQ TSM-SSH | Start-VMHostService
-
-echo y | C:\plink.exe -ssh $user@$VMHost -pw $pass "exit"
-
-#Suppress Shell warning
-C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass 'vim-cmd hostsvc/advopt/update UserVars.SuppressShellWarning long 0'
-
-#do not modify the below line
-C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass "hostname"
-
-#Disable SSH on all hosts
-get-cluster $cluster | Get-VMHost $VMHost | Get-VMHostService | where Key -EQ TSM-SSH | Stop-VMHostService -confirm:$false
-}
+ ForEach ($VMHost in $VMHosts){
+ #Enable SSH on all hosts
+ get-cluster $cluster | Get-VMHost $VMHost | Get-VMHostService | where Key -EQ TSM-SSH | Start-VMHostService
+ 
+ echo y | C:\plink.exe -ssh $user@$VMHost -pw $pass "exit"
+ 
+ #Suppress Shell warning
+ C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass 'vim-cmd hostsvc/advopt/update UserVars.SuppressShellWarning long 0'
+ 
+ #do not modify the below line
+ C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass "hostname"
+ 
+ #Disable SSH on all hosts
+ get-cluster $cluster | Get-VMHost $VMHost | Get-VMHostService | where Key -EQ TSM-SSH | Stop-VMHostService -confirm:$false
+ }
 
 #delete plink from c:\
 Remove-Item C:\plink.exe
