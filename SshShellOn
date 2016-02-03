@@ -133,3 +133,5 @@ get-cluster $cluster | Get-VMHost $VMHost | Get-VMHostService | where Key -EQ TS
 #delete plink from c:\
 Remove-Item C:\plink.exe
 }
+
+#End of Script
