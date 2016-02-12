@@ -42,7 +42,7 @@ if ($type -eq 2) {
    $c     = $ip.Split('.')[3]
    $c     = [int]$c
 
-   foreach ($vmhost in (get-cluster $cluster | get-vmhost)) {
+   foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
     get-vmhost $vmhost | get-virtualswitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false
    (get-vmhost $vmhost | Get-EsxCli).network.ip.interface.add($null, $null, "$vmk", $null, "1500", $null, "$pg")
    (get-vmhost $vmhost | Get-EsxCli).network.ip.interface.ipv4.set("$vmk", "$b.$(($c++))", "$mask", $null, "static")
