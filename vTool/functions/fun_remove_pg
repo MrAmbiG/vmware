@@ -20,22 +20,12 @@ Function fun_remove_pg {
  $cluster = Read-Host "name of the cluster(hint:type * to include all cluster):"
  $pg      = read-host "name of the portgroup?"
  
- foreach ($vmhost in (get-cluster $cluster | Get-VMHost | sort)) {
- $pgs       = get-vmhost $vmhost | get-virtualportgroup | select name
- if ($pgs -match $portgroup) {
-   $vmk     = Get-VMHostNetworkAdapter -VMHost $vmhost | where PortgroupName -eq $portgroup
-   if ($vmk -ne $null) {
-    
-   #removing vmkernel
-   Write-Host removing the vmkernel $vmk from portgrop $portgroup on the host $vmhost -ForegroundColor Green
-   Remove-VMHostNetworkAdapter -Nic $vmk -confirm:$false
-   }
- 
-   #removing portgroup
-   Write-Host removing the portgrop $portgroup on the host $vmhost -ForegroundColor Blue
-   get-virtualportgroup -Name $portgroup | Remove-VirtualPortGroup -Confirm:$false
-   
+foreach ($vmhost in $vmhosts) {
+ $vmk = Get-VMHostNetworkAdapter -VMHost $vmhost | where name -eq $pg
+  if ($vmk -ne $null) {
+  Remove-VMHostNetworkAdapter -Nic $vmk -confirm:$false
   }
+  get-vmhost $vmhost | get-virtualportgroup -Name $pg | Remove-VirtualPortGroup -Confirm:$false
  }
 }
 #end of function
