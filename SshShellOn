@@ -61,7 +61,7 @@ Write-Host "
 8. Reenable SSH/Shell warning
 " -ForegroundColor Yellow
 Write-Host "choose one of the above" -ForegroundColor Yellow
-$option  = Read-Host ""
+$option  = Read-Host
 $cluster = "*"
 
 if ($option -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | Start-VMHostService}
