@@ -17,11 +17,11 @@
 #start of function
 Function fun_remove_pg {
  #variables
- $cluster = Read-Host "name of the cluster(hint:type * to include all cluster):"
+ $cluster = Read-Host "name of the cluster(hint:type * to include all cluster)"
  $pg      = read-host "name of the portgroup?"
  
-foreach ($vmhost in (get-cluster $cluster | get-vmhost)) {
- $vmk = Get-VMHostNetworkAdapter -VMHost $vmhost | where name -eq $pg
+foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
+ $vmk = Get-VMHostNetworkAdapter -VMHost $vmhost | where PortgroupName -eq $pg
   if ($vmk -ne $null) {
   Remove-VMHostNetworkAdapter -Nic $vmk -confirm:$false
   }
