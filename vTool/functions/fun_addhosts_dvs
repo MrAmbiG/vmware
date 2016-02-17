@@ -22,10 +22,7 @@ $csv >> "$PSScriptRoot/addhosts.csv"
 $csv = "$PSScriptRoot/addhosts.csv"
 $csv | select dvs, hosts | Export-Csv $csv
 
-Write-Host "update the csv file" -ForegroundColor Yellow
-Write-Host "hit ctrl+s to save and click yes" -ForegroundColor Yellow
-Write-Host "close the csv only after the script is over" -ForegroundColor Yellow
-Read-Host  "hit enter/return to continue"
+Write-Host "update the csv file with a text editor,save & close it & then hit enter" -ForegroundColor Yellow
 
 start-process $csv
 Read-Host "Hit Enter/Return to continue"
@@ -33,8 +30,8 @@ $csv = import-csv $csv
 $csv
 
 $cluster = Read-Host "name of the cluster?(type * to include all clusters)"
-$nic1    = Read-Host "type the name of the network adapter to add(ex:vmnic2):"
-$nic2    = Read-Host "type the name of another network adapter to add(ex:vmnic3):"
+$nic1    = Read-Host "type the name of the network adapter to add(ex:vmnic2)"
+$nic2    = Read-Host "type the name of another network adapter to add(ex:vmnic3)"
 
  foreach ($line in $csv){
  $dvs    = $($line.dvs)
@@ -48,4 +45,5 @@ $nic2    = Read-Host "type the name of another network adapter to add(ex:vmnic3)
  }
 }
 #End of function
+fun_addhosts_dvs
 #End of script
