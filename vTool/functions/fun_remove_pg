@@ -20,7 +20,7 @@ Function fun_remove_pg {
  $cluster = Read-Host "name of the cluster(hint:type * to include all cluster):"
  $pg      = read-host "name of the portgroup?"
  
-foreach ($vmhost in $vmhosts) {
+foreach ($vmhost in (get-cluster $cluster | get-vmhost)) {
  $vmk = Get-VMHostNetworkAdapter -VMHost $vmhost | where name -eq $pg
   if ($vmk -ne $null) {
   Remove-VMHostNetworkAdapter -Nic $vmk -confirm:$false
