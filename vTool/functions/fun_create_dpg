@@ -22,7 +22,7 @@ $csv >> "$PSScriptRoot/dpg.csv"
 $csv = "$PSScriptRoot/dpg.csv"
 $csv | select dvs, portgroup, vlan, ports | Export-Csv $csv
 
-Write-Host "update the csv file,save & close it & then hit enter" -ForegroundColor Yellow
+Write-Host "update the csv file with a text editor,save & close it & then hit enter" -ForegroundColor Yellow
 
 start-process $csv
 Read-Host "Hit Enter/Return to continue"
