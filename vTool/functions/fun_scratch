@@ -19,7 +19,7 @@
 #start of function
 function fun_scratch {
 $resetloc = get-location
-$cluster  = "*"
+$cluster  = Read-Host "name of the cluster[type * to include all clusters]?"
 foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
  $vmhost        = (get-vmhost $vmhost).Name
  $scratchfolder = '.locker_'+($vmhost.Split('.')[0])
@@ -32,7 +32,7 @@ foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
   Set-Location $resetloc
   Remove-PSDrive $location
  }
- Get-VMhost | sort | Get-AdvancedSetting -Name "ScratchConfig.ConfiguredScratchLocation" | select Entity, Value | fl
+ get-cluster $cluster | get-vmhost | sort | Get-AdvancedSetting -Name "ScratchConfig.ConfiguredScratchLocation" | select Entity, Value | fl
 }
 #End of script
 fun_scratch
