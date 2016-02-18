@@ -23,4 +23,5 @@ $mtu      = Read-Host "mtu?"
 New-VDSwitch -Name $dvs -Mtu $mtu -Location $dc -NumUplinkPorts $NumPorts -Confirm:$false
 }
 #End of Function
+fun_create_vds
 #End of Script
