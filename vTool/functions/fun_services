@@ -44,10 +44,10 @@ If (($option -EQ 'A') -or ($option -EQ 'a')) {  Write-Host "
   "
   $choice  = read-host 'choose one of the above' -foregroundcolor green
   $service = 'DCUI'
-  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice} 
-  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice}
-  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice | Set-VMHostService -Policy On}
-  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice | Set-VMHostService -Policy off}  }
+  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice} 
+  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice}
+  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice | Set-VMHostService -Policy On}
+  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice | Set-VMHostService -Policy off}  }
 If (($option -EQ 'B') -or ($option -EQ 'b')) {  Write-Host "
   1. Turn On
   2. Turn Off
@@ -56,10 +56,10 @@ If (($option -EQ 'B') -or ($option -EQ 'b')) {  Write-Host "
   "
   $choice  = read-host 'choose one of the above' -foregroundcolor green
   $service = 'TSM'
-  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice} 
-  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice}
-  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice | Set-VMHostService -Policy On}
-  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice | Set-VMHostService -Policy off}  }
+  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice} 
+  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice}
+  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice | Set-VMHostService -Policy On}
+  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice | Set-VMHostService -Policy off}  }
 If (($option -EQ 'C') -or ($option -EQ 'c')) {  Write-Host "
   1. Turn On
   2. Turn Off
@@ -68,10 +68,10 @@ If (($option -EQ 'C') -or ($option -EQ 'c')) {  Write-Host "
   "
   $choice  = read-host 'choose one of the above' -foregroundcolor green
   $service = 'TSM-SSH'
-  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice} 
-  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice}
-  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice | Set-VMHostService -Policy On}
-  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice | Set-VMHostService -Policy off}  }
+  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice} 
+  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice}
+  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice | Set-VMHostService -Policy On}
+  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice | Set-VMHostService -Policy off}  }
 If (($option -EQ 'D') -or ($option -EQ 'd')) {  Write-Host "
   1. Turn On
   2. Turn Off
@@ -80,10 +80,10 @@ If (($option -EQ 'D') -or ($option -EQ 'd')) {  Write-Host "
   "
   $choice  = read-host 'choose one of the above' -foregroundcolor green
   $service = ''
-  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice} 
-  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice}
-  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice | Set-VMHostService -Policy On}
-  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice | Set-VMHostService -Policy off}  }
+  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice} 
+  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice}
+  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice | Set-VMHostService -Policy On}
+  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice | Set-VMHostService -Policy off}  }
 If (($option -EQ 'E') -or ($option -EQ 'e')) {  Write-Host "
   1. Turn On
   2. Turn Off
@@ -92,10 +92,10 @@ If (($option -EQ 'E') -or ($option -EQ 'e')) {  Write-Host "
   "
   $choice  = read-host 'choose one of the above' -foregroundcolor green
   $service = 'lbtd'
-  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice} 
-  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice}
-  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice | Set-VMHostService -Policy On}
-  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice | Set-VMHostService -Policy off}  }
+  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice} 
+  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice}
+  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice | Set-VMHostService -Policy On}
+  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice | Set-VMHostService -Policy off}  }
 If (($option -EQ 'F') -or ($option -EQ 'f')) {  Write-Host "
   1. Turn On
   2. Turn Off
@@ -104,10 +104,10 @@ If (($option -EQ 'F') -or ($option -EQ 'f')) {  Write-Host "
   "
   $choice  = read-host 'choose one of the above' -foregroundcolor green
   $service = 'lwsmd'
-  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice} 
-  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice}
-  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice | Set-VMHostService -Policy On}
-  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice | Set-VMHostService -Policy off}  }
+  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice} 
+  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice}
+  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice | Set-VMHostService -Policy On}
+  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice | Set-VMHostService -Policy off}  }
 If (($option -EQ 'G') -or ($option -EQ 'g')) {  Write-Host "
   1. Turn On
   2. Turn Off
@@ -116,10 +116,10 @@ If (($option -EQ 'G') -or ($option -EQ 'g')) {  Write-Host "
   "
   $choice  = read-host 'choose one of the above' -foregroundcolor green
   $service = 'ntpd'
-  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice} 
-  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice}
-  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice | Set-VMHostService -Policy On}
-  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice | Set-VMHostService -Policy off}  }
+  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice} 
+  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice}
+  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice | Set-VMHostService -Policy On}
+  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice | Set-VMHostService -Policy off}  }
 If (($option -EQ 'H') -or ($option -EQ 'h')) {  Write-Host "
   1. Turn On
   2. Turn Off
@@ -128,10 +128,10 @@ If (($option -EQ 'H') -or ($option -EQ 'h')) {  Write-Host "
   "
   $choice  = read-host 'choose one of the above' -foregroundcolor green
   $service = 'pcscd'
-  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice} 
-  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice}
-  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice | Set-VMHostService -Policy On}
-  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice | Set-VMHostService -Policy off}  }
+  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice} 
+  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice}
+  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice | Set-VMHostService -Policy On}
+  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice | Set-VMHostService -Policy off}  }
 If (($option -EQ 'I') -or ($option -EQ 'i')) {  Write-Host "
   1. Turn On
   2. Turn Off
@@ -140,10 +140,10 @@ If (($option -EQ 'I') -or ($option -EQ 'i')) {  Write-Host "
   "
   $choice  = read-host 'choose one of the above' -foregroundcolor green
   $service = 'sfcbd-watchdog'
-  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice} 
-  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice}
-  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice | Set-VMHostService -Policy On}
-  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice | Set-VMHostService -Policy off}  }
+  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice} 
+  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice}
+  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice | Set-VMHostService -Policy On}
+  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice | Set-VMHostService -Policy off}  }
 If (($option -EQ 'J') -or ($option -EQ 'j')) {  Write-Host "
   1. Turn On
   2. Turn Off
@@ -152,10 +152,10 @@ If (($option -EQ 'J') -or ($option -EQ 'j')) {  Write-Host "
   "
   $choice  = read-host 'choose one of the above' -foregroundcolor green
   $service = 'snmpd'
-  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice} 
-  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice}
-  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice | Set-VMHostService -Policy On}
-  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice | Set-VMHostService -Policy off}  }
+  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice} 
+  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice}
+  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice | Set-VMHostService -Policy On}
+  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice | Set-VMHostService -Policy off}  }
 If (($option -EQ 'K') -or ($option -EQ 'k')) {  Write-Host "
   1. Turn On
   2. Turn Off
@@ -164,10 +164,10 @@ If (($option -EQ 'K') -or ($option -EQ 'k')) {  Write-Host "
   "
   $choice  = read-host 'choose one of the above' -foregroundcolor green
   $service = 'vmsyslogd'
-  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice} 
-  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice}
-  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice | Set-VMHostService -Policy On}
-  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice | Set-VMHostService -Policy off}  }
+  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice} 
+  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice}
+  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice | Set-VMHostService -Policy On}
+  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice | Set-VMHostService -Policy off}  }
 If (($option -EQ 'L') -or ($option -EQ 'l')) {  Write-Host "
   1. Turn On
   2. Turn Off
@@ -176,10 +176,10 @@ If (($option -EQ 'L') -or ($option -EQ 'l')) {  Write-Host "
   "
   $choice  = read-host 'choose one of the above' -foregroundcolor green
   $service = 'vprobed'
-  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice} 
-  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice}
-  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice | Set-VMHostService -Policy On}
-  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice | Set-VMHostService -Policy off}  }
+  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice} 
+  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice}
+  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice | Set-VMHostService -Policy On}
+  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice | Set-VMHostService -Policy off}  }
 If (($option -EQ 'M') -or ($option -EQ 'm')) {  Write-Host "
   1. Turn On
   2. Turn Off
@@ -188,10 +188,10 @@ If (($option -EQ 'M') -or ($option -EQ 'm')) {  Write-Host "
   "
   $choice  = read-host 'choose one of the above' -foregroundcolor green
   $service = 'vpxa'
-  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice} 
-  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice}
-  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice | Set-VMHostService -Policy On}
-  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice | Set-VMHostService -Policy off}  }
+  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice} 
+  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice}
+  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice | Set-VMHostService -Policy On}
+  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice | Set-VMHostService -Policy off}  }
 If (($option -EQ 'M') -or ($option -EQ 'm')) {  Write-Host "
   1. Turn On
   2. Turn Off
@@ -200,10 +200,10 @@ If (($option -EQ 'M') -or ($option -EQ 'm')) {  Write-Host "
   "
   $choice  = read-host 'choose one of the above' -foregroundcolor green
   $service = 'xorg'
-  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice} 
-  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice}
-  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Start-VMHostchoice | Set-VMHostService -Policy On}
-  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostchoice | where Key -EQ $service | Stop-VMHostchoice | Set-VMHostService -Policy off}  }
+  if ($choice -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice} 
+  if ($choice -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice}
+  if ($choice -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Start-vmhostservice | Set-VMHostService -Policy On}
+  if ($choice -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ $service | Stop-vmhostservice | Set-VMHostService -Policy off}  }
 }
 #End of function
 fun_services
