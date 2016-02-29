@@ -30,9 +30,9 @@ $type     = Read-Host "type 1 or 2"
 if ($type -eq 1) {Get-cluster $cluster | get-vmhost | get-virtualswitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false}
 
 if ($type -eq 2) {
-   $vmk   = Read-Host "vmk number? ex:- vmk9" -foregroundcolor yellow
-   $ip    = Read-Host "starting ip address?"  -foregroundcolor yellow
-   $mask  = Read-Host "subnet mask"           -foregroundcolor yellow
+   $vmk   = Read-Host "vmk number? ex:- vmk9"
+   $ip    = Read-Host "starting ip address?" 
+   $mask  = Read-Host "subnet mask"          
    $a     = $ip.Split('.')[0..2]
    
    #first 3 octets of the ip address
