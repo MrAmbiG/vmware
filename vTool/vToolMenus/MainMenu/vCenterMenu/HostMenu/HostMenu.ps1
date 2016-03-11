@@ -1,5 +1,4 @@
-﻿
-#Start of HostMenu
+﻿#Start of HostMenu
 function HostMenu
 {
  do {
@@ -11,7 +10,7 @@ function HostMenu
      B. Syslog settings
      C. DNS settings
      D. NTP settings
-     E. TCP/IP advance settings
+     E. Any Advanced setting
      F. Firewall Settings
      G. Scratch partition
      H. Performance settings
