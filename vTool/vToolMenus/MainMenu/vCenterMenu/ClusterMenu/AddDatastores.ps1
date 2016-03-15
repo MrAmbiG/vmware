@@ -55,8 +55,8 @@ $csv = Import-Csv $csv
   $lunid   = $($line.LunID)
   $ds      = $($line.DatastoreName)
   $vmhost  = (get-cluster $cluster | get-vmhost)[0]
-  $naa     = (Get-SCSILun -VMhost $vmhost -LunType Disk | where runtimename -eq vmhba0:C0:T0:L$lunid).CanonicalName
-  New-Datastore -VMHost $vmhost -Name $datastore -Path $naa -vmfs -Confirm:$false
+  $naa     = (Get-SCSILun -VMhost $vmhost -LunType Disk | where Runtime -eq vmhba0:C0:T0:L$lunid).CanonicalName
+  New-Datastore -VMHost $vmhost -Name $ds -Path $naa -vmfs -Confirm:$false
  }
 
  $cluster = $csv.Cluster | get-unique
@@ -69,3 +69,4 @@ $csv = Import-Csv $csv
 
 #End of Script
 }#End of function
+AddDatastores
