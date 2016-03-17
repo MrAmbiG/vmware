@@ -1,5 +1,6 @@
 ﻿#start of function
-Function DRSVMToHostRule {
+Function DRSVMToHostRule 
+{
 <#
 .SYNOPSIS
     Create DRSVMToHostRule DRS Rule.

@@ -1,5 +1,6 @@
 ﻿#start of function
-function SetSnmp {
+function SetSnmp 
+{
 <#
 .SYNOPSIS
     Configure SNMP

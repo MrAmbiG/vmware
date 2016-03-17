@@ -1,6 +1,7 @@
 ﻿
 #start of function
-Function AddDatastores {
+Function AddDatastores 
+{
 <#
 .SYNOPSIS
     Add datastores to a cluster.
@@ -69,4 +70,4 @@ $csv = Import-Csv $csv
 
 #End of Script
 }#End of function
-AddDatastores
+

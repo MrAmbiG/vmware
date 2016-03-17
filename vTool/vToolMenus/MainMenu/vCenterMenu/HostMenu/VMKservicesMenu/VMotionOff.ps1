@@ -1,5 +1,6 @@
 ﻿#start of function
-function VMotionOff {
+function VMotionOff 
+{
 <#
 .SYNOPSIS
     Enable vMotion

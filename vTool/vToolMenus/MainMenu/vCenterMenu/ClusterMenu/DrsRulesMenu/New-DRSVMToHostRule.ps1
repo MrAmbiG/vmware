@@ -1,4 +1,4 @@
-﻿Function New-DRSVMToHostRule{
+﻿Function New-DRSVMToHostRule {
 <#
 .SYNOPSIS
   Creates a new DRS VM to host rule

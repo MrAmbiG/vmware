@@ -1,5 +1,6 @@
 ﻿#start of function
-function VsanTrafficOn {
+function VsanTrafficOn 
+{
 <#
 .SYNOPSIS
     Enable VsanTrafficOn

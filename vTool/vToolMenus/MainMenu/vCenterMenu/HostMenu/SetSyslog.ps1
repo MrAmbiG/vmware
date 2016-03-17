@@ -1,5 +1,6 @@
 ﻿#start of function
-function SetSyslog {
+function SetSyslog 
+{
 <#
 .SYNOPSIS
     Configure Syslog

@@ -46,7 +46,7 @@ function HostMenu
     "K" { HostServicesMenu }
     "L" { Write-Host you chose L }
     "M" { VMKservicesMenu }
-    "W" { Write-Host you chose HostsOtherMenu. This is not implemented yet }
+    "W" { Write-Host you chose others. This is not implemented yet }
     "X" { vCenterMenu }
     "Y" { MainMenu }  
     }

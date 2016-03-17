@@ -1,5 +1,6 @@
 ﻿#start of function
-Function DrsVmGroup {
+Function DrsVmGroup 
+{
 <#
 .SYNOPSIS
     Create DrsVmGroup DRS Rule.

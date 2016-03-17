@@ -1,5 +1,6 @@
 ﻿#start of function
-function SetDNS {
+function SetDNS 
+{
 <#
 .SYNOPSIS
     Update NTP

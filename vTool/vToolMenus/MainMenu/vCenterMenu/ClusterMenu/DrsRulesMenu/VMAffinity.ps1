@@ -1,5 +1,7 @@
-﻿#start of function
-Function VMAffinity {
+﻿
+#start of function
+Function VMAffinity 
+{
 <#
 .SYNOPSIS
     Create VMAffinity DRS Rule.

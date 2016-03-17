@@ -1,5 +1,6 @@
 ﻿#start of function
-Function DrsHostGroup {
+Function DrsHostGroup 
+{
 <#
 .SYNOPSIS
     Create DrsHostGroup DRS Rule.

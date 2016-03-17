@@ -1,5 +1,6 @@
 ﻿#start of function
-function FaultToleranceOff {
+function FaultToleranceOff 
+{
 <#
 .SYNOPSIS
     Enable vMotion

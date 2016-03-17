@@ -1,6 +1,7 @@
 ﻿ 
 #start of function
-Function AddHosts {
+Function AddHosts 
+{
 <#
 .SYNOPSIS
     Add hosts to cluster.

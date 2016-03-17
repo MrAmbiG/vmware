@@ -1,5 +1,6 @@
 ﻿#start of function
-function ManagementTrafficOn {
+function ManagementTrafficOn 
+{
 <#
 .SYNOPSIS
     Enable vMotion

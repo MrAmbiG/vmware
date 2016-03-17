@@ -1,5 +1,6 @@
 ﻿
-function CoreDump {
+function CoreDump 
+{
 <#
 .SYNOPSIS
     configure Coredump on esxi hosts

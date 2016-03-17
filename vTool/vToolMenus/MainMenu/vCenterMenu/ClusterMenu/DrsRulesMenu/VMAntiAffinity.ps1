@@ -1,5 +1,6 @@
 ﻿#start of function
-Function VMAntiAffinity {
+Function VMAntiAffinity 
+{
 <#
 .SYNOPSIS
     Create VMAntiAffinity DRS Rule.

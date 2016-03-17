@@ -1,5 +1,7 @@
-﻿#start of function
-Function CreateCluster {
+﻿
+#start of function
+Function CreateCluster 
+{
 <#
 .SYNOPSIS
     Create CreateCluster DRS Rule.

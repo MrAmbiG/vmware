@@ -1,6 +1,7 @@
 ﻿
 #start of function
-Function CreateVapp {
+Function CreateVapp 
+{
 <#
 .SYNOPSIS
     Create new vApp.

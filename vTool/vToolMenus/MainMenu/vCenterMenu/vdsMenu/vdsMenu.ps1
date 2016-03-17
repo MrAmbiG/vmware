@@ -28,8 +28,8 @@ function vdsMenu
     "B" { Write-Host you chose B }
     "C" { Write-Host you chose C }
     "D" { vdsLoadBalancingMenu }
-    "E" { Write-Host you chose E }
-    "X" { ClusterMenu }
+    "E" { Write-Host This feature is not available yet }
+    "X" { vCenterMenu }
     "Y" { MainMenu }  
     }
     } until ( $choice -match "Z" )
