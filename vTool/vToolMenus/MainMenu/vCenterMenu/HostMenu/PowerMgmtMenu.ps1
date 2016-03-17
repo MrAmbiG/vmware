@@ -27,6 +27,8 @@ function PowerMgmtMenu
     "B" { Write-Host you chose B }
     "C" { Write-Host you chose C }
     "D" { Write-Host you chose D }
+    "X" { HostMenu }
+    "Y" { MainMenu }
     }
     } until ( $choice -match "Z" )
 }
