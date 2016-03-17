@@ -30,7 +30,7 @@ if ($perf -eq 1) {$perf = "HighPerformance"}
 if ($perf -eq 2) {$perf = "Balanced"       }
 if ($perf -eq 3) {$perf = "LowPower"       }
 
-(Get-View (Get-VMHost | Get-View).ConfigManager.PowerSystem).ConfigurePowerPolicy($perf)
+(Get-View (Get-Cluster $cluster | Get-VMHost | Get-View).ConfigManager.PowerSystem).ConfigurePowerPolicy($perf)
 
  #End of Script#
 }#End of function

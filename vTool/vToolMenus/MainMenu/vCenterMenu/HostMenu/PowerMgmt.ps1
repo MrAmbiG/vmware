@@ -30,7 +30,7 @@ Write-Host "
 3.Shutdown (the hosts which are in maintenance mode)
 4.Reboot (the hosts which are in maintenance mode)
 " -ForegroundColor Blue -BackgroundColor White
-$axn     = Read-Host "Type a number amongst 1 to 4"
+$axn     = Read-Host "Type a number from 1 to 4"
 $vmhosts = Get-cluster $cluster | get-vmhost
 if ($axn -eq 1) {$vmhosts | set-vmhost -State Maintenance}
 if ($axn -eq 2) {$vmhosts | set-vmhost -State Connected}

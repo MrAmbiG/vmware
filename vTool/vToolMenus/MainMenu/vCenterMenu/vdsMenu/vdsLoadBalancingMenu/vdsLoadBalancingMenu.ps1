@@ -24,11 +24,11 @@ function vdsLoadBalancingMenu
     } until ( $ok )
     switch -Regex ($choice) 
     {
-    "A" { Write-Host you chose A }
-    "B" { Write-Host you chose B }
-    "C" { Write-Host you chose C }
-    "D" { Write-Host you chose D }
-    "E" { Write-Host you chose E }
+    "A" { SetLbip }
+    "B" { Setllb }
+    "C" { Setlbsm }
+    "D" { Setlbsi }
+    "E" { Setef }
     "X" { vdsMenu }
     "Y" { MainMenu }  
     }

@@ -24,9 +24,9 @@ function vdsMenu
     } until ( $ok )
     switch -Regex ($choice) 
     {
-    "A" { Write-Host you chose A }
-    "B" { Write-Host you chose B }
-    "C" { Write-Host you chose C }
+    "A" { CreateVds }
+    "B" { AddDpg }
+    "C" { HostVds }
     "D" { vdsLoadBalancingMenu }
     "E" { Write-Host This feature is not available yet }
     "X" { vCenterMenu }

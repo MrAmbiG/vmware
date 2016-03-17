@@ -33,18 +33,18 @@ function HostMenu
     } until ( $ok )
     switch -Regex ($choice) 
     {
-    "A" { Write-Host you chose A }
-    "B" { Write-Host you chose B }
-    "C" { Write-Host you chose C }
-    "D" { Write-Host you chose D }
-    "E" { Write-Host you chose E }
-    "F" { Write-Host you chose F }
-    "G" { Write-Host you chose G }
+    "A" { SetSnmp }
+    "B" { SetSyslog }
+    "C" { SetDNS }
+    "D" { SetNTP }
+    "E" { SetFirewall }
+    "F" { SetFirewall }
+    "G" { EsxiAdvanced }
     "H" { HostPerfMenu }
-    "I" { Write-Host you chose I }
+    "I" { CoreDump }
     "J" { PowerMgmtMenu }
     "K" { HostServicesMenu }
-    "L" { Write-Host you chose L }
+    "L" { SetIpv6 }
     "M" { VMKservicesMenu }
     "W" { Write-Host you chose others. This is not implemented yet }
     "X" { vCenterMenu }

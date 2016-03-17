@@ -26,14 +26,14 @@ function VMKservicesMenu
     } until ( $ok )
     switch -Regex ($choice) 
     {
-    "A" { Write-Host you chose A }
-    "B" { Write-Host you chose B }
-    "C" { Write-Host you chose C }
-    "D" { Write-Host you chose D }
-    "E" { Write-Host you chose E }
-    "F" { Write-Host you chose F }    
-    "G" { Write-Host you chose G }
-    "H" { Write-Host you chose H }
+    "A" { VmotionOn }
+    "B" { VsanTrafficOn }
+    "C" { FaultToleranceOn }
+    "D" { ManagementTrafficOn }
+    "E" { VMotionOff }
+    "F" { VsanTrafficOff }    
+    "G" { FaultToleranceOff }
+    "H" { ManagementTrafficOff }
     "X" { HostMenu }
     "Y" { MainMenu } 
     }

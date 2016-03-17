@@ -2462,6 +2462,7 @@ Get-Cluster $cluster | get-vmhost | Get-Virtualswitch -Name $vss | Set-VirtualSw
 #------------------------------End of Collection of Functions of automation------------------------#
 
 #------------------------------Start of Collection of Menu Functions-------------------------------#
+
 #Start of vdsLoadBalancingMenu
 function vdsLoadBalancingMenu
 {
@@ -2487,11 +2488,11 @@ function vdsLoadBalancingMenu
     } until ( $ok )
     switch -Regex ($choice) 
     {
-    "A" { Write-Host you chose A }
-    "B" { Write-Host you chose B }
-    "C" { Write-Host you chose C }
-    "D" { Write-Host you chose D }
-    "E" { Write-Host you chose E }
+    "A" { SetLbip }
+    "B" { Setllb }
+    "C" { Setlbsm }
+    "D" { Setlbsi }
+    "E" { Setef }
     "X" { vdsMenu }
     "Y" { MainMenu }  
     }
@@ -2527,14 +2528,14 @@ function VMKservicesMenu
     } until ( $ok )
     switch -Regex ($choice) 
     {
-    "A" { Write-Host you chose A }
-    "B" { Write-Host you chose B }
-    "C" { Write-Host you chose C }
-    "D" { Write-Host you chose D }
-    "E" { Write-Host you chose E }
-    "F" { Write-Host you chose F }    
-    "G" { Write-Host you chose G }
-    "H" { Write-Host you chose H }
+    "A" { VmotionOn }
+    "B" { VsanTrafficOn }
+    "C" { FaultToleranceOn }
+    "D" { ManagementTrafficOn }
+    "E" { VMotionOff }
+    "F" { VsanTrafficOff }    
+    "G" { FaultToleranceOff }
+    "H" { ManagementTrafficOff }
     "X" { HostMenu }
     "Y" { MainMenu } 
     }
@@ -2567,52 +2568,17 @@ function vdsMenu
     } until ( $ok )
     switch -Regex ($choice) 
     {
-    "A" { Write-Host you chose A }
-    "B" { Write-Host you chose B }
-    "C" { Write-Host you chose C }
+    "A" { CreateVds }
+    "B" { AddDpg }
+    "C" { HostVds }
     "D" { vdsLoadBalancingMenu }
-    "E" { Write-Host you chose E }
+    "E" { Write-Host This feature is not available yet }
     "X" { vCenterMenu }
     "Y" { MainMenu }  
     }
     } until ( $choice -match "Z" )
 }
 #end of vdsMenu
-
-#Start of PowerMgmtMenu
-function PowerMgmtMenu
-{
- do {
- do {
-     Write-Host "Make sure you are connected to a vCenter" -ForegroundColor Yellow
-     Write-Host "`nPowerMgmtMenu" -BackgroundColor White -ForegroundColor Black
-     Write-Host "
-     A. Enter Maintenance Mode
-     B. Exit Maintenance Mode
-     C. Shutdown
-     D. Reboot" #options to choose from
-   
-     Write-Host "
-     X. Previous Menu
-     Y. Main Menu
-     Z. Exit" -BackgroundColor Black -ForegroundColor Green #return to main menu
-    
-     $choice = Read-Host "choose one of the above"  #Get user's entry
-     $ok     = $choice -match '^[abcdxyz]+$'
-     if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
-    } until ( $ok )
-    switch -Regex ($choice) 
-    {
-    "A" { Write-Host you chose A }
-    "B" { Write-Host you chose B }
-    "C" { Write-Host you chose C }
-    "D" { Write-Host you chose D }
-    "X" { HostMenu }
-    "Y" { MainMenu }
-    }
-    } until ( $choice -match "Z" )
-}
-#end of PowerMgmtMenu
 
 #Start of VssMenu
 Function VssMenu
@@ -2646,7 +2612,8 @@ Function VssMenu
      Write-Host "
      X. Previous Menu
      Y. Main Menu
-     Z. Exit" -BackgroundColor Black -ForegroundColor Green
+     Z. Exit 
+     " -BackgroundColor White -ForegroundColor Black
 
      $user   = [Environment]::UserName
      $choice = Read-Host "choose one of the above"  #Get user's entry
@@ -2655,28 +2622,28 @@ Function VssMenu
     } until ( $ok )
     switch -Regex ($choice) 
     {
-     "A" { Write-Host "Create vSwitch            "}
-     "B" { Write-Host "Update NumPorts           "}
-     "C" { Write-Host "Update Nic                "}
-     "D" { Write-Host "Update MTU                "}
-     "E" { Write-Host "Create VM Portgroup       "}
-     "F" { Write-Host "Create VMkernel Portgroup "}
-     "G" { Write-Host "Rename Portgroup          "}
-     "H" { Write-Host "Update Portgroup's Vlan   "}
-     "I" { Write-Host "LoadBalanceIP             "}
-     "J" { Write-Host "LoadBalanceSrcMac         "}
-     "K" { Write-Host "LoadBalanceSrcId          "}
-     "L" { Write-Host "ExplicitFailover          "}
-     "M" { Write-Host "Delete Portgroup          "}
-     "N" { Write-Host "Enable AllowPromiscuous   "}
-     "O" { Write-Host "Enable ForgedTransmits    "}
-     "P" { Write-Host "Enable MacChanges         "}
-     "Q" { Write-Host "Disable AllowPromiscuous  "}
-     "R" { Write-Host "Disable ForgedTransmits   "}
-     "S" { Write-Host "Disable MacChanges        "}
-     "T" { Write-Host "Delete Portgroup          "}
+     "A" { CreateVss }
+     "B" { VssPorts }
+     "C" { VssNic }
+     "D" { VssMtu }
+     "E" { VssVmPg }
+     "F" { VssVmkPg }
+     "G" { PgRename }
+     "H" { PgVlan }
+     "I" { Pglbip }
+     "J" { Pglbsm }
+     "K" { Pglbsi }
+     "L" { Pgef }
+     "M" { ShootVmPg }
+     "N" { VssPmOn }
+     "O" { VssFtOn }
+     "P" { VssMcOn }
+     "Q" { VssPmOff }
+     "R" { VssFtOff }
+     "S" { VssMcOff }
+     "T" { ShootVmkPg }
      "X" { vCenterMenu }
-     "Y" { MainMenu }    
+     "Y" { MainMenu }      
     }
     } until ( $choice -match "Z" )
 }
@@ -2705,7 +2672,7 @@ function MainMenu
     switch -Regex ($choice) 
     {
     "A" { vCenterMenu }
-    "B" { Write-Host you chose B }
+    "B" { Write-Host It will be present in future release }
     }
     } until ( $choice -match "Z" )
     #if ($choice -eq "z") { exit }
@@ -2732,17 +2699,17 @@ function DrsRulesMenu
      Y. Main Menu
      Z. Exit" -BackgroundColor Black -ForegroundColor Green #return to main menu
     
-     $choice = Read-Host "choose one of the above"  #Get user's entry
+     $choice = Read-Host "choose one of the above" #Get user's entry
      $ok     = $choice -match '^[abcdexyz]+$'
      if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
     } until ( $ok )
     switch -Regex ($choice) 
     {
-    "A" { Write-Host you chose A }
-    "B" { Write-Host you chose B }
-    "C" { Write-Host you chose C }
-    "D" { Write-Host you chose D }
-    "E" { Write-Host you chose E }
+    "A" { VMAffinity }
+    "B" { VMAntiAffinity }
+    "C" { DrsVmGroup }
+    "D" { DrsHostGroup }
+    "E" { DRSVMToHostRule }
     "X" { ClusterMenu }
     "Y" { MainMenu }  
     }
@@ -2777,13 +2744,13 @@ function ClusterMenu
     } until ( $ok )
     switch -Regex ($choice) 
     {
-    "A" { Write-Host you chose A }
-    "B" { Write-Host you chose B }
-    "C" { Write-Host you chose C }
-    "D" { Write-Host you chose D }
+    "A" { CreateCluster }
+    "B" { AddHosts }
+    "C" { ConfigHA }
+    "D" { ConfigDrs }
     "E" { DrsRulesMenu }
-    "F" { Write-Host you chose G }
-    "G" { Write-Host you chose H }
+    "F" { CreateVapp }
+    "G" { AddDatastores }
     "X" { vCenterMenu }
     "Y" { MainMenu }  
     }
@@ -2825,59 +2792,25 @@ function HostServicesMenu
     } until ( $ok )
     switch -Regex ($choice) 
     {
-    "A" { Write-Host you chose A }
-    "B" { Write-Host you chose B }
-    "C" { Write-Host you chose C }
-    "D" { Write-Host you chose D }
-    "E" { Write-Host you chose E }
-    "F" { Write-Host you chose F }
-    "G" { Write-Host you chose G }
-    "H" { Write-Host you chose H }
-    "I" { Write-Host you chose I }
-    "J" { Write-Host you chose J }
-    "K" { Write-Host you chose K }
-    "L" { Write-Host you chose L }
-    "M" { Write-Host you chose M }
+    "A" { SetDCUI }
+    "B" { SetTSM }
+    "C" { SetSSH }
+    "D" { SetLbtd }
+    "E" { Setlwsmd }
+    "F" { Setntpd }
+    "G" { Setpcscd }
+    "H" { Setsfcbd }
+    "I" { Setsnmpd }
+    "J" { Setvmsyslogd }
+    "K" { Setvprobed }
+    "L" { Setvpxa }
+    "M" { Setxorg }
     "X" { HostMenu }
     "Y" { MainMenu }
     }
     } until ( $choice -match "Z" )
 }
 #end of HostServicesMenu
-
-#Start of HostPerfMenu
-function HostPerfMenu
-{
- do {
- do {
-     Write-Host "Make sure you are connected to a vCenter" -ForegroundColor Yellow
-     Write-Host "`nHostPerfMenu" -BackgroundColor White -ForegroundColor Black
-     Write-Host "
-     A. High Performance
-     B. Balanced performance
-     C. LowPower Mode
-     " #options to choose from
-   
-     Write-Host "
-     X. Previous Menu
-     Y. Main Menu
-     Z. Exit" -BackgroundColor Black -ForegroundColor Green #return to main menu
-    
-     $choice = Read-Host "choose one of the above"  #Get user's entry
-     $ok     = $choice -match '^[abcxyz]+$'
-     if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
-    } until ( $ok )
-    switch -Regex ($choice) 
-    {
-    "A" { Write-Host you chose A }
-    "B" { Write-Host you chose B }
-    "C" { Write-Host you chose C }
-    "X" { HostMenu }
-    "Y" { MainMenu }
-    }
-    } until ( $choice -match "Z" )
-}
-#end of HostPerfMenu
 
 #Start of HostMenu
 function HostMenu
@@ -2914,20 +2847,20 @@ function HostMenu
     } until ( $ok )
     switch -Regex ($choice) 
     {
-    "A" { Write-Host you chose A }
-    "B" { Write-Host you chose B }
-    "C" { Write-Host you chose C }
-    "D" { Write-Host you chose D }
-    "E" { Write-Host you chose E }
-    "F" { Write-Host you chose F }
-    "G" { Write-Host you chose G }
-    "H" { HostPerfMenu }
-    "I" { Write-Host you chose I }
+    "A" { SetSnmp }
+    "B" { SetSyslog }
+    "C" { SetDNS }
+    "D" { SetNTP }
+    "E" { SetFirewall }
+    "F" { SetFirewall }
+    "G" { EsxiAdvanced }
+    "H" { SetEsxiPerf }
+    "I" { CoreDump }
     "J" { PowerMgmtMenu }
     "K" { HostServicesMenu }
-    "L" { Write-Host you chose L }
+    "L" { SetIpv6 }
     "M" { VMKservicesMenu }
-    "W" { Write-Host you chose HostsOtherMenu. This is not implemented yet }
+    "W" { Write-Host you chose others. This is not implemented yet }
     "X" { vCenterMenu }
     "Y" { MainMenu }  
     }

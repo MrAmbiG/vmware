@@ -33,19 +33,19 @@ function HostServicesMenu
     } until ( $ok )
     switch -Regex ($choice) 
     {
-    "A" { Write-Host you chose A }
-    "B" { Write-Host you chose B }
-    "C" { Write-Host you chose C }
-    "D" { Write-Host you chose D }
-    "E" { Write-Host you chose E }
-    "F" { Write-Host you chose F }
-    "G" { Write-Host you chose G }
-    "H" { Write-Host you chose H }
-    "I" { Write-Host you chose I }
-    "J" { Write-Host you chose J }
-    "K" { Write-Host you chose K }
-    "L" { Write-Host you chose L }
-    "M" { Write-Host you chose M }
+    "A" { SetDCUI }
+    "B" { SetTSM }
+    "C" { SetSSH }
+    "D" { SetLbtd }
+    "E" { Setlwsmd }
+    "F" { Setntpd }
+    "G" { Setpcscd }
+    "H" { Setsfcbd }
+    "I" { Setsnmpd }
+    "J" { Setvmsyslogd }
+    "K" { Setvprobed }
+    "L" { Setvpxa }
+    "M" { Setxorg }
     "X" { HostMenu }
     "Y" { MainMenu }
     }

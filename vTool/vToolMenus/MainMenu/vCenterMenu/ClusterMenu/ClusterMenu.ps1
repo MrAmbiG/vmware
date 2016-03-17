@@ -26,13 +26,13 @@ function ClusterMenu
     } until ( $ok )
     switch -Regex ($choice) 
     {
-    "A" { Write-Host you chose A }
-    "B" { Write-Host you chose B }
-    "C" { Write-Host you chose C }
-    "D" { Write-Host you chose D }
+    "A" { CreateCluster }
+    "B" { AddHosts }
+    "C" { ConfigHA }
+    "D" { ConfigDrs }
     "E" { DrsRulesMenu }
-    "F" { Write-Host you chose G }
-    "G" { Write-Host you chose H }
+    "F" { CreateVapp }
+    "G" { AddDatastores }
     "X" { vCenterMenu }
     "Y" { MainMenu }  
     }
