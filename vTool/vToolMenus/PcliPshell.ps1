@@ -19,11 +19,15 @@ function PcliPshell
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of script#
-Add-PSSnapin VMware.VimAutomation.Core -ErrorAction SilentlyContinue
-Import-Module VMware.VimAutomation.Core -ErrorAction SilentlyContinue
-Add-PSSnapin VMware.VumAutomation -ErrorAction SilentlyContinue
-Import-Module VMware.VumAutomation -ErrorAction SilentlyContinue
-Add-PSSnapin VMware.VimAutomation.Vds -ErrorAction SilentlyContinue
-Import-Module VMware.VimAutomation.Vds -ErrorAction SilentlyContinue
+Import-Module VMware.VimAutomation.Core     -ErrorAction SilentlyContinue
+Import-Module VMware.VimAutomation.Vds      -ErrorAction SilentlyContinue
+Import-Module VMware.VimAutomation.Cis.Core -ErrorAction SilentlyContinue
+Import-Module VMware.VimAutomation.Storage  -ErrorAction SilentlyContinue
+Import-Module VMware.VimAutomation.vROps    -ErrorAction SilentlyContinue
+Import-Module VMware.VimAutomation.HA       -ErrorAction SilentlyContinue
+Import-Module VMware.VimAutomation.License  -ErrorAction SilentlyContinue
+Import-Module VMware.VimAutomation.Cloud    -ErrorAction SilentlyContinue
+Import-Module VMware.VimAutomation.PCloud   -ErrorAction SilentlyContinue
+Import-Module VMware.VumAutomation          -ErrorAction SilentlyContinue
 #End of Script#
 }#End of function

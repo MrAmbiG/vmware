@@ -19,11 +19,11 @@ Function VssNic
 #Start of Script
 $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 $vss     = Read-Host "name of the vSphere standard Switch?"
-$nic     = Read-Host "number of ports?"
+$newnic  = Read-Host "Name of the Nic (ex:vmnic5)?"
  foreach ($vmhost in (get-cluster $cluster | get-vmhost))
- {
-  $vmnic = Get-VMhost $vmhost | Get-VMHostNetworkAdapter -Physical -Name $nic
-  Get-VirtualSwitch $vss | Add-VirtualSwitchPhysicalNetworkAdapter -VMHostPhysicalNic $vmnic
+ { 
+ $oldnic = (get-vmhost $vmhost | get-virtualswitch -Name vSwitch0 | Get-VMHostNetworkAdapter -Physical).Name
+ get-vmhost $vmhost | Get-VirtualSwitch -Name vSwitch0 | Set-VirtualSwitch -Nic $oldnic,$newnic -Confirm:$false
  }
 #End of Script
 }#End of function

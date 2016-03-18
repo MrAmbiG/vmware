@@ -17,10 +17,10 @@ Function DrsHostGroup
 #>
 
 #Start of Script
-
+$cluster    = Read-Host "Name of the Cluster?"
 $vmhosts    = Read-Host "Type the Name of the host/hosts (separated only by a comma and no spaces)"
 $hostgroup  = Read-Host "Type the Name of the Hostgroup"
-Get-VMHost $vmhosts | New-DrsHostGroup -Name $hostgroup
+Get-Cluster $cluster | Get-VMHost $vmhosts | New-DrsHostGroup -Name $hostgroup
 
 #End of Script
 } #End of function

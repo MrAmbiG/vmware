@@ -18,10 +18,10 @@ Function VMAffinity
 #>
 
 #Start of Script
-
+$cluster = Read-Host "Name of the Cluster?"
 $drsrule = Read-Host "Type the Name of the DRS Rule"
-$VMs     = Read-Host "Type the Name of the VMs (separated only by a comma and no spaces)"
-New-DrsRule –Name $drsrule -Cluster $cluster –KeepTogether:$true –VM $VMs -Confirm:$false
-
+$vm1     = Read-Host 'Name of the 1st Virtual Machine?'
+$vm2     = Read-Host 'Name of the 2nd Virtual Machine?'
+New-DrsRule –Name $drsrule -Cluster $cluster –KeepTogether $true –VM $vm1,$vm2
 #End of Script
-} #End of function
+}#End of function

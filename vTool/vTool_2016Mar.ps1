@@ -36,12 +36,16 @@ function PcliPshell
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of script#
-Add-PSSnapin VMware.VimAutomation.Core -ErrorAction SilentlyContinue
-Import-Module VMware.VimAutomation.Core -ErrorAction SilentlyContinue
-Add-PSSnapin VMware.VumAutomation -ErrorAction SilentlyContinue
-Import-Module VMware.VumAutomation -ErrorAction SilentlyContinue
-Add-PSSnapin VMware.VimAutomation.Vds -ErrorAction SilentlyContinue
-Import-Module VMware.VimAutomation.Vds -ErrorAction SilentlyContinue
+Import-Module VMware.VimAutomation.Core     -ErrorAction SilentlyContinue
+Import-Module VMware.VimAutomation.Vds      -ErrorAction SilentlyContinue
+Import-Module VMware.VimAutomation.Cis.Core -ErrorAction SilentlyContinue
+Import-Module VMware.VimAutomation.Storage  -ErrorAction SilentlyContinue
+Import-Module VMware.VimAutomation.vROps    -ErrorAction SilentlyContinue
+Import-Module VMware.VimAutomation.HA       -ErrorAction SilentlyContinue
+Import-Module VMware.VimAutomation.License  -ErrorAction SilentlyContinue
+Import-Module VMware.VimAutomation.Cloud    -ErrorAction SilentlyContinue
+Import-Module VMware.VimAutomation.PCloud   -ErrorAction SilentlyContinue
+Import-Module VMware.VumAutomation          -ErrorAction SilentlyContinue
 #End of Script#
 }#End of function
 
@@ -337,13 +341,13 @@ Function VMAffinity
 #>
 
 #Start of Script
-
+$cluster = Read-Host "Name of the Cluster?"
 $drsrule = Read-Host "Type the Name of the DRS Rule"
-$VMs     = Read-Host "Type the Name of the VMs (separated only by a comma and no spaces)"
-New-DrsRule –Name $drsrule -Cluster $cluster –KeepTogether:$true –VM $VMs -Confirm:$false
-
+$vm1     = Read-Host 'Name of the 1st Virtual Machine?'
+$vm2     = Read-Host 'Name of the 2nd Virtual Machine?'
+New-DrsRule –Name $drsrule -Cluster $cluster –KeepTogether $true –VM $vm1,$vm2
 #End of Script
-} #End of function
+}#End of function
 
 Function New-DrsVmGroup {
 <#
@@ -431,10 +435,10 @@ Function DrsHostGroup
 #>
 
 #Start of Script
-
+$cluster    = Read-Host "Name of the Cluster?"
 $vmhosts    = Read-Host "Type the Name of the host/hosts (separated only by a comma and no spaces)"
 $hostgroup  = Read-Host "Type the Name of the Hostgroup"
-Get-VMHost $vmhosts | New-DrsHostGroup -Name $hostgroup
+Get-Cluster $cluster | Get-VMHost $vmhosts | New-DrsHostGroup -Name $hostgroup
 
 #End of Script
 } #End of function
@@ -458,7 +462,7 @@ Function DrsVmGroup
 #>
 
 #Start of Script
-
+$cluster     = Read-Host "Name of the Cluster?"
 $VMs         = Read-Host "Type the Name of the VM/VMs (separated only by a comma and no spaces)"
 $vmgroup     = Read-Host "Type the Name of the VM group"
 Get-VM $VMs | New-DrsVmGroup -Name $vmgroup -Cluster $cluster
@@ -485,7 +489,7 @@ Function DRSVMToHostRule
 #>
 
 #Start of Script
-
+$cluster    = Read-Host "Name of the Cluster?"
 $drsrule    = Read-Host "Type the Name of the DRS Rule"
 $vmgroup    = Read-Host "Type the Name of the VM group"
 $hostgroup  = Read-Host "Type the Name of the Hostgroup"
@@ -513,10 +517,11 @@ Function VMAntiAffinity
 #>
 
 #Start of Script
-
-$drsrule = Read-Host "Type the Name of the DRS Rule:"
-$VMs     = Read-Host "Type the Name of the VMs (separated only by a comma and no spaces):"
-New-DrsRule –Name $drsrule -Cluster $cluster –KeepTogether:$false –VM $VMs -Confirm:$false
+$cluster = Read-Host "Name of the Cluster?"
+$drsrule = Read-Host "Type the Name of the DRS Rule"
+$vm1     = Read-Host 'Name of the 1st Virtual Machine?'
+$vm2     = Read-Host 'Name of the 2nd Virtual Machine?'
+New-DrsRule –Name $drsrule -Cluster $cluster –KeepTogether $false –VM $vm1,$vm2
 
 #End of Script
 } #End of function
@@ -2189,14 +2194,15 @@ Function VssNic
 #Start of Script
 $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 $vss     = Read-Host "name of the vSphere standard Switch?"
-$nic     = Read-Host "number of ports?"
+$newnic  = Read-Host "Name of the Nic (ex:vmnic5)?"
  foreach ($vmhost in (get-cluster $cluster | get-vmhost))
- {
-  $vmnic = Get-VMhost $vmhost | Get-VMHostNetworkAdapter -Physical -Name $nic
-  Get-VirtualSwitch $vss | Add-VirtualSwitchPhysicalNetworkAdapter -VMHostPhysicalNic $vmnic
+ { 
+ $oldnic = (get-vmhost $vmhost | get-virtualswitch -Name vSwitch0 | Get-VMHostNetworkAdapter -Physical).Name
+ get-vmhost $vmhost | Get-VirtualSwitch -Name vSwitch0 | Set-VirtualSwitch -Nic $oldnic,$newnic -Confirm:$false
  }
 #End of Script
 }#End of function
+
 
 #start of function
 Function VssPmOn 

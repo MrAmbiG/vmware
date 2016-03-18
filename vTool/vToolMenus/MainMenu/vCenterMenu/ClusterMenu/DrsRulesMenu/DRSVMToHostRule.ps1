@@ -17,7 +17,7 @@ Function DRSVMToHostRule
 #>
 
 #Start of Script
-
+$cluster    = Read-Host "Name of the Cluster?"
 $drsrule    = Read-Host "Type the Name of the DRS Rule"
 $vmgroup    = Read-Host "Type the Name of the VM group"
 $hostgroup  = Read-Host "Type the Name of the Hostgroup"
