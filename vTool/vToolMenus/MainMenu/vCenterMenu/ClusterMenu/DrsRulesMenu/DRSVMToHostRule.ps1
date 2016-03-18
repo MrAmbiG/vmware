@@ -24,4 +24,4 @@ $hostgroup  = Read-Host "Type the Name of the Hostgroup"
 New-DrsVMToHostRule -VMGroup $vmgroup -HostGroup $hostgroup -Name $drsrule -Cluster $cluster -AntiAffine -Mandatory
 
 #End of Script
-} #End of function
+}#End of function

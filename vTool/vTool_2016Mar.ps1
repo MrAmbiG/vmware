@@ -343,9 +343,9 @@ Function VMAffinity
 #Start of Script
 $cluster = Read-Host "Name of the Cluster?"
 $drsrule = Read-Host "Type the Name of the DRS Rule"
-$vm1     = Read-Host 'Name of the 1st Virtual Machine?'
-$vm2     = Read-Host 'Name of the 2nd Virtual Machine?'
-New-DrsRule –Name $drsrule -Cluster $cluster –KeepTogether $true –VM $vm1,$vm2
+$vms     = Read-Host "Name of the VMs (separated by comma, no space)?"
+$vms     = $vms.split(',')
+New-DrsRule –Name $drsrule -Cluster $cluster –KeepTogether $true –VM $vms
 #End of Script
 }#End of function
 
@@ -444,15 +444,15 @@ Get-Cluster $cluster | Get-VMHost $vmhosts | New-DrsHostGroup -Name $hostgroup
 } #End of function
 
 #start of function
-Function DrsVmGroup 
+Function DrsHostGroup 
 {
 <#
 .SYNOPSIS
-    Create DrsVmGroup DRS Rule.
+    Create DrsHostGroup DRS Rule.
 .DESCRIPTION
-    This uses custom functions to create DRS DrsVmGroup rules between VMs where VMs will be made to stay on the same host by the DRS.
+    This uses custom functions to create DRS DrsHostGroup rules between VMs where VMs will be made to stay on the same host by the DRS.
 .NOTES
-    File Name      : DrsVmGroup.ps1
+    File Name      : DrsHostGroup.ps1
     Author         : gajendra d ambi
     Date           : February 2016
     Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
@@ -462,13 +462,14 @@ Function DrsVmGroup
 #>
 
 #Start of Script
-$cluster     = Read-Host "Name of the Cluster?"
-$VMs         = Read-Host "Type the Name of the VM/VMs (separated only by a comma and no spaces)"
-$vmgroup     = Read-Host "Type the Name of the VM group"
-Get-VM $VMs | New-DrsVmGroup -Name $vmgroup -Cluster $cluster
+$cluster    = Read-Host "Name of the Cluster?"
+$vmhosts    = Read-Host "Type the Name of the host/hosts (separated only by a comma and no spaces)"
+$vmhosts    = $vmhosts.split(',')
+$hostgroup  = Read-Host "Type the Name of the Hostgroup"
+Get-Cluster $cluster | Get-VMHost $vmhosts | New-DrsHostGroup -Name $hostgroup
 
 #End of Script
-} #End of function
+}#End of function
 
 #start of function
 Function DRSVMToHostRule 
@@ -519,10 +520,9 @@ Function VMAntiAffinity
 #Start of Script
 $cluster = Read-Host "Name of the Cluster?"
 $drsrule = Read-Host "Type the Name of the DRS Rule"
-$vm1     = Read-Host 'Name of the 1st Virtual Machine?'
-$vm2     = Read-Host 'Name of the 2nd Virtual Machine?'
-New-DrsRule –Name $drsrule -Cluster $cluster –KeepTogether $false –VM $vm1,$vm2
-
+$vms     = Read-Host "Name of the VMs (separated by comma, no space)?"
+$vms     = $vms.split(',')
+New-DrsRule –Name $drsrule -Cluster $cluster –KeepTogether $false –VM $vms
 #End of Script
 } #End of function
 
