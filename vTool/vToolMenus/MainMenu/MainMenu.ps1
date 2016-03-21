@@ -1,10 +1,9 @@
-﻿
-#Start of MainMenu
+﻿#Start of MainMenu
 function MainMenu
 {
  do {
  do {
-     $version = 'Feb2016'
+     $version = 'Mar2016'
      Write-Host -BackgroundColor Black -ForegroundColor Cyan  "`nvTool $version"
      Write-Host -BackgroundColor White -ForegroundColor Black "`nMain Menu"
      Write-Host "
@@ -21,10 +20,10 @@ function MainMenu
     } until ( $ok )
     switch -Regex ($choice) 
     {
-    "A" { Write-Host you chose A }
-    "B" { Write-Host you chose B }
+    "A" { vCenterMenu }
+    "B" { Write-Host It will be present in future release }
     }
     } until ( $choice -match "Z" )
+    #if ($choice -eq "z") { exit }
 }
-MainMenu
 #end of MainMenu
