@@ -1983,7 +1983,7 @@ Get-VDswitch -Name $dvs | Set-NicTeamingPolicy -LoadBalancingPolicy LoadBalanceL
 }#End of function
 
 #start of function
-Function ShootVmkPg 
+function ShootVmkPg
 {
 <#
 .SYNOPSIS
@@ -2007,10 +2007,10 @@ $pg      = Read-Host "Name of the portgroup?"
   $vmk = Get-VMHostNetworkAdapter -VMHost $vmhost | where PortgroupName -eq $pg
   Write-Host "removing vmkernel from the $pg on $vmhost"
   Remove-VMHostNetworkAdapter -Nic $vmk -confirm:$false
- }
-   Write-Host "removing $pg on $vmhost"
-   get-vmhost $vmhost | get-virtualportgroup -Name $pg | Remove-VirtualPortGroup -Confirm:$false 
-#End of Script
+ 
+  Write-Host "removing $pg on $vmhost"
+  get-vmhost $vmhost | get-virtualportgroup -Name $pg | Remove-VirtualPortGroup -Confirm:$false 
+ }#End of Script
 }#End of function
 
 #start of function
