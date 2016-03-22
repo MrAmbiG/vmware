@@ -40,5 +40,3 @@ $a       = $ip.Split('.')[0..2]
   $esxcli.network.ip.interface.ipv4.set("$vmk", "$b.$(($c++))", "$mask", $null, "static")
  }#End of Script
 }#End of function
-
-
