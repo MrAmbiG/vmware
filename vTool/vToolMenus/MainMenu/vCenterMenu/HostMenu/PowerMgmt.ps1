@@ -1,4 +1,5 @@
-﻿function PowerMgmt
+﻿#start of function
+function PowerMgmt
 {
 <#
 .SYNOPSIS

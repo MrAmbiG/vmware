@@ -18,6 +18,7 @@ function SetDNS
 #Start of script#
 $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 $dnsadd  = Read-Host "DNS Addresses(separate multiple entries with a comma)?"
+$dnsadd  = $dnsadd.split(',')
 $domain  = Read-Host "domain name?"
 
 get-cluster $cluster | get-vmhost | Get-VMHostNetwork | Set-VMHostNetwork -DnsAddress $dnsadd -DomainName $domain -SearchDomain $domain -Confirm:$false

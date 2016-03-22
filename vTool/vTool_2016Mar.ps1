@@ -52,6 +52,35 @@ Import-Module VMware.VumAutomation          -ErrorAction SilentlyContinue
 #------------------------------Start of Collection of Functions of automation------------------------------#
 
 #start of function
+function PgSync
+{
+<#
+.SYNOPSIS
+    Sync portgroups properties with vSwitch
+.DESCRIPTION
+    This will make the portgroup to sync itself with the vswitch's settings. this will make the portgroup inherit the following from the vSwitch
+    LoadBalancingPolicy
+    NetworkFailoverDetectionPolicy
+    NotifySwitches
+    FailoverOrder
+.NOTES
+    File Name      : PowerMgmt.ps1
+    Author         : gajendra d ambi
+    Date           : March 2016
+    Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
+    Copyright      - None
+.LINK
+    Script posted over: github.com/gajuambi/vmware
+#>
+#Start of script#
+$cluster   = Read-Host "name of the cluster[type * to include all clusters]?"
+$pg        = Read-Host "name of the portgroup?"
+get-cluster $cluster | Get-VMHost | sort | Get-virtualswitch -Standard | Get-VirtualPortGroup -Name $pg | get-nicteamingpolicy | Set-NicTeamingPolicy -InheritLoadBalancingPolicy $true -InheritNetworkFailoverDetectionPolicy $true -InheritNotifySwitches $true -InheritFailback $true -InheritFailoverOrder $true -Confirm:$false
+Write-Host "All done, Have Fun :)"
+ #End of Script#
+}#End of function
+
+#start of function
 Function AddHosts 
 {
 <#
@@ -680,6 +709,7 @@ function SetDNS
 #Start of script#
 $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 $dnsadd  = Read-Host "DNS Addresses(separate multiple entries with a comma)?"
+$dnsadd  = $dnsadd.split(',')
 $domain  = Read-Host "domain name?"
 
 get-cluster $cluster | get-vmhost | Get-VMHostNetwork | Set-VMHostNetwork -DnsAddress $dnsadd -DomainName $domain -SearchDomain $domain -Confirm:$false
@@ -788,7 +818,7 @@ If ($choice -eq 2) { get-cluster $cluster | get-vmhost | Get-VMHostNetwork | Set
 }#End of function
 
 #start of function
-function SetDNS 
+function SetNTP 
 {
 <#
 .SYNOPSIS
@@ -797,7 +827,7 @@ function SetDNS
     This will update the NTP servers to the esxi hosts. It will add one NTP server at a time.
     It will not replace or overwrite any existing NTP servers. This will set the ntpd service to on.
 .NOTES
-    File Name      : SetDNS.ps1
+    File Name      : SetNTP.ps1
     Author         : gajendra d ambi
     Date           : March 2016
     Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
@@ -808,13 +838,15 @@ function SetDNS
 #Start of script#
 $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 $ntp     = Read-Host "NTP address(put just one ntp address at a time, re run the same script to add more)"
+$ntp     = $ntp.split(',')
 
- foreach ($vmhost in (Get-Cluster $cluster)) 
+ foreach ($vmhost in (Get-Cluster $cluster | get-vmhost | sort)) 
  {
  Write-Host "adding ntp server to $vmhost" -ForegroundColor Green
  Add-VMHostNTPServer -NtpServer $ntp -VMHost (Get-VMHost $vmhost) -Confirm:$false
  Write-Host "setting ntp policy to on on $vmhost" -ForegroundColor Green
- Get-VMHostService -VMHost (Get-VMHost $vmhost) | where Key -eq "ntpd" | Restart-VMHostService | Set-VMHostService -policy "on" -Confirm:$false
+ Get-VMHostService -VMHost (Get-VMHost $vmhost) | where Key -eq "ntpd" | Restart-VMHostService -Confirm:$false
+ Get-VMHostService -VMHost (Get-VMHost $vmhost) | where Key -eq "ntpd" | Set-VMHostService -policy "on" -Confirm:$false
  }#End of Script#
 }#End of function
 
@@ -984,6 +1016,7 @@ get-vmhost $vmhost | Get-VMHostFirewallException -Name "syslog" | Set-VMHostFire
   }#End of Script#
 }#End of function
 
+#start of function
 function PowerMgmt
 {
 <#
@@ -2612,7 +2645,8 @@ Function VssMenu
      Q. Disable AllowPromiscuous
      R. Disable ForgedTransmits
      S. Disable MacChanges
-     T. Delete VMkernel Portgroup     
+     T. Delete VMkernel Portgroup  
+     U. Sync portgroup with vSwitch(inerit all properties of vswitch to portgroup)   
      " #options to choose from...
 
      Write-Host "
@@ -2623,7 +2657,7 @@ Function VssMenu
 
      $user   = [Environment]::UserName
      $choice = Read-Host "choose one of the above"  #Get user's entry
-     $ok     = $choice -match '^[abcdefghijklmnopqrstxyz]+$'
+     $ok     = $choice -match '^[abcdefghijklmnopqrstuxyz]+$'
      if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
     } until ( $ok )
     switch -Regex ($choice) 
@@ -2648,6 +2682,7 @@ Function VssMenu
      "R" { VssFtOff }
      "S" { VssMcOff }
      "T" { ShootVmkPg }
+     "U" { PgSync }
      "X" { vCenterMenu }
      "Y" { MainMenu }      
     }
@@ -2862,7 +2897,7 @@ function HostMenu
     "G" { SetScratch }
     "H" { HostPerfMenu }
     "I" { CoreDump }
-    "J" { PowerMgmtMenu }
+    "J" { PowerMgmt }
     "K" { HostServicesMenu }
     "L" { SetIpv6 }
     "M" { VMKservicesMenu }

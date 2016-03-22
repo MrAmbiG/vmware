@@ -24,7 +24,8 @@ Function VssMenu
      Q. Disable AllowPromiscuous
      R. Disable ForgedTransmits
      S. Disable MacChanges
-     T. Delete VMkernel Portgroup     
+     T. Delete VMkernel Portgroup  
+     U. Sync portgroup with vSwitch(inerit all properties of vswitch to portgroup)   
      " #options to choose from...
 
      Write-Host "
@@ -35,7 +36,7 @@ Function VssMenu
 
      $user   = [Environment]::UserName
      $choice = Read-Host "choose one of the above"  #Get user's entry
-     $ok     = $choice -match '^[abcdefghijklmnopqrstxyz]+$'
+     $ok     = $choice -match '^[abcdefghijklmnopqrstuxyz]+$'
      if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
     } until ( $ok )
     switch -Regex ($choice) 
@@ -60,6 +61,7 @@ Function VssMenu
      "R" { VssFtOff }
      "S" { VssMcOff }
      "T" { ShootVmkPg }
+     "U" { PgSync }
      "X" { vCenterMenu }
      "Y" { MainMenu }      
     }

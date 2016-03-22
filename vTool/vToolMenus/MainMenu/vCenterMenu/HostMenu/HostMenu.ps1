@@ -42,7 +42,7 @@ function HostMenu
     "G" { SetScratch }
     "H" { HostPerfMenu }
     "I" { CoreDump }
-    "J" { PowerMgmtMenu }
+    "J" { PowerMgmt }
     "K" { HostServicesMenu }
     "L" { SetIpv6 }
     "M" { VMKservicesMenu }
