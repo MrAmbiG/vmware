@@ -37,9 +37,9 @@ function HostMenu
     "B" { SetSyslog }
     "C" { SetDNS }
     "D" { SetNTP }
-    "E" { SetFirewall }
+    "E" { EsxiAdvanced }
     "F" { SetFirewall }
-    "G" { EsxiAdvanced }
+    "G" { SetScratch }
     "H" { HostPerfMenu }
     "I" { CoreDump }
     "J" { PowerMgmtMenu }
