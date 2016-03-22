@@ -18,7 +18,7 @@ function SetNTP
 #>
 #Start of script#
 $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
-$ntp     = Read-Host "NTP address(put just one ntp address at a time, re run the same script to add more)"
+$ntp     = Read-Host "NTP address(separate them with comma,no space..)"
 $ntp     = $ntp.split(',')
 
  foreach ($vmhost in (Get-Cluster $cluster | get-vmhost | sort)) 
