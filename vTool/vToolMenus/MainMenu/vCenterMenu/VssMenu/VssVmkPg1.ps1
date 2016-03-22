@@ -23,7 +23,7 @@ populate the values,
 save & close the file,
 Hit Enter to proceed
 " -ForegroundColor Blue -BackgroundColor White
-$csv = "$PSScriptRoot/VssVmPg1.csv"
+$csv = "$PSScriptRoot/VssVmkPg1.csv"
 get-process | Select-Object VMHost,vSwitch,Portgroup,vmk,IpV4Address,SubnetMask,vlan | Export-Csv -Path $csv -Encoding ASCII -NoTypeInformation
 Start-Process $csv
 Read-Host "Hit Enter/Return to proceed"
