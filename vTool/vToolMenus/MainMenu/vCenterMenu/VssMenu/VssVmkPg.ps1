@@ -22,7 +22,8 @@ $vss     = Read-Host "name of the vSphere standard Switch?"
 $pg      = Read-Host "Name of the portgroup?"
 $vmk     = Read-Host "vmk number? ex:- vmk9"
 $ip      = Read-Host "starting ip address?" 
-$mask    = Read-Host "subnet mask" 
+$mask    = Read-Host "subnet mask"
+$vlan    = Read-Host "Vlan?"
 $a       = $ip.Split('.')[0..2]
    
   #first 3 octets of the ip address

@@ -2286,15 +2286,15 @@ Get-cluster $cluster | Get-VMHost | Get-VirtualSwitch -Name $vss | Get-SecurityP
 }#End of function
 
 #start of function
-Function VssVmkPg 
+function ShootVmkPg
 {
 <#
 .SYNOPSIS
-    update vmkernel portgroup on vSwitch.
+    Remove virtual machine portgroup
 .DESCRIPTION
-    This will update vmkernel portgroup on a chosen standard vSwitch of hosts of a chosen cluster.    
+    This will remove the virtual machine portgroup of all the hosts of a cluster/clusters.
 .NOTES
-    File Name      : VssVmkPg.ps1
+    File Name      : ShootVmkPg.ps1
     Author         : gajendra d ambi
     Date           : March 2016
     Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
@@ -2304,25 +2304,15 @@ Function VssVmkPg
 #>
 #Start of Script
 $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
-$vss     = Read-Host "name of the vSphere standard Switch?"
 $pg      = Read-Host "Name of the portgroup?"
-$vmk     = Read-Host "vmk number? ex:- vmk9"
-$ip      = Read-Host "starting ip address?" 
-$mask    = Read-Host "subnet mask" 
-$a       = $ip.Split('.')[0..2]
-   
-  #first 3 octets of the ip address
-  $b     = [string]::Join(".",$a)
-  
-  #last octet of the ip address
-  $c     = $ip.Split('.')[3]
-  $c     = [int]$c
-
-  foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
-  get-vmhost $vmhost | get-virtualswitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false
-  $esxcli = get-vmhost $vmhost | Get-EsxCli
-  $esxcli.network.ip.interface.add($null, $null, "$vmk", $null, "1500", $null, "$pg")
-  $esxcli.network.ip.interface.ipv4.set("$vmk", "$b.$(($c++))", "$mask", $null, "static")
+ foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) 
+ {
+  $vmk = Get-VMHostNetworkAdapter -VMHost $vmhost | where PortgroupName -eq $pg
+  Write-Host "removing vmkernel from the $pg on $vmhost"
+  Remove-VMHostNetworkAdapter -Nic $vmk -confirm:$false
+ 
+  Write-Host "removing $pg on $vmhost"
+  get-vmhost $vmhost | get-virtualportgroup -Name $pg | Remove-VirtualPortGroup -Confirm:$false 
  }#End of Script
 }#End of function
 
