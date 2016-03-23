@@ -17,6 +17,7 @@ function SetDNS
 #>
 #Start of script#
 $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
+Write-Host "This new values will replace the existing values, hence add all the values" -ForegroundColor Yellow 
 $dnsadd  = Read-Host "DNS Addresses(separate multiple entries with a comma)?"
 $dnsadd  = $dnsadd.split(',')
 $domain  = Read-Host "domain name?"

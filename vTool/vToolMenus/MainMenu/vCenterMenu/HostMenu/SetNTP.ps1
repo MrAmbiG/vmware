@@ -18,6 +18,7 @@ function SetNTP
 #>
 #Start of script#
 $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
+Write-Host "This new values will replace the existing values, hence add all the values" -ForegroundColor Yellow 
 $ntp     = Read-Host "NTP address(separate them with comma,no space..)"
 $ntp     = $ntp.split(',')
 

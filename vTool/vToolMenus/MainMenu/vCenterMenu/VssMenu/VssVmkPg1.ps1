@@ -24,7 +24,7 @@ save & close the file,
 Hit Enter to proceed
 " -ForegroundColor Blue -BackgroundColor White
 $csv = "$PSScriptRoot/VssVmkPg1.csv"
-get-process | Select-Object VMHost,vSwitch,Portgroup,vmk,IpV4Address,SubnetMask,vlan | Export-Csv -Path $csv -Encoding ASCII -NoTypeInformation
+get-process | Select-Object VMHost,vSwitch,Portgroup,vmk,IpAddress,SubnetMask,vlan | Export-Csv -Path $csv -Encoding ASCII -NoTypeInformation
 Start-Process $csv
 Read-Host "Hit Enter/Return to proceed"
 
@@ -35,7 +35,7 @@ $csv = Import-Csv $csv
   $vss    = $($line.vSwitch)
   $pg     = $($line.Portgroup)
   $vmk    = $($line.vmk)
-  $ip     = $($line.IpV4Address)
+  $ip     = $($line.IpAddress)
   $mask   = $($line.SubnetMask)
   $vlan   = $($line.vlan)
   Get-VMHost $vmhost | Get-VirtualSwitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false
