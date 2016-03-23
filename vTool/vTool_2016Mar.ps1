@@ -2647,7 +2647,7 @@ Function VssMenu
      R. Disable ForgedTransmits
      S. Disable MacChanges
      T. Delete VMkernel Portgroup  
-     U. Sync portgroup with vSwitch(inerit all properties of vswitch to portgroup)   
+     U. Sync portgroup with vSwitch(inherit all properties of vswitch to portgroup)   
      " #options to choose from...
 
      Write-Host "
