@@ -13,7 +13,7 @@ function ClusterMenu
      D. Configure DRS
      E. DRS rules
      F. Create vApp
-     G. Customer Datastores" #options to choose from
+     G. Add Datastores" #options to choose from
    
      Write-Host "
      X. Previous Menu
