@@ -284,7 +284,7 @@ populate the values,
 save & close the file,
 Hit Enter to proceed
 " -ForegroundColor Blue -BackgroundColor White
-$csv = "$PSScriptRoot/addhosts.csv"
+$csv = "$PSScriptRoot/AddLuns.csv"
 get-process | Select-Object Cluster,LunID,DatastoreName | Export-Csv -Path $csv -Encoding ASCII -NoTypeInformation
 Start-Process $csv
 Read-Host "Hit Enter/Return to proceed"
