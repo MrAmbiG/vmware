@@ -285,7 +285,7 @@ save & close the file,
 Hit Enter to proceed
 " -ForegroundColor Blue -BackgroundColor White
 $csv = "$PSScriptRoot/AddLuns.csv"
-get-process | Select-Object Cluster,LunID,DatastoreName | Export-Csv -Path $csv -Encoding ASCII -NoTypeInformation
+get-process | Select-Object Cluster,LunID,DatastoreName,vmhba | Export-Csv -Path $csv -Encoding ASCII -NoTypeInformation
 Start-Process $csv
 Read-Host "Hit Enter/Return to proceed"
 
@@ -295,8 +295,11 @@ $csv = Import-Csv $csv
   $cluster = $($line.Cluster)
   $lunid   = $($line.LunID)
   $ds      = $($line.DatastoreName)
+  $vmhba   = $($line.vmhba)
+  $runtime = ":C0:T0:L$lunid"
+  $runtime = $vmhba+$runtime
   $vmhost  = (get-cluster $cluster | get-vmhost)[0]
-  $naa     = (Get-SCSILun -VMhost $vmhost -LunType Disk | where Runtime -eq vmhba0:C0:T0:L$lunid).CanonicalName
+  $naa     = (Get-SCSILun -VMhost $vmhost -LunType Disk | where Runtime -eq $runtime).CanonicalName
   New-Datastore -VMHost $vmhost -Name $ds -Path $naa -vmfs -Confirm:$false
  }
 
