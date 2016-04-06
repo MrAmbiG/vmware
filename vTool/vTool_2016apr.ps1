@@ -2231,14 +2231,12 @@ Function VssNic
 $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 $vss     = Read-Host "name of the vSphere standard Switch?"
 $newnic  = Read-Host "Name of the Nic (ex:vmnic5)?"
- foreach ($vmhost in (get-cluster $cluster | get-vmhost))
- { 
- $oldnic = (get-vmhost $vmhost | get-virtualswitch -Name vSwitch0 | Get-VMHostNetworkAdapter -Physical).Name
- get-vmhost $vmhost | Get-VirtualSwitch -Name vSwitch0 | Set-VirtualSwitch -Nic $oldnic,$newnic -Confirm:$false
+foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
+ $vmnic = get-vmhost $vmhost | Get-VMHostNetworkAdapter -Physical -Name $newnic
+ get-vmhost $vmhost | get-virtualswitch -Name $vss | Add-VirtualSwitchPhysicalNetworkAdapter -VMHostPhysicalNic $vmnic -confirm:$false
  }
 #End of Script
 }#End of function
-
 
 #start of function
 Function VssPmOn 
