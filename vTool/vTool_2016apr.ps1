@@ -304,12 +304,7 @@ $csv = Import-Csv $csv
  }
 
  $cluster = $csv.Cluster | get-unique
- $cluster = [string]::Join(", ",$cluster)
- foreach ($a in (get-cluster $cluster | get-vmhost)) 
- {
-  $a | Get-VMHostStorage -RescanAllHba | Out-Null
-  Write-Host "Rescan of all HBAs on $a is complete" -ForegroundColor Green
- }
+ get-cluster $cluster | get-vmhost | Get-VMHostStorage -RescanAllHba
 
 #End of Script
 }#End of function
