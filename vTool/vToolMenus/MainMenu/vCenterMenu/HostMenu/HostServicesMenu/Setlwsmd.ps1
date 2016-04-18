@@ -28,10 +28,10 @@ Write-Host "lwsmd [Active Directory Service] options
      4. lwsmd Policy Off
      " -BackgroundColor White -ForegroundColor Blue #options to choose from
  $a = Read-Host "Choose a number from 1 to 4"
- if ($option -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lwsmd | Start-VMHostService}
- if ($option -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lwsmd | stop-VMHostService}
- if ($option -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lwsmd | Set-VMHostService -Policy On}
- if ($option -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lwsmd | Set-VMHostService -Policy Off}
+ if ($a -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lwsmd | Start-VMHostService -Confirm:$false}
+ if ($a -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lwsmd | stop-VMHostService -Confirm:$false}
+ if ($a -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lwsmd | Set-VMHostService -Policy On -Confirm:$false}
+ if ($a -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lwsmd | Set-VMHostService -Policy Off -Confirm:$false}
     
  #End of Script#
 }#End of function

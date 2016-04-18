@@ -28,10 +28,10 @@ Write-Host "TSM-SSH [SSH] options
      4. TSM-SSH Policy Off
      " -BackgroundColor White -ForegroundColor Blue #options to choose from
  $a = Read-Host "Choose a number from 1 to 4"
- if ($option -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | Start-VMHostService}
- if ($option -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | stop-VMHostService}
- if ($option -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | Set-VMHostService -Policy On}
- if ($option -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | Set-VMHostService -Policy Off}
+ if ($a -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | Start-VMHostService -Confirm:$false}
+ if ($a -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | stop-VMHostService -Confirm:$false}
+ if ($a -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | Set-VMHostService -Policy On -Confirm:$false}
+ if ($a -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | Set-VMHostService -Policy Off -Confirm:$false}
     
  #End of Script#
 }#End of function

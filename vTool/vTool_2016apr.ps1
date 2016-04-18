@@ -1100,10 +1100,10 @@ Write-Host "pcscd [PC/SC Smart Card Daemon] options
      4. pcscd Policy Off
      " -BackgroundColor White -ForegroundColor Blue #options to choose from
  $a = Read-Host "Choose a number from 1 to 4"
- if ($option -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ pcscd | Start-VMHostService}
- if ($option -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ pcscd | stop-VMHostService}
- if ($option -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ pcscd | Set-VMHostService -Policy On}
- if ($option -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ pcscd | Set-VMHostService -Policy Off}
+ if ($a -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ pcscd | Start-VMHostService -Confirm:$false}
+ if ($a -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ pcscd | stop-VMHostService -Confirm:$false}
+ if ($a -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ pcscd | Set-VMHostService -Policy On -Confirm:$false}
+ if ($a -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ pcscd | Set-VMHostService -Policy Off -Confirm:$false}
     
  #End of Script#
 }#End of function
@@ -1138,10 +1138,10 @@ Write-Host "sfcbd-watchdog [CIM Server] options
      4. sfcbd Policy Off
      " -BackgroundColor White -ForegroundColor Blue #options to choose from
  $a = Read-Host "Choose a number from 1 to 4"
- if ($option -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ sfcbd | Start-VMHostService}
- if ($option -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ sfcbd | stop-VMHostService}
- if ($option -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ sfcbd | Set-VMHostService -Policy On}
- if ($option -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ sfcbd | Set-VMHostService -Policy Off}
+ if ($a -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ sfcbd | Start-VMHostService -Confirm:$false}
+ if ($a -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ sfcbd | stop-VMHostService -Confirm:$false}
+ if ($a -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ sfcbd | Set-VMHostService -Policy On -Confirm:$false}
+ if ($a -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ sfcbd | Set-VMHostService -Policy Off -Confirm:$false}
     
  #End of Script#
 }#End of function
@@ -1176,10 +1176,10 @@ Write-Host "TSM [ESXi Shell] options
      4. TSM Policy Off
      " -BackgroundColor White -ForegroundColor Blue #options to choose from
  $a = Read-Host "Choose a number from 1 to 4"
- if ($option -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM | Start-VMHostService}
- if ($option -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM | stop-VMHostService}
- if ($option -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM | Set-VMHostService -Policy On}
- if ($option -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM | Set-VMHostService -Policy Off}
+ if ($a -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM | Start-VMHostService -Confirm:$false}
+ if ($a -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM | stop-VMHostService -Confirm:$false}
+ if ($a -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM | Set-VMHostService -Policy On -Confirm:$false}
+ if ($a -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM | Set-VMHostService -Policy Off -Confirm:$false}
     
  #End of Script#
 }#End of function
@@ -1214,10 +1214,10 @@ Write-Host "vpxa [VMware vCenter Agent] options
      4. vpxa Policy Off
      " -BackgroundColor White -ForegroundColor Blue #options to choose from
  $a = Read-Host "Choose a number from 1 to 4"
- if ($option -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vpxa | Start-VMHostService}
- if ($option -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vpxa | stop-VMHostService}
- if ($option -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vpxa | Set-VMHostService -Policy On}
- if ($option -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vpxa | Set-VMHostService -Policy Off}
+ if ($a -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vpxa | Start-VMHostService -Confirm:$false}
+ if ($a -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vpxa | stop-VMHostService -Confirm:$false}
+ if ($a -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vpxa | Set-VMHostService -Policy On -Confirm:$false}
+ if ($a -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vpxa | Set-VMHostService -Policy Off -Confirm:$false}
     
  #End of Script#
 }#End of function
@@ -1252,10 +1252,10 @@ Write-Host "vprobed [VProbe Daemon] options
      4. vprobed Policy Off
      " -BackgroundColor White -ForegroundColor Blue #options to choose from
  $a = Read-Host "Choose a number from 1 to 4"
- if ($option -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vprobed | Start-VMHostService}
- if ($option -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vprobed | stop-VMHostService}
- if ($option -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vprobed | Set-VMHostService -Policy On}
- if ($option -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vprobed | Set-VMHostService -Policy Off}
+ if ($a -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vprobed | Start-VMHostService -Confirm:$false}
+ if ($a -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vprobed | stop-VMHostService -Confirm:$false}
+ if ($a -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vprobed | Set-VMHostService -Policy On -Confirm:$false}
+ if ($a -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vprobed | Set-VMHostService -Policy Off -Confirm:$false}
     
  #End of Script#
 }#End of function
@@ -1290,10 +1290,10 @@ Write-Host "ntpd [NTP Daemon] options
      4. ntpd Policy Off
      " -BackgroundColor White -ForegroundColor Blue #options to choose from
  $a = Read-Host "Choose a number from 1 to 4"
- if ($option -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ ntpd | Start-VMHostService}
- if ($option -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ ntpd | stop-VMHostService}
- if ($option -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ ntpd | Set-VMHostService -Policy On}
- if ($option -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ ntpd | Set-VMHostService -Policy Off}
+ if ($a -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ ntpd | Start-VMHostService -Confirm:$false}
+ if ($a -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ ntpd | stop-VMHostService -Confirm:$false}
+ if ($a -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ ntpd | Set-VMHostService -Policy On -Confirm:$false}
+ if ($a -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ ntpd | Set-VMHostService -Policy Off -Confirm:$false}
     
  #End of Script#
 }#End of function
@@ -1328,10 +1328,10 @@ Write-Host "vmsyslogd [Syslog Server] options
      4. vmsyslogd Policy Off
      " -BackgroundColor White -ForegroundColor Blue #options to choose from
  $a = Read-Host "Choose a number from 1 to 4"
- if ($option -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vmsyslogd | Start-VMHostService}
- if ($option -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vmsyslogd | stop-VMHostService}
- if ($option -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vmsyslogd | Set-VMHostService -Policy On}
- if ($option -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vmsyslogd | Set-VMHostService -Policy Off}
+ if ($a -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vmsyslogd | Start-VMHostService -Confirm:$false}
+ if ($a -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vmsyslogd | stop-VMHostService -Confirm:$false}
+ if ($a -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vmsyslogd | Set-VMHostService -Policy On -Confirm:$false}
+ if ($a -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ vmsyslogd | Set-VMHostService -Policy Off -Confirm:$false}
     
  #End of Script#
 }#End of function
@@ -1366,10 +1366,10 @@ Write-Host "lwsmd [Active Directory Service] options
      4. lwsmd Policy Off
      " -BackgroundColor White -ForegroundColor Blue #options to choose from
  $a = Read-Host "Choose a number from 1 to 4"
- if ($option -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lwsmd | Start-VMHostService}
- if ($option -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lwsmd | stop-VMHostService}
- if ($option -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lwsmd | Set-VMHostService -Policy On}
- if ($option -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lwsmd | Set-VMHostService -Policy Off}
+ if ($a -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lwsmd | Start-VMHostService -Confirm:$false}
+ if ($a -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lwsmd | stop-VMHostService -Confirm:$false}
+ if ($a -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lwsmd | Set-VMHostService -Policy On -Confirm:$false}
+ if ($a -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lwsmd | Set-VMHostService -Policy Off -Confirm:$false}
     
  #End of Script#
 }#End of function
@@ -1404,10 +1404,10 @@ Write-Host "TSM-SSH [SSH] options
      4. TSM-SSH Policy Off
      " -BackgroundColor White -ForegroundColor Blue #options to choose from
  $a = Read-Host "Choose a number from 1 to 4"
- if ($option -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | Start-VMHostService}
- if ($option -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | stop-VMHostService}
- if ($option -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | Set-VMHostService -Policy On}
- if ($option -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | Set-VMHostService -Policy Off}
+ if ($a -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | Start-VMHostService -Confirm:$false}
+ if ($a -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | stop-VMHostService -Confirm:$false}
+ if ($a -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | Set-VMHostService -Policy On -Confirm:$false}
+ if ($a -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ TSM-SSH | Set-VMHostService -Policy Off -Confirm:$false}
     
  #End of Script#
 }#End of function
@@ -1442,10 +1442,10 @@ Write-Host "xorg [X.Org Server] options
      4. xorg Policy Off
      " -BackgroundColor White -ForegroundColor Blue #options to choose from
  $a = Read-Host "Choose a number from 1 to 4"
- if ($option -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ xorg | Start-VMHostService}
- if ($option -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ xorg | stop-VMHostService}
- if ($option -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ xorg | Set-VMHostService -Policy On}
- if ($option -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ xorg | Set-VMHostService -Policy Off}
+ if ($a -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ xorg | Start-VMHostService -Confirm:$false}
+ if ($a -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ xorg | stop-VMHostService -Confirm:$false}
+ if ($a -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ xorg | Set-VMHostService -Policy On -Confirm:$false}
+ if ($a -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ xorg | Set-VMHostService -Policy Off -Confirm:$false}
     
  #End of Script#
 }#End of function
@@ -1480,10 +1480,10 @@ Write-Host "snmpd [SNMP Server] options
      4. snmpd Policy Off
      " -BackgroundColor White -ForegroundColor Blue #options to choose from
  $a = Read-Host "Choose a number from 1 to 4"
- if ($option -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ snmpd | Start-VMHostService}
- if ($option -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ snmpd | stop-VMHostService}
- if ($option -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ snmpd | Set-VMHostService -Policy On}
- if ($option -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ snmpd | Set-VMHostService -Policy Off}
+ if ($a -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ snmpd | Start-VMHostService -Confirm:$false}
+ if ($a -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ snmpd | stop-VMHostService -Confirm:$false}
+ if ($a -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ snmpd | Set-VMHostService -Policy On -Confirm:$false}
+ if ($a -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ snmpd | Set-VMHostService -Policy Off -Confirm:$false}
     
  #End of Script#
 }#End of function
@@ -1518,10 +1518,10 @@ Write-Host "DCUI [Direct Console UI] options
      4. DCUI Policy Off
      " -BackgroundColor White -ForegroundColor Blue #options to choose from
  $a = Read-Host "Choose a number from 1 to 4"
- if ($option -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ DCUI | Start-VMHostService}
- if ($option -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ DCUI | stop-VMHostService}
- if ($option -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ DCUI | Set-VMHostService -Policy On}
- if ($option -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ DCUI | Set-VMHostService -Policy Off}
+ if ($a -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ DCUI | Start-VMHostService -Confirm:$false}
+ if ($a -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ DCUI | stop-VMHostService -Confirm:$false}
+ if ($a -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ DCUI | Set-VMHostService -Policy On -Confirm:$false}
+ if ($a -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ DCUI | Set-VMHostService -Policy Off -Confirm:$false}
     
  #End of Script#
 }#End of function
@@ -1556,10 +1556,10 @@ Write-Host "lbtd[Load-Based Teaming Daemon] options
      4. lbtdPolicy Off
      " -BackgroundColor White -ForegroundColor Blue #options to choose from
  $a = Read-Host "Choose a number from 1 to 4"
- if ($option -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lbtd| Start-VMHostService}
- if ($option -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lbtd| stop-VMHostService}
- if ($option -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lbtd| Set-VMHostService -Policy On}
- if ($option -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lbtd| Set-VMHostService -Policy Off}
+ if ($a -eq 1) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lbtd| Start-VMHostService -Confirm:$false}
+ if ($a -eq 2) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lbtd| stop-VMHostService -Confirm:$false}
+ if ($a -eq 3) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lbtd| Set-VMHostService -Policy On -Confirm:$false}
+ if ($a -eq 4) {get-cluster $cluster | get-vmhost | get-vmhostservice | where Key -EQ lbtd| Set-VMHostService -Policy Off -Confirm:$false}
     
  #End of Script#
 }#End of function
