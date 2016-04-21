@@ -4,7 +4,7 @@ function ShootVmkPg
 {
 <#
 .SYNOPSIS
-    Remove virtual machine portgroup
+    Remove vmkernel portgroup
 .DESCRIPTION
     This will remove the virtual machine portgroup of all the hosts of a cluster/clusters.
 .NOTES
@@ -29,5 +29,3 @@ $pg      = Read-Host "Name of the portgroup?"
   get-vmhost $vmhost | get-virtualportgroup -Name $pg | Remove-VirtualPortGroup -Confirm:$false 
  }#End of Script
 }#End of function
-
-

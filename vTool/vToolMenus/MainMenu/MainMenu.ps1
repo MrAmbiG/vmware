@@ -3,7 +3,7 @@ function MainMenu
 {
  do {
  do {
-     $version = 'Mar2016'
+     $version = 'Apr2016'
      Write-Host -BackgroundColor Black -ForegroundColor Cyan  "`nvTool $version"
      Write-Host -BackgroundColor White -ForegroundColor Black "`nMain Menu"
      Write-Host "
@@ -13,8 +13,7 @@ function MainMenu
      write-host "
      Z - Exit" -ForegroundColor Yellow #exits the script
 
-     $user   = [Environment]::UserName
-     $choice = Read-Host "Hi $user, choose one of the above"  #Get user's entry
+     $user   = [Environment]::UserName     $choice = Read-Host "Hi $user, choose one of the above"  #Get user's entry
      $ok     = $choice -match '^[abz]+$'
      if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
     } until ( $ok )

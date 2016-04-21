@@ -52,6 +52,308 @@ Import-Module VMware.VumAutomation          -ErrorAction SilentlyContinue
 #------------------------------Start of Collection of Functions of automation------------------------------#
 
 #start of function
+function shGetShHosts 
+{
+<#
+.SYNOPSIS
+    Connect to standalone hosts
+.DESCRIPTION
+    This will get the 1st host's ip address and increment it to a number specified by the user and connect to all of them.
+.NOTES
+    File Name      : shNewVss.ps1
+    Author         : gajendra d ambi
+    Date           : April 2016
+    Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
+    Copyright      - None
+.LINK
+    Script posted over: github.com/gajuambi/vmware
+#>
+#Start of script#
+
+$1sthost  = Read-Host "1st host's ip address?"
+$max      = Read-Host "total number of esxi hosts that you want to configure?"
+$user     = Read-Host "ESXi username?"
+$pass     = Read-Host "ESXi password?"
+
+#generate the range of ip addresses of hosts
+$fixed = $1sthost.Split('.')[0..2]
+$last = [int]($1sthost.Split('.')[3])
+$maxhosts = $max - 1
+$hosts = 
+$last..($last + $maxhosts) | %{
+    [string]::Join('.',$fixed) + "." + $_
+}
+
+#connect to all hosts
+connect-viserver $hosts -User $user -Password $pass
+}
+
+#Start of vdsMenu
+function StandHostsMenu
+{
+ do {
+ do {     
+     Write-Host "`StandHostsMenu" -BackgroundColor White -ForegroundColor Black
+     Write-Host "
+     A. Create virtual Standard Switch
+     B. Create virtual Machine Portgroup
+     C. Create VMkernel Portgroup
+     D. Rename Portgroups
+     E. Add Nics to vSwitch
+     F. Remove VM portgroup
+     F. Remove VMkernel portgroup" #options to choose from
+   
+     Write-Host "
+     X. Previous Menu
+     Y. Main Menu
+     Z. Exit" -BackgroundColor Black -ForegroundColor Green #return to main menu
+    
+     $choice = Read-Host "choose one of the above" #Get user's entry
+     $ok     = $choice -match '^[abcdefgxyz]+$'
+     if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
+    } until ( $ok )
+    switch -Regex ($choice) 
+    {
+    "A" { shNewVss }
+    "B" { shNewVMPg }
+    "C" { shNewVMkernelPg }
+    "D" { shRenamePg }
+    "E" { shAddNic }
+    "F" { shShootVmPg }
+    "g" { shShootVmkPg }
+
+    "X" { vCenterMenu }
+    "Y" { MainMenu }  
+    }
+    } until ( $choice -match "Z" )
+}
+#end of vdsMenu
+
+#start of function
+function shShootVmPg 
+{
+<#
+.SYNOPSIS
+    Create New VMware Standard Switch on all hosts
+.DESCRIPTION
+    This will need the 1st host's ip address and the number of subsequent hosts that you want to configure(which should be in series of the ip address).
+    Lets say you have 10 esxi hosts and the 1st host's ip is 1.1.1.1 then you have to provide the 1st host's ip address and the number of hosts
+    as an input to this script which will do +1 to the last octet of the 1st host's ip address and connect to all the 10 hosts and 
+    Then it will Remove VM portgroup.
+.NOTES
+    File Name      : ShootVmkPg.ps1
+    Author         : gajendra d ambi
+    Date           : April 2016
+    Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
+    Copyright      - None
+.LINK
+    Script posted over: github.com/gajuambi/vmware
+#>
+#Start of script#
+shGetShHosts
+$pg      = Read-Host "Name of the portgroup?"
+$pg      = Read-Host "Name of the portgroup?"
+Get-VMHost | Get-VirtualPortGroup -Name $pg | Remove-VirtualPortGroup -Confirm:$false
+ #End of Script#
+}#End of function
+
+#start of function
+function shShootVmkPg 
+{
+<#
+.SYNOPSIS
+    Create New VMware Standard Switch on all hosts
+.DESCRIPTION
+    This will need the 1st host's ip address and the number of subsequent hosts that you want to configure(which should be in series of the ip address).
+    Lets say you have 10 esxi hosts and the 1st host's ip is 1.1.1.1 then you have to provide the 1st host's ip address and the number of hosts
+    as an input to this script which will do +1 to the last octet of the 1st host's ip address and connect to all the 10 hosts and 
+    Then it will Remove vmkernel portgroup.
+.NOTES
+    File Name      : ShootVmkPg.ps1
+    Author         : gajendra d ambi
+    Date           : April 2016
+    Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
+    Copyright      - None
+.LINK
+    Script posted over: github.com/gajuambi/vmware
+#>
+#Start of script#
+shGetShHosts
+$pg      = Read-Host "Name of the portgroup?"
+ foreach ($vmhost in (get-vmhost | sort)) 
+ {
+  $vmk = Get-VMHostNetworkAdapter -VMHost $vmhost | where PortgroupName -eq $pg
+  Write-Host "removing vmkernel from the $pg on $vmhost"
+  Remove-VMHostNetworkAdapter -Nic $vmk -confirm:$false
+ 
+  Write-Host "removing $pg on $vmhost"
+  get-vmhost $vmhost | get-virtualportgroup -Name $pg | Remove-VirtualPortGroup -Confirm:$false 
+ }#End of Script#
+}#End of function
+
+#start of function
+function shRenamePg 
+{
+<#
+.SYNOPSIS
+    Create New VMware Standard Switch on all hosts
+.DESCRIPTION
+    This will need the 1st host's ip address and the number of subsequent hosts that you want to configure(which should be in series of the ip address).
+    Lets say you have 10 esxi hosts and the 1st host's ip is 1.1.1.1 then you have to provide the 1st host's ip address and the number of hosts
+    as an input to this script which will do +1 to the last octet of the 1st host's ip address and connect to them all the 10 hosts.
+    Then it will rename the esxi host's portgroup.
+.NOTES
+    File Name      : shRenamePg.ps1
+    Author         : gajendra d ambi
+    Date           : April 2016
+    Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
+    Copyright      - None
+.LINK
+    Script posted over: github.com/gajuambi/vmware
+#>
+#Start of script#
+shGetShHosts
+$oldpg   = Read-Host "Old Name of the portgroup?"
+$newpg   = Read-Host "New Name of the portgroup?"
+Get-VMHost | Get-VirtualPortGroup -Name $oldpg | Set-VirtualPortGroup -Name $newpg -Confirm:$false
+#End of Script#
+}#End of function
+
+#start of function
+function shNewVss 
+{
+<#
+.SYNOPSIS
+    Create New VMware Standard Switch on all hosts
+.DESCRIPTION
+    This will need the 1st host's ip address and the number of subsequent hosts that you want to configure(which should be in series of the ip address).
+    Lets say you have 10 esxi hosts and the 1st host's ip is 1.1.1.1 then you have to provide the 1st host's ip address and the number of hosts
+    as an input to this script which will do +1 to the last octet of the 1st host's ip address and connect to all of the 10 hosts.
+    Then it will create a new vswitch based on your input.
+.NOTES
+    File Name      : shNewVss.ps1
+    Author         : gajendra d ambi
+    Date           : April 2016
+    Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
+    Copyright      - None
+.LINK
+    Script posted over: github.com/gajuambi/vmware
+#>
+#Start of script#
+shGetShHosts
+$vss = "name of the vSwitch?"
+get-vmhost | New-VirtualSwitch -Name $vss -Confirm:$false
+ #End of Script#
+}#End of function
+
+#start of function
+function shNewVMPg 
+{
+<#
+.SYNOPSIS
+    Create New VMware Standard Swiportgroup on all hosts
+.DESCRIPTION
+    This will need the 1st host's ip address and the number of subsequent hosts that you want to configure(which should be in series of the ip address).
+    Lets say you have 10 esxi hosts and the 1st host's ip is 1.1.1.1 then you have to provide the 1st host's ip address and the number of hosts
+    as an input to this script which will do +1 to the last octet of the 1st host's ip address and  connect to all of the 10 hosts and 
+    Then it will create a new virtual machine portgroup based on your input.
+.NOTES
+    File Name      : shNewVMPg.ps1
+    Author         : gajendra d ambi
+    Date           : April 2016
+    Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
+    Copyright      - None
+.LINK
+    Script posted over: github.com/gajuambi/vmware
+#>
+#Start of script#
+shGetShHosts
+$vss  = "name of the vSwitch?"
+$pg   = "name of the portgroup?"
+$vlan = "vlan?"
+get-vmhost | Get-VirtualSwitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false
+
+ #End of Script#
+}#End of function
+
+#start of function
+function shNewVMkernelPg 
+{
+<#
+.SYNOPSIS
+    Create New VMware Standard Swiportgroup on all hosts
+.DESCRIPTION
+    This will need the 1st host's ip address and the number of subsequent hosts that you want to configure(which should be in series of the ip address).
+    Lets say you have 10 esxi hosts and the 1st host's ip is 1.1.1.1 then you have to provide the 1st host's ip address and the number of hosts
+    as an input to this script which will do +1 to the last octet of the 1st host's ip address and connect to all of the 10 hosts and 
+    Then it will create a new vmkernel portgroup based on your input.
+.NOTES
+    File Name      : shNewVMkernelPg.ps1
+    Author         : gajendra d ambi
+    Date           : April 2016
+    Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
+    Copyright      - None
+.LINK
+    Script posted over: github.com/gajuambi/vmware
+#>
+#Start of script#
+shGetShHosts
+$vss  = "name of the vSwitch?"
+$pg   = "name of the portgroup?"
+$vlan = "vlan?"
+get-vmhost | Get-VirtualSwitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false
+
+$ip    = "What is the 1st vmkernel ip address?"
+$mask  = "subnet mask?"
+$gw    = "default gateway?"
+$vmk   = "vmk number? ex: vmk7?"
+
+$a     = $ip.Split('.')[0..2]   
+#first 3 octets of the ip address
+$b     = [string]::Join(".",$a)
+
+#last octet of the ip address
+$c     = $ip.Split('.')[3]
+$c     = [int]$c
+
+ foreach ($vmhost in $hosts){
+ $esxcli = get-vmhost $vmhost | Get-EsxCli
+ $esxcli.network.ip.interface.add($null, $null, "$vmk", $null, "1500", $null, "$pg") #add vmkernel to the portgroup
+ $esxcli.network.ip.interface.ipv4.set("$vmk", "$b.$(($c++))", "$mask", $null, "static") #update ip informaiton to the vmkernel
+ }#End of Script#
+}#End of function
+
+#start of function
+function shAddNic 
+{
+<#
+.SYNOPSIS
+    Create New VMware Standard Switch on all hosts
+.DESCRIPTION
+    This will need the 1st host's ip address and the number of subsequent hosts that you want to configure(which should be in series of the ip address).
+    Lets say you have 10 esxi hosts and the 1st host's ip is 1.1.1.1 then you have to provide the 1st host's ip address and the number of hosts
+    as an input to this script which will do +1 to the last octet of the 1st host's ip address and connect to all the 10 hosts and 
+    Then it will add physical nics to the standard switch.
+.NOTES
+    File Name      : shAddNic.ps1
+    Author         : gajendra d ambi
+    Date           : April 2016
+    Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
+    Copyright      - None
+.LINK
+    Script posted over: github.com/gajuambi/vmware
+#>
+#Start of script#
+shGetShHosts
+$vss     = Read-Host "name of the vSphere standard Switch?"
+$newnic  = Read-Host "Name of the Nic (ex:vmnic5)?"
+foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
+ $vmnic = get-vmhost $vmhost | Get-VMHostNetworkAdapter -Physical -Name $newnic
+ get-vmhost $vmhost | get-virtualswitch -Name $vss | Add-VirtualSwitchPhysicalNetworkAdapter -VMHostPhysicalNic $vmnic -confirm:$false
+ }#End of Script#
+}#End of function
+
+#start of function
 function PgSync
 {
 <#
@@ -1985,7 +2287,7 @@ function ShootVmkPg
 {
 <#
 .SYNOPSIS
-    Remove virtual machine portgroup
+    Remove vmkernel portgroup
 .DESCRIPTION
     This will remove the virtual machine portgroup of all the hosts of a cluster/clusters.
 .NOTES
@@ -2229,8 +2531,7 @@ $newnic  = Read-Host "Name of the Nic (ex:vmnic5)?"
 foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
  $vmnic = get-vmhost $vmhost | Get-VMHostNetworkAdapter -Physical -Name $newnic
  get-vmhost $vmhost | get-virtualswitch -Name $vss | Add-VirtualSwitchPhysicalNetworkAdapter -VMHostPhysicalNic $vmnic -confirm:$false
- }
-#End of Script
+ }#End of Script
 }#End of function
 
 #start of function
