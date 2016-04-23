@@ -60,7 +60,7 @@ function shGetShHosts
 .DESCRIPTION
     This will get the 1st host's ip address and increment it to a number specified by the user and connect to all of them.
 .NOTES
-    File Name      : shNewVss.ps1
+    File Name      : shGetShHosts.ps1
     Author         : gajendra d ambi
     Date           : April 2016
     Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
@@ -86,48 +86,7 @@ $last..($last + $maxhosts) | %{
 
 #connect to all hosts
 connect-viserver $hosts -User $user -Password $pass
-}
-
-#Start of vdsMenu
-function StandHostsMenu
-{
- do {
- do {     
-     Write-Host "`StandHostsMenu" -BackgroundColor White -ForegroundColor Black
-     Write-Host "
-     A. Create virtual Standard Switch
-     B. Create virtual Machine Portgroup
-     C. Create VMkernel Portgroup
-     D. Rename Portgroups
-     E. Add Nics to vSwitch
-     F. Remove VM portgroup
-     F. Remove VMkernel portgroup" #options to choose from
-   
-     Write-Host "
-     X. Previous Menu
-     Y. Main Menu
-     Z. Exit" -BackgroundColor Black -ForegroundColor Green #return to main menu
-    
-     $choice = Read-Host "choose one of the above" #Get user's entry
-     $ok     = $choice -match '^[abcdefgxyz]+$'
-     if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
-    } until ( $ok )
-    switch -Regex ($choice) 
-    {
-    "A" { shNewVss }
-    "B" { shNewVMPg }
-    "C" { shNewVMkernelPg }
-    "D" { shRenamePg }
-    "E" { shAddNic }
-    "F" { shShootVmPg }
-    "g" { shShootVmkPg }
-
-    "X" { vCenterMenu }
-    "Y" { MainMenu }  
-    }
-    } until ( $choice -match "Z" )
-}
-#end of vdsMenu
+}#End of function
 
 #start of function
 function shShootVmPg 
@@ -212,7 +171,6 @@ function shRenamePg
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of script#
-shGetShHosts
 $oldpg   = Read-Host "Old Name of the portgroup?"
 $newpg   = Read-Host "New Name of the portgroup?"
 Get-VMHost | Get-VirtualPortGroup -Name $oldpg | Set-VirtualPortGroup -Name $newpg -Confirm:$false
@@ -240,8 +198,7 @@ function shNewVss
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of script#
-shGetShHosts
-$vss = "name of the vSwitch?"
+$vss = Read-Host "name of the vSwitch?"
 get-vmhost | New-VirtualSwitch -Name $vss -Confirm:$false
  #End of Script#
 }#End of function
@@ -267,12 +224,10 @@ function shNewVMPg
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of script#
-shGetShHosts
-$vss  = "name of the vSwitch?"
-$pg   = "name of the portgroup?"
-$vlan = "vlan?"
+$vss  = Read-Host "name of the vSwitch?"
+$pg   = Read-Host "name of the portgroup?"
+$vlan = Read-Host "vlan?"
 get-vmhost | Get-VirtualSwitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false
-
  #End of Script#
 }#End of function
 
@@ -297,16 +252,14 @@ function shNewVMkernelPg
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of script#
-shGetShHosts
-$vss  = "name of the vSwitch?"
-$pg   = "name of the portgroup?"
-$vlan = "vlan?"
+$vss  = Read-Host "name of the vSwitch?"
+$pg   = Read-Host "name of the portgroup?"
+$vlan = Read-Host "vlan?"
 get-vmhost | Get-VirtualSwitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false
-
-$ip    = "What is the 1st vmkernel ip address?"
-$mask  = "subnet mask?"
-$gw    = "default gateway?"
-$vmk   = "vmk number? ex: vmk7?"
+$ip    = Read-Host "What is the 1st vmkernel ip address?"
+$mask  = Read-Host "subnet mask?"
+$gw    = Read-Host "default gateway?"
+$vmk   = Read-Host "vmk number? ex: vmk7?"
 
 $a     = $ip.Split('.')[0..2]   
 #first 3 octets of the ip address
@@ -316,7 +269,7 @@ $b     = [string]::Join(".",$a)
 $c     = $ip.Split('.')[3]
 $c     = [int]$c
 
- foreach ($vmhost in $hosts){
+ foreach ($vmhost in (get-vmhost | sort)){
  $esxcli = get-vmhost $vmhost | Get-EsxCli
  $esxcli.network.ip.interface.add($null, $null, "$vmk", $null, "1500", $null, "$pg") #add vmkernel to the portgroup
  $esxcli.network.ip.interface.ipv4.set("$vmk", "$b.$(($c++))", "$mask", $null, "static") #update ip informaiton to the vmkernel
@@ -324,7 +277,7 @@ $c     = [int]$c
 }#End of function
 
 #start of function
-function shAddNic 
+function shShootVmkPg 
 {
 <#
 .SYNOPSIS
@@ -333,9 +286,9 @@ function shAddNic
     This will need the 1st host's ip address and the number of subsequent hosts that you want to configure(which should be in series of the ip address).
     Lets say you have 10 esxi hosts and the 1st host's ip is 1.1.1.1 then you have to provide the 1st host's ip address and the number of hosts
     as an input to this script which will do +1 to the last octet of the 1st host's ip address and connect to all the 10 hosts and 
-    Then it will add physical nics to the standard switch.
+    Then it will Remove vmkernel portgroup.
 .NOTES
-    File Name      : shAddNic.ps1
+    File Name      : ShootVmkPg.ps1
     Author         : gajendra d ambi
     Date           : April 2016
     Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
@@ -344,12 +297,15 @@ function shAddNic
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of script#
-shGetShHosts
-$vss     = Read-Host "name of the vSphere standard Switch?"
-$newnic  = Read-Host "Name of the Nic (ex:vmnic5)?"
-foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
- $vmnic = get-vmhost $vmhost | Get-VMHostNetworkAdapter -Physical -Name $newnic
- get-vmhost $vmhost | get-virtualswitch -Name $vss | Add-VirtualSwitchPhysicalNetworkAdapter -VMHostPhysicalNic $vmnic -confirm:$false
+$pg      = Read-Host "Name of the portgroup?"
+ foreach ($vmhost in (get-vmhost | sort)) 
+ {
+  $vmk = Get-VMHostNetworkAdapter -VMHost $vmhost | where PortgroupName -eq $pg
+  Write-Host "removing vmkernel from the $pg on $vmhost"
+  Remove-VMHostNetworkAdapter -Nic $vmk -confirm:$false
+ 
+  Write-Host "removing $pg on $vmhost"
+  get-vmhost $vmhost | get-virtualportgroup -Name $pg | Remove-VirtualPortGroup -Confirm:$false 
  }#End of Script#
 }#End of function
 
@@ -2800,6 +2756,49 @@ Get-Cluster $cluster | get-vmhost | Get-Virtualswitch -Name $vss | Set-VirtualSw
 
 #------------------------------Start of Collection of Menu Functions-------------------------------#
 
+#Start of StandHostsMenu
+function StandHostsMenu
+{
+ do {
+ do {     
+     Write-Host "`StandHostsMenu" -BackgroundColor White -ForegroundColor Black
+     Write-Host "
+     A. Connect to standalone hosts
+     B. Create virtual Standard Switch
+     C. Create virtual Machine Portgroup
+     D. Create VMkernel Portgroup
+     E. Rename Portgroups
+     F. Add Nics to vSwitch
+     G. Remove VM portgroup
+     H. Remove VMkernel portgroup" #options to choose from
+   
+     Write-Host "
+     X. Previous Menu
+     Y. Main Menu
+     Z. Exit" -BackgroundColor Black -ForegroundColor Green #return to main menu
+    
+     $choice = Read-Host "choose one of the above" #Get user's entry
+     $ok     = $choice -match '^[abcdefghxyz]+$'
+     if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
+    } until ( $ok )
+    switch -Regex ($choice) 
+    {
+    "A" { shGetShHosts }
+    "B" { shNewVss }
+    "C" { shNewVMPg }
+    "D" { shNewVMkernelPg }
+    "E" { shRenamePg }
+    "F" { shAddNic }
+    "G" { shShootVmPg }
+    "H" { shShootVmkPg }
+
+    "X" { vCenterMenu }
+    "Y" { MainMenu }  
+    }
+    } until ( $choice -match "Z" )
+}
+#end of StandHostsMenu
+
 #Start of vdsLoadBalancingMenu
 function vdsLoadBalancingMenu
 {
@@ -2993,7 +2992,7 @@ function MainMenu
 {
  do {
  do {
-     $version = 'Mar2016'
+     $version = 'Apr2016'
      Write-Host -BackgroundColor Black -ForegroundColor Cyan  "`nvTool $version"
      Write-Host -BackgroundColor White -ForegroundColor Black "`nMain Menu"
      Write-Host "
@@ -3003,7 +3002,7 @@ function MainMenu
      write-host "
      Z - Exit" -ForegroundColor Yellow #exits the script
 
-     $user   = [Environment]::UserName
+     $user   = [Environment]::UserName     
      $choice = Read-Host "Hi $user, choose one of the above"  #Get user's entry
      $ok     = $choice -match '^[abz]+$'
      if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
@@ -3011,7 +3010,7 @@ function MainMenu
     switch -Regex ($choice) 
     {
     "A" { vCenterMenu }
-    "B" { Write-Host It will be present in future release }
+    "B" { StandHostsMenu }
     }
     } until ( $choice -match "Z" )
     #if ($choice -eq "z") { exit }

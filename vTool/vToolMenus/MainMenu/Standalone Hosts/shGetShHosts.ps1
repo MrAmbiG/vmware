@@ -7,7 +7,7 @@ function shGetShHosts
 .DESCRIPTION
     This will get the 1st host's ip address and increment it to a number specified by the user and connect to all of them.
 .NOTES
-    File Name      : shNewVss.ps1
+    File Name      : shGetShHosts.ps1
     Author         : gajendra d ambi
     Date           : April 2016
     Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
@@ -33,4 +33,4 @@ $last..($last + $maxhosts) | %{
 
 #connect to all hosts
 connect-viserver $hosts -User $user -Password $pass
-}
+}#End of function

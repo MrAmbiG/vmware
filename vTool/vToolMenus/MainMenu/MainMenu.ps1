@@ -13,14 +13,15 @@ function MainMenu
      write-host "
      Z - Exit" -ForegroundColor Yellow #exits the script
 
-     $user   = [Environment]::UserName     $choice = Read-Host "Hi $user, choose one of the above"  #Get user's entry
+     $user   = [Environment]::UserName     
+     $choice = Read-Host "Hi $user, choose one of the above"  #Get user's entry
      $ok     = $choice -match '^[abz]+$'
      if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
     } until ( $ok )
     switch -Regex ($choice) 
     {
     "A" { vCenterMenu }
-    "B" { Write-Host It will be present in future release }
+    "B" { StandHostsMenu }
     }
     } until ( $choice -match "Z" )
     #if ($choice -eq "z") { exit }

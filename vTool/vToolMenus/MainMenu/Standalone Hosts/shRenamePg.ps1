@@ -19,7 +19,6 @@ function shRenamePg
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of script#
-shGetShHosts
 $oldpg   = Read-Host "Old Name of the portgroup?"
 $newpg   = Read-Host "New Name of the portgroup?"
 Get-VMHost | Get-VirtualPortGroup -Name $oldpg | Set-VirtualPortGroup -Name $newpg -Confirm:$false

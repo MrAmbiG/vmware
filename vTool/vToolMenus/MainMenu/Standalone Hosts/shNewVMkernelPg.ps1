@@ -19,16 +19,15 @@ function shNewVMkernelPg
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of script#
-shGetShHosts
-$vss  = "name of the vSwitch?"
-$pg   = "name of the portgroup?"
-$vlan = "vlan?"
+$vss  = Read-Host "name of the vSwitch?"
+$pg   = Read-Host "name of the portgroup?"
+$vlan = Read-Host "vlan?"
 get-vmhost | Get-VirtualSwitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false
 
-$ip    = "What is the 1st vmkernel ip address?"
-$mask  = "subnet mask?"
-$gw    = "default gateway?"
-$vmk   = "vmk number? ex: vmk7?"
+$ip    = Read-Host "What is the 1st vmkernel ip address?"
+$mask  = Read-Host "subnet mask?"
+$gw    = Read-Host "default gateway?"
+$vmk   = Read-Host "vmk number? ex: vmk7?"
 
 $a     = $ip.Split('.')[0..2]   
 #first 3 octets of the ip address
@@ -38,7 +37,7 @@ $b     = [string]::Join(".",$a)
 $c     = $ip.Split('.')[3]
 $c     = [int]$c
 
- foreach ($vmhost in $hosts){
+ foreach ($vmhost in (get-vmhost | sort)){
  $esxcli = get-vmhost $vmhost | Get-EsxCli
  $esxcli.network.ip.interface.add($null, $null, "$vmk", $null, "1500", $null, "$pg") #add vmkernel to the portgroup
  $esxcli.network.ip.interface.ipv4.set("$vmk", "$b.$(($c++))", "$mask", $null, "static") #update ip informaiton to the vmkernel

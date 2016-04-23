@@ -19,7 +19,6 @@ function shShootVmPg
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of script#
-shGetShHosts
 $pg      = Read-Host "Name of the portgroup?"
 $pg      = Read-Host "Name of the portgroup?"
 Get-VMHost | Get-VirtualPortGroup -Name $pg | Remove-VirtualPortGroup -Confirm:$false

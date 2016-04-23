@@ -19,11 +19,9 @@ function shNewVMPg
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of script#
-shGetShHosts
-$vss  = "name of the vSwitch?"
-$pg   = "name of the portgroup?"
-$vlan = "vlan?"
+$vss  = Read-Host "name of the vSwitch?"
+$pg   = Read-Host "name of the portgroup?"
+$vlan = Read-Host "vlan?"
 get-vmhost | Get-VirtualSwitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false
-
  #End of Script#
 }#End of function

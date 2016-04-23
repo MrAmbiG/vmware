@@ -19,7 +19,6 @@ function shAddNic
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of script#
-shGetShHosts
 $vss     = Read-Host "name of the vSphere standard Switch?"
 $newnic  = Read-Host "Name of the Nic (ex:vmnic5)?"
 foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {

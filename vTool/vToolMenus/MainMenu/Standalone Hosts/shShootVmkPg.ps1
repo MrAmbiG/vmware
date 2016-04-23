@@ -19,7 +19,6 @@ function shShootVmkPg
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of script#
-shGetShHosts
 $pg      = Read-Host "Name of the portgroup?"
  foreach ($vmhost in (get-vmhost | sort)) 
  {

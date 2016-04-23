@@ -19,8 +19,7 @@ function shNewVss
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of script#
-shGetShHosts
-$vss = "name of the vSwitch?"
+$vss = Read-Host "name of the vSwitch?"
 get-vmhost | New-VirtualSwitch -Name $vss -Confirm:$false
  #End of Script#
 }#End of function
