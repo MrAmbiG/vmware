@@ -256,9 +256,9 @@ $vss  = Read-Host "name of the vSwitch?"
 $pg   = Read-Host "name of the portgroup?"
 $vlan = Read-Host "vlan?"
 get-vmhost | Get-VirtualSwitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false
+
 $ip    = Read-Host "What is the 1st vmkernel ip address?"
 $mask  = Read-Host "subnet mask?"
-$gw    = Read-Host "default gateway?"
 $vmk   = Read-Host "vmk number? ex: vmk7?"
 
 $a     = $ip.Split('.')[0..2]   

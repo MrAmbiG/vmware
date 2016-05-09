@@ -26,7 +26,6 @@ get-vmhost | Get-VirtualSwitch -Name $vss | New-VirtualPortGroup -Name $pg -VLan
 
 $ip    = Read-Host "What is the 1st vmkernel ip address?"
 $mask  = Read-Host "subnet mask?"
-$gw    = Read-Host "default gateway?"
 $vmk   = Read-Host "vmk number? ex: vmk7?"
 
 $a     = $ip.Split('.')[0..2]   
