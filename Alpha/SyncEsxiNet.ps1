@@ -12,7 +12,7 @@
     Prerequisite   : PowerShell v4+, powercli 6.3+ over win7 and upper.
     Copyright      - None
 .LINK
-    Script posted over: github.com/gajuambi/vmware
+    Script posted over: github.com/MrAmbiG/vmware
 #>
 #Start of Script
 $SHost = Read-Host "name or address of the source host?"
