@@ -26,7 +26,7 @@ Connect-VIServer $SHost, $DHost -User $user -Password $pass
 foreach ($vss in (get-vmhost $SHost | Get-virtualswitch))
 {
  get-vmhost $DHost | New-VirtualSwitch -Name $vss -Confirm:$false #creates vSwtch
-
+}
  #Add vmnics
  foreach ($vmnic in ((get-vmhost $SHost | get-virtualswitch -Name $vss | Get-VMHostNetworkAdapter | Where Name -Match vmnic).Name)) #lists the added vmnics on the source host $vss switch
  {
@@ -61,7 +61,7 @@ foreach ($vss in (get-vmhost $SHost | Get-virtualswitch))
   #set the above values to the $DHost
   Get-VMHost $DHost | get-virtualswitch -Name $vss | Get-NicTeamingPolicy | Set-NicTeamingPolicy -BeaconInterval $BeaconInterval -LoadBalancingPolicy $LoadBalancingPolicy -NetworkFailoverDetectionPolicy $NetworkFailoverDetectionPolicy -NotifySwitches $NotifySwitches -FailbackEnabled $FailbackEnabled -Confirm:$false
  } 
-}
+
 
 #Replicate Portgroups
 foreach ($vss in (get-vmhost $SHost | Get-virtualswitch))
