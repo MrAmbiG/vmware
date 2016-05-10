@@ -23,14 +23,17 @@ $pass  = Read-Host "password?"
 Connect-VIServer $SHost, $DHost -User $user -Password $pass
 
 #Replicate vSwitchs
+$DVss = (get-vmhost $DHost | get-virtualswitch).Name #gets a list of vswitchs on destinaton host
 foreach ($vss in (get-vmhost $SHost | Get-virtualswitch))
 {
- get-vmhost $DHost | New-VirtualSwitch -Name $vss -Confirm:$false #creates vSwtch
+ if ($DVss -notcontains $vss) #checks if the destination host already has this switch and if not then proceeds to creates the vswitch
+ { get-vmhost $DHost | New-VirtualSwitch -Name $vss -Confirm:$false } #creates vSwtch
 }
  #Add vmnics
  foreach ($vmnic in ((get-vmhost $SHost | get-virtualswitch -Name $vss | Get-VMHostNetworkAdapter | Where Name -Match vmnic).Name)) #lists the added vmnics on the source host $vss switch
  {
-  get-vmhost $DHost | Get-VirtualSwitch -Name $vss | New-VMHostNetworkAdapter $vmnic -Confirm:$false #add vmnic to the destination host
+  $newnic = get-vmhost $DHost | Get-VMHostNetworkAdapter -Physical -Name $newnic
+  get-vmhost $DHost | Get-VirtualSwitch -Name $vss | Add-VirtualSwitchPhysicalNetworkAdapter -VMHostPhysicalNic $newnic -Confirm:$false #add vmnic to the destination host
  }
 
  #NIC Teaming Policies
@@ -64,12 +67,16 @@ foreach ($vss in (get-vmhost $SHost | Get-virtualswitch))
 
 
 #Replicate Portgroups
+$Dpg = (get-vmhost $DHost | get-Virtualportgroup).Name #list the existing portgroups on $DHost
 foreach ($vss in (get-vmhost $SHost | Get-virtualswitch))
 {
  foreach ($pg in (get-vmhost $SHost | Get-virtualswitch -name $vss | Get-virtualportgroup))
  {
+  if ($Dpg -notcontains $pg)
+  {
   $vlan = (get-vmhost $SHost | Get-VirtualSwitch -Name $vss | Get-VirtualPortGroup -Name $pg).VLanId
   get-vmhost $DHost | Get-virtualswitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false #creates portgroup
+  }
 
   #NIC Teaming Policies
   $ActiveNics = (get-vmhost $SHost | get-virtualportgroup -Name $pg | Get-NicTeamingPolicy).ActiveNic
