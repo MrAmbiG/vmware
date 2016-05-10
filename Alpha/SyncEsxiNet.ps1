@@ -17,6 +17,10 @@
 #Start of Script
 $SHost = Read-Host "name or address of the source host?"
 $DHost = Read-Host "name or address of the destination host?"
+$user  = Read-Host "username?"
+$pass  = Read-Host "password?"
+
+Connect-VIServer $SHost, $DHost -User $user -Password $pass
 
 #Replicate vSwitchs
 foreach ($vss in (get-vmhost $SHost | Get-virtualswitch))
@@ -148,3 +152,5 @@ foreach ($pg in (get-vmhost $SHost | get-virtualportgroup))
  }
 }
 }#End of Script
+
+SyncEsxiNet
