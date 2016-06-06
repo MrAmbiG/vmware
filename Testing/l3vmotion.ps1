@@ -18,13 +18,13 @@
     Script posted over: github.com/MrAmbiG/vmware
 #>
 #Start of Script
-$vss   = Read-Host "name of the vSwitch?"
-$oldpg = "VMkernel" #don't change it unless the default portgroup name is something else
-$pg    = Read-Host "name of the portgroup?"
-$vlan  = Read-Host "vlan?"
-$ip    = Read-Host "What is the 1st vmkernel ip address?"
-$mask  = Read-Host "subnet mask?"
-$vmk   = Read-Host "vmk number? ex: vmk7?"
+$cluster = Read-Host "Name of the cluster?"
+$oldpg   = "VMkernel" #don't change it unless the default portgroup name is something else
+$pg      = Read-Host "name of the portgroup?"
+$vlan    = Read-Host "vlan?"
+$ip      = Read-Host "What is the 1st vmkernel ip address?"
+$mask    = Read-Host "subnet mask?"
+$vmk     = Read-Host "vmk number? ex: vmk7?"
 
 $a     = $ip.Split('.')[0..2]   
 #first 3 octets of the ip address
@@ -34,6 +34,7 @@ $b     = [string]::Join(".",$a)
 $c     = $ip.Split('.')[3]
 $c     = [int]$c
 
+$vmhosts = get-cluster $cluster | get-vmhost | sort
 foreach ($vmhost in $vmhosts)
  {
  get-vmhost $vmhost | get-virtualportgroup -Name $oldpg | set-virtualportgroup -Name $pg -VLanId $vlan -Confirm:$false
@@ -41,3 +42,4 @@ foreach ($vmhost in $vmhosts)
  $esxcli.network.ip.interface.ipv4.set("$vmk", "$b.$(($c++))", "$mask", $null, "static") #update ip informaiton to the vmkernel
  }
 }#End of script
+l3vmotion
