@@ -20,6 +20,7 @@
 #Start of Script
 $cluster = Read-Host "Name of the cluster?"
 $oldpg   = "VMkernel" #don't change it unless the default portgroup name is something else
+Write-Host 'The default portgroup "VMkernel" will be renamed to the below value' -ForegroundColor Black -BackgroundColor Yellow
 $pg      = Read-Host "name of the portgroup?"
 $vlan    = Read-Host "vlan?"
 $ip      = Read-Host "What is the 1st vmkernel ip address?"
