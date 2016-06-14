@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Check the Queuedepth of the fnic and 
+    Check the Queuedepth of the fnic and NoofoutstandingIOswithcompetingworlds
 .DESCRIPTION
     This should help you to generate a VMware infrastructure audit report which includes most of the things that are required by a datacenter.
 .NOTES
