@@ -5,7 +5,8 @@
     Configure l3 vmotion.
 .DESCRIPTION
     You must have created an l3 vmotion portgroup before it configures it.
-    1. create a vmkernel portgorup, select your vSwitch with tcp ip stack as vmotion but with everything else as default (leave portgroup name, vlan, ip address, subnet mask as default or blank)
+    1. create a vmkernel portgorup, select your vSwitch with tcp ip stack as vmotion but with everything else as default 
+    (leave portgroup name, vlan, ip address, subnet mask as default or blank)
     2. then run this part of the script which will update the portgroup from the default value of VMkernel, vlan, ip, subnet mask.
     3. update the default gateway
 .NOTES
@@ -18,6 +19,14 @@
     Script posted over: github.com/MrAmbiG/vmware
 #>
 #Start of Script
+Write-Host "
+You must have created an l3 vmotion portgroup before it configures it.
+    1. create a vmkernel portgorup, select your vSwitch with tcp ip stack as vmotion but with everything else as default
+    (leave portgroup name, vlan, ip address, subnet mask as default or blank)
+    2. then run this part of the script which will update the portgroup from the default value of VMkernel, vlan, ip, subnet mask.
+    3. update the default gateway
+" -BackgroundColor White -ForegroundColor Black
+
 $cluster = Read-Host "Name of the cluster?"
 $oldpg   = "VMkernel" #don't change it unless the default portgroup name is something else
 Write-Host 'The default portgroup "VMkernel" will be renamed to the below value' -ForegroundColor Black -BackgroundColor Yellow
