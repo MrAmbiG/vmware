@@ -29,21 +29,20 @@
 #>
 
 #Get Plink
-#http://www.virtu-al.net/2013/01/07/ssh-powershell-tricks-with-plink-exe/
-$PlinkLocation = $PSScriptRoot + "\Plink.exe"
+$PlinkLocation = $PSScriptRoot + "\Plink.exe" #http://www.virtu-al.net/2013/01/07/ssh-powershell-tricks-with-plink-exe/
 If (-not (Test-Path $PlinkLocation)){
    Write-Host "Plink.exe not found, trying to download..."
    $WC = new-object net.webclient
-   $WC.DownloadFile("ftp://10.12.209.140/build-utils/putty/PLINK.EXE",$PlinkLocation)
+   $WC.DownloadFile("http://the.earth.li/~sgtatham/putty/latest/x86/plink.exe",$PlinkLocation)
    If (-not (Test-Path $PlinkLocation)){
-      Write-Host "Unable to download plink.exe, please download from the following URL and add it to the same folder as this script: ftp://10.12.209.140/build-utils/putty/PLINK.EXE"
+      Write-Host "Unable to download plink.exe, please download and add it to the same folder as this script"
       Exit
    } Else {
       $PlinkEXE = Get-ChildItem $PlinkLocation
       If ($PlinkEXE.Length -gt 0) {
          Write-Host "Plink.exe downloaded, continuing script"
       } Else {
-         Write-Host "Unable to download plink.exe, please download from the following URL and add it to the same folder as this script: ftp://10.12.209.140/build-utils/putty/PLINK.EXE"
+      Write-Host "Unable to download plink.exe, please download and add it to the same folder as this script"
          Exit
       }
    }  
