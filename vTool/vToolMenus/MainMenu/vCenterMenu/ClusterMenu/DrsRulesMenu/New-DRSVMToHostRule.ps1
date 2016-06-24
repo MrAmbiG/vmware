@@ -63,4 +63,5 @@
     }
     $spec.RulesSpec += $rule
     $cluster.ReconfigureComputeResource_Task($spec,$true)
+
 }

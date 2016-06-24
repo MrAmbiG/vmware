@@ -24,6 +24,12 @@ $vmk     = Read-Host "vmk number? ex:- vmk9"
 $ip      = Read-Host "starting ip address?" 
 $mask    = Read-Host "subnet mask"
 $vlan    = Read-Host "Vlan?"
+
+$TimeStart = Get-Date #start time
+$TimeEnd   = Get-Date #end time
+$TimeTaken = $TimeEnd - $TimeStart #total time taken
+$TimeStart #starting the timer
+
 $a       = $ip.Split('.')[0..2]
    
   #first 3 octets of the ip address
@@ -38,5 +44,9 @@ $a       = $ip.Split('.')[0..2]
   $esxcli = get-vmhost $vmhost | Get-EsxCli
   $esxcli.network.ip.interface.add($null, $null, "$vmk", $null, "1500", $null, "$pg")
   $esxcli.network.ip.interface.ipv4.set("$vmk", "$b.$(($c++))", "$mask", $null, "static")
- }#End of Script
+ }
+
+$TimeEnd #stopping the timer
+Write-Host "Time taken - $TimeTaken" -BackgroundColor White -ForegroundColor blue #total time taken
+ #End of Script#
 }#End of function

@@ -18,6 +18,8 @@ Function CreateCluster
 #>
 
 #Start of Script
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
 
  $cluster = Read-Host "Name of the Cluster?"
  if ((Get-datacenter).count -gt 1) {
@@ -32,5 +34,8 @@ Function CreateCluster
  if ((Get-datacenter).count -eq 0) {
  Write-Host "Please create a datacenter first" -ForegroundColor DarkYellow -BackgroundColor White
  }
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
 #End of Script
 } #End of function

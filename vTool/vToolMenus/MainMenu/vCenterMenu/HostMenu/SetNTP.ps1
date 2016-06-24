@@ -20,6 +20,10 @@ function SetNTP
 $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 Write-Host "This new values will replace the existing values, hence add all the values" -ForegroundColor Yellow 
 $ntp     = Read-Host "NTP address(separate them with comma,no space..)"
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 $ntp     = $ntp.split(',')
 
  foreach ($vmhost in (Get-Cluster $cluster | get-vmhost | sort)) 
@@ -29,5 +33,9 @@ $ntp     = $ntp.split(',')
  Write-Host "setting ntp policy to on on $vmhost" -ForegroundColor Green
  Get-VMHostService -VMHost (Get-VMHost $vmhost) | where Key -eq "ntpd" | Restart-VMHostService -Confirm:$false
  Get-VMHostService -VMHost (Get-VMHost $vmhost) | where Key -eq "ntpd" | Set-VMHostService -policy "on" -Confirm:$false
- }#End of Script#
+ }
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
+#End of Script#
 }#End of function

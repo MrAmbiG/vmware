@@ -28,6 +28,11 @@ get-process | Select-Object VMHost,vSwitch,Portgroup,vmk,IpAddress,SubnetMask,vl
 Start-Process $csv
 Read-Host "Hit Enter/Return to proceed"
 
+$TimeStart = Get-Date #start time
+$TimeEnd   = Get-Date #end time
+$TimeTaken = $TimeEnd - $TimeStart #total time taken
+$TimeStart #starting the timer
+
 $csv = Import-Csv $csv
  foreach ($line in $csv) 
  {
@@ -42,5 +47,9 @@ $csv = Import-Csv $csv
   $esxcli = get-vmhost $vmhost | Get-EsxCli
   $esxcli.network.ip.interface.add($null, $null, "$vmk", $null, "1500", $null, "$pg")
   $esxcli.network.ip.interface.ipv4.set("$vmk", "$ip", "$mask", $null, "static")
- }#End of Script
+ }
+
+$TimeEnd #stopping the timer
+Write-Host "Time taken - $TimeTaken" -BackgroundColor White -ForegroundColor blue #total time taken
+ #End of Script#
 }#End of function

@@ -21,8 +21,15 @@ function SetSyslog
 $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 $syslog  = Read-Host "Syslog Target?"
 
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
 get-vmhost $vmhost | Get-AdvancedSetting -Name Syslog.global.logHost | Set-AdvancedSetting -Value $Syslog -Confirm:$false
 get-vmhost $vmhost | Get-VMHostFirewallException -Name "syslog" | Set-VMHostFirewallException -enabled:$true -Confirm:$false
-  }#End of Script#
+  }
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
+#End of Script#
 }#End of function

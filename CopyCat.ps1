@@ -26,6 +26,11 @@ $dest_dir   = $(Read-Host '"Input the Destination Directory(ex:-"/vmware/docs"')
 #connect to the host
 Connect-VIServer $esxi -User $esxi_user -Password $esxi_pass
 
+$TimeStart = Get-Date #start time
+$TimeEnd   = Get-Date #end time
+$TimeTaken = $TimeEnd - $TimeStart #total time taken
+$TimeStart #starting the timer
+
 #Let us choose a datastore to copy the files to...
 $allds = (get-vmhost | get-datastore).Name | sort
 $z = 0
@@ -54,4 +59,6 @@ If ((test-path $source_dir) -eq $true)
 #copy data from source directory to destination directory
 Copy-DatastoreItem $source_dir psdrive:$dest_dir -recurse -force
 
+$TimeEnd #stopping the timer
+Write-Host "Time taken - $TimeTaken" -BackgroundColor White -ForegroundColor blue #total time taken
 #End of Script

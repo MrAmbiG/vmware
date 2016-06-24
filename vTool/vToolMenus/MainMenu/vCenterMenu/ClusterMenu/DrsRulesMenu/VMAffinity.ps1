@@ -22,6 +22,13 @@ $cluster = Read-Host "Name of the Cluster?"
 $drsrule = Read-Host "Type the Name of the DRS Rule"
 $vms     = Read-Host "Name of the VMs (separated by comma, no space)?"
 $vms     = $vms.split(',')
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 New-DrsRule –Name $drsrule -Cluster $cluster –KeepTogether $true –VM $vms
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
 #End of Script
 }#End of function

@@ -21,8 +21,15 @@ $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 $vss     = Read-Host "name of the vSphere standard Switch?"
 $pg      = Read-Host "Name of the portgroup?"
 $vlan    = read-host "VLAN?"
+
+$TimeStart = Get-Date #start time
+$TimeEnd   = Get-Date #end time
+$TimeTaken = $TimeEnd - $TimeStart #total time taken
+$TimeStart #starting the timer
+
 Get-cluster $cluster | Get-VMHost | Get-VirtualSwitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false
-#End of Script
+
+$TimeEnd #stopping the timer
+Write-Host "Time taken - $TimeTaken" -BackgroundColor White -ForegroundColor blue #total time taken
+ #End of Script#
 }#End of function
-
-

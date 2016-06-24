@@ -26,11 +26,16 @@ Write-Host "
 " -ForegroundColor Blue -BackgroundColor White
 $perf   = Read-Host "one of the following is a valid choice. Type 1,2 or 3"
 
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 if ($perf -eq 1) {$perf = "HighPerformance"}
 if ($perf -eq 2) {$perf = "Balanced"       }
 if ($perf -eq 3) {$perf = "LowPower"       }
 
 (Get-View (Get-Cluster $cluster | Get-VMHost | Get-View).ConfigManager.PowerSystem).ConfigurePowerPolicy($perf)
 
- #End of Script#
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
+#End of Script#
 }#End of function

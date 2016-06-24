@@ -20,10 +20,15 @@ Function CreateVapp
 #>
 
 #Start of Script
-
 $cluster = Read-Host "name of the cluster?"
 $vapp    = Read-Host "Name of the vApp?"
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 New-VApp -Name $vapp -Location (get-cluster $cluster) -Confirm:$false
 
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
 #End of Script
 }#End of function

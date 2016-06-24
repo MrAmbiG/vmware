@@ -19,8 +19,13 @@ Function CreateVss
 #Start of Script
 $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 $vss     = Read-Host "name of the vSphere standard Switch?"
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 Get-Cluster $cluster | Get-VMHost | New-VirtualSwitch -Name $vss -Confirm:$false
-#End of Script
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
+ #End of Script#
 }#End of function
-
-

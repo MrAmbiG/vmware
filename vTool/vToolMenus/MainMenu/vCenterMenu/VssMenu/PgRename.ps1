@@ -20,8 +20,13 @@ Function PgRename
 $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 $oldpg   = Read-Host "Old Name of the portgroup?"
 $newpg   = Read-Host "New Name of the portgroup?"
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 Get-cluster $cluster | Get-VMHost | Get-VirtualPortGroup -Name $oldpg | Set-VirtualPortGroup -Name $newpg -Confirm:$false
-#End of Script
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
+ #End of Script#
 }#End of function
-
-

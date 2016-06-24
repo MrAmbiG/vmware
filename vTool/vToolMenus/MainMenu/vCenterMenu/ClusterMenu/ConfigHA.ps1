@@ -30,7 +30,11 @@ choose one of the following as your VM (HA) Restart Priority
 2. Low
 3. Medium (Recommended)
 4. High
-"
+" -ForegroundColor Blue -BackgroundColor White
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 get-cluster $cluster | Set-Cluster -HAEnabled:$true
 
 if ($HARestartPriority -eq 0 ) { get-cluster $cluster | set-cluster -HARestartPriority ClusterRestartPriority -Confirm:$false }
@@ -41,5 +45,7 @@ if ($HARestartPriority -eq 4 ) { get-cluster $cluster | set-cluster -HARestartPr
 
 if ((Get-Cluster $cluster | Get-VMHost).count -lt 4) { Get-Cluster $cluster | Set-Cluster -HAAdmissionControlEnabled:$false }
 
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
 #End of Script
 }#End of function

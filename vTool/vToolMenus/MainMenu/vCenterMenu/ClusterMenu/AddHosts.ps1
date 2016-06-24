@@ -32,6 +32,9 @@ get-process | Select-Object cluster,hostname,username,password | Export-Csv -Pat
 Start-Process $csv
 Read-Host "Hit Enter/Return to proceed"
 
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 $csv = Import-Csv $csv
  foreach ($line in $csv) 
  {
@@ -41,5 +44,8 @@ $csv = Import-Csv $csv
   $pass    = $($line.password)
   Add-VMHost $vmhost -Location (get-cluster -Name $cluster) -User $user -Password $pass -Force -Confirm:$false 
  }
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
 #End of Script
 } #End of function

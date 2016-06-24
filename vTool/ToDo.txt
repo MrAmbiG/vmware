@@ -1,1 +1,2 @@
 * power management actions for hosts where powered on VM count is less than 1
+* update nic verbose

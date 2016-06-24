@@ -21,7 +21,13 @@ $cluster    = Read-Host "Name of the Cluster?"
 $drsrule    = Read-Host "Type the Name of the DRS Rule"
 $vmgroup    = Read-Host "Type the Name of the VM group"
 $hostgroup  = Read-Host "Type the Name of the Hostgroup"
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 New-DrsVMToHostRule -VMGroup $vmgroup -HostGroup $hostgroup -Name $drsrule -Cluster $cluster -AntiAffine -Mandatory
 
-#End of Script
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
+#End of Script#
 }#End of function

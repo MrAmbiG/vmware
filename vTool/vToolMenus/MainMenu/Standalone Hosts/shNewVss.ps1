@@ -20,6 +20,13 @@ function shNewVss
 #>
 #Start of script#
 $vss = Read-Host "name of the vSwitch?"
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 get-vmhost | New-VirtualSwitch -Name $vss -Confirm:$false
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
  #End of Script#
 }#End of function

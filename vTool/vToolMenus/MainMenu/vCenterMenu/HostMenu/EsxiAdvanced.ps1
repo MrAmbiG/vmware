@@ -22,8 +22,15 @@ $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 $AdvSet  = Read-Host "name of the advancedsetting[case sensitive]?"
 $value   = Read-Host "value for the advancedsetting?"
 
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
  foreach ($vmhost in (Get-Cluster $cluster)) 
  {
  Get-VMHost $vmhost | get-advancedsetting -Name $AdvSet | Set-AdvancedSetting -Value $value -Confirm:$false
- }#End of Script#
+ }
+ 
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
+#End of Script#
 }#End of function

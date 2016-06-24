@@ -26,6 +26,10 @@ populate the values,
 save & close the file,
 Hit Enter to proceed
 " -ForegroundColor Blue -BackgroundColor White
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 $csv = "$PSScriptRoot/AddDpg.csv"
 get-process | Select-Object dvSwitch,dvPortgroup,VlanId,NumberOfPorts | Export-Csv -Path $csv -Encoding ASCII -NoTypeInformation
 Start-Process $csv
@@ -41,7 +45,9 @@ $csv = Import-Csv $csv
   Get-VDSwitch -Name $dvs | New-VDPortgroup -Name $dpg -VlanId $vlan -NumPorts $ports
  }
 
-#End of Script
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
+ #End of Script#
 }#End of function
 
 

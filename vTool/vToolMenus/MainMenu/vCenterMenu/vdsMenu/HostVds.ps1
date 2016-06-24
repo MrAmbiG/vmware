@@ -31,6 +31,9 @@ get-process | Select-Object dvSwitch,hostname,vmnic | Export-Csv -Path $csv -Enc
 Start-Process $csv
 Read-Host "Hit Enter/Return to proceed"
 
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 $csv = Import-Csv $csv
  foreach ($line in $csv) 
  {
@@ -42,7 +45,9 @@ $csv = Import-Csv $csv
   Get-VDSwitch $dvs | Add-VDSwitchPhysicalNetworkAdapter -VMHostNetworkAdapter $vmhostNetworkAdapter
  }
 
-#End of Script
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
+ #End of Script#
 }#End of function
 
 

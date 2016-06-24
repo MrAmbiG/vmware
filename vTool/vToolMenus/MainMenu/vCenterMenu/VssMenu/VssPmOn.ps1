@@ -19,8 +19,15 @@ Function VssPmOn
 #Start of Script
 $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 $vss     = Read-Host "Name of the vSwitch?"
+
+$TimeStart = Get-Date #start time
+$TimeEnd   = Get-Date #end time
+$TimeTaken = $TimeEnd - $TimeStart #total time taken
+$TimeStart #starting the timer
+
 Get-cluster $cluster | Get-VMHost | Get-VirtualSwitch -Name $vss | Get-SecurityPolicy | Set-SecurityPolicy -AllowPromiscuous $true -Confirm:$false
-#End of Script
+
+$TimeEnd #stopping the timer
+Write-Host "Time taken - $TimeTaken" -BackgroundColor White -ForegroundColor blue #total time taken
+ #End of Script#
 }#End of function
-
-

@@ -28,6 +28,11 @@ get-process | Select-Object IP,Hostname,DomainName,username,password | Export-Cs
 Start-Process $csv
 Read-Host "Hit Enter/Return to proceed"
 
+$TimeStart = Get-Date #start time
+$TimeEnd   = Get-Date #end time
+$TimeTaken = $TimeEnd - $TimeStart #total time taken
+$TimeStart #starting the timer
+
 $csv = Import-Csv $csv
  foreach ($line in $csv) 
  {
@@ -46,6 +51,9 @@ $csv = Import-Csv $csv
   $esxcli.system.hostname.set.Invoke($args)
   Disconnect-VIServer $IP -Confirm:$false #disconnect from the esxi host
  }
+
+$TimeEnd #stopping the timer
+Write-Host "Time taken - $TimeTaken" -BackgroundColor White -ForegroundColor blue #total time taken
 #End of Script
 } #End of function
 RenameHosts

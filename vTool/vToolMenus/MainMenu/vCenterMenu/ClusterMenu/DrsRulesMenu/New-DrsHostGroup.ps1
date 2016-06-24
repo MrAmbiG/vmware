@@ -1,4 +1,5 @@
-﻿Function New-DrsHostGroup {
+﻿Function New-DrsHostGroup
+{
 <#
 .SYNOPSIS
   Creates a new DRS host group
@@ -63,4 +64,5 @@
             throw "No valid hosts specified"
         }
     }
-}
+
+} 

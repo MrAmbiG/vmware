@@ -23,8 +23,13 @@ Write-Host "
 " -ForegroundColor Blue -BackgroundColor White
 $choice = Read-Host "type between 1 & 2"
 
-If ($choice -eq 1) { get-cluster $cluster | get-vmhost | Get-VMHostNetwork | Set-VMHostNetwork -IPv6Enabled $false }
-If ($choice -eq 2) { get-cluster $cluster | get-vmhost | Get-VMHostNetwork | Set-VMHostNetwork -IPv6Enabled $false }
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
 
+If ($choice -eq 1) { get-cluster $cluster | get-vmhost | Get-VMHostNetwork | Set-VMHostNetwork -IPv6Enabled $false }
+If ($choice -eq 2) { get-cluster $cluster | get-vmhost | Get-VMHostNetwork | Set-VMHostNetwork -IPv6Enabled $true }
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
  #End of Script#
 }#End of function

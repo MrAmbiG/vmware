@@ -32,6 +32,10 @@ Write-Host "
 4.Reboot (the hosts which are in maintenance mode)
 " -ForegroundColor Blue -BackgroundColor White
 $axn     = Read-Host "Type a number from 1 to 4"
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 $vmhosts = Get-cluster $cluster | get-vmhost
 if ($axn -eq 1) {$vmhosts | set-vmhost -State Maintenance}
 if ($axn -eq 2) {$vmhosts | set-vmhost -State Connected}
@@ -51,5 +55,9 @@ if ($axn -eq 4)
   $esxcli = get-esxcli
   $esxcli.system.shutdown.poweroff($null,$reason)
   }
- }#End of Script#
+ }
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
+#End of Script#
 }#End of function

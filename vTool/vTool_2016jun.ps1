@@ -155,7 +155,7 @@ function shShootVmPg
     as an input to this script which will do +1 to the last octet of the 1st host's ip address and connect to all the 10 hosts and 
     Then it will Remove VM portgroup.
 .NOTES
-    File Name      : ShootVmkPg.ps1
+    File Name      : ShootVmPg.ps1
     Author         : gajendra d ambi
     Date           : April 2016
     Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.

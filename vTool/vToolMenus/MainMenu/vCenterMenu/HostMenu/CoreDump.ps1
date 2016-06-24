@@ -21,6 +21,10 @@ function CoreDump
 
 $DumpTarget = Read-Host "Type the DumpTarget?:"
 $vmk        = Read-Host "Type the vmk number?:"
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
  foreach ($vmhost in (get-vmhost | sort)) {
   if ((get-vmhost $vmhost).version -match 5.) {
   $esxcli = get-vmhost $VMHost | Get-EsxCli
@@ -35,5 +39,9 @@ $vmk        = Read-Host "Type the vmk number?:"
   $esxcli.system.coredump.network.set("true")
   $esxcli.system.coredump.network.get()
   }
- }#end of the function
-}#end of the script
+ }
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
+#End of Script#
+}#End of function

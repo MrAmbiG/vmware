@@ -22,6 +22,10 @@ function SetScratch
 #Start of script#
 $resetloc = get-location
 $cluster  = Read-Host "name of the cluster[type * to include all clusters]?"
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
  $vmhost        = (get-vmhost $vmhost).Name
  $scratchfolder = '.locker_'+($vmhost.Split('.')[0])
@@ -35,5 +39,8 @@ foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
   Remove-PSDrive $location
  }
  get-cluster $cluster | get-vmhost | sort | Get-AdvancedSetting -Name "ScratchConfig.ConfiguredScratchLocation" | select Entity, Value | fl
- #End of Script#
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
+#End of Script#
 }#End of function

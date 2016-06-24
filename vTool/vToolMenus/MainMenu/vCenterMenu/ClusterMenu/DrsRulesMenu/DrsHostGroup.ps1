@@ -21,7 +21,13 @@ $cluster    = Read-Host "Name of the Cluster?"
 $vmhosts    = Read-Host "Type the Name of the host/hosts (separated only by a comma and no spaces)"
 $vmhosts    = $vmhosts.split(',')
 $hostgroup  = Read-Host "Type the Name of the Hostgroup"
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 Get-Cluster $cluster | Get-VMHost $vmhosts | New-DrsHostGroup -Name $hostgroup
 
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
 #End of Script
 }#End of function

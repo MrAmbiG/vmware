@@ -19,10 +19,18 @@ function SetFirewall
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of script#
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 
  foreach ($vmhost in (Get-Cluster $cluster)) 
  {
   Get-VMHost $vmhost | Get-VmhostFirewallException -Name "NTP Client" | Set-VMHostFirewallException -enabled:$true -Confirm:$false
- }#End of Script#
+ }
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
+#End of Script#
 }#End of function

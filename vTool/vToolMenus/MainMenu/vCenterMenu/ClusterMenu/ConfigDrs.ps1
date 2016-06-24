@@ -28,11 +28,16 @@ choose the DRS Mode
 " -ForegroundColor Blue -BackgroundColor White
 $DrsLevel = Read-Host "type 1 or 2 or 3"
 
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 if ($DrsLevel -eq 1) { $DrsLevel = "FullyAutomated" }
 if ($DrsLevel -eq 2) { $DrsLevel = "Manual" }
 if ($DrsLevel -eq 3) { $DrsLevel = "PartiallyAutomated" }
 
 Get-Cluster $cluster | Set-Cluster -DrsEnabled:$true -DrsAutomationLevel $DrsLevel -confirm:$false
 
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
 #End of Script
 }#End of function

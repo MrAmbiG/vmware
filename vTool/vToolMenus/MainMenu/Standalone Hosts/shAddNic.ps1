@@ -21,8 +21,16 @@ function shAddNic
 #Start of script#
 $vss     = Read-Host "name of the vSphere standard Switch?"
 $newnic  = Read-Host "Name of the Nic (ex:vmnic5)?"
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
  $vmnic = get-vmhost $vmhost | Get-VMHostNetworkAdapter -Physical -Name $newnic
  get-vmhost $vmhost | get-virtualswitch -Name $vss | Add-VirtualSwitchPhysicalNetworkAdapter -VMHostPhysicalNic $vmnic -confirm:$false
- }#End of Script#
+ }
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
+#End of Script#
 }#End of function

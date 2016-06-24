@@ -22,6 +22,9 @@ $max      = Read-Host "total number of esxi hosts that you want to configure?"
 $user     = Read-Host "ESXi username?"
 $pass     = Read-Host "ESXi password?"
 
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 #generate the range of ip addresses of hosts
 $fixed = $1sthost.Split('.')[0..2]
 $last = [int]($1sthost.Split('.')[3])
@@ -33,4 +36,7 @@ $last..($last + $maxhosts) | %{
 
 #connect to all hosts
 connect-viserver $hosts -User $user -Password $pass
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
 }#End of function

@@ -20,6 +20,11 @@ $DHost = Read-Host "name or address of the destination host?"
 $user  = Read-Host "username?"
 $pass  = Read-Host "password?"
 
+$TimeStart = Get-Date #start time
+$TimeEnd   = Get-Date #end time
+$TimeTaken = $TimeEnd - $TimeStart #total time taken
+$TimeStart #starting the timer
+
 Connect-VIServer $SHost, $DHost -User $user -Password $pass
 
 #Replicate vSwitchs
@@ -160,6 +165,9 @@ foreach ($pg in (get-vmhost $SHost | get-virtualportgroup))
   $CheckBeacon                    = (get-vmhost $SHost | get-virtualportgroup -Name $pg | Get-NicTeamingPolicy).CheckBeacon
   #set the above values to the $DHost
   Get-VMHost $DHost | get-virtualportgroup -Name $pg | Get-NicTeamingPolicy | Set-NicTeamingPolicy -BeaconInterval $BeaconInterval -LoadBalancingPolicy $LoadBalancingPolicy -NetworkFailoverDetectionPolicy $NetworkFailoverDetectionPolicy -NotifySwitches $NotifySwitches -FailbackEnabled $FailbackEnabled -Confirm:$false
+
+$TimeEnd #stopping the timer
+Write-Host "Time taken - $TimeTaken" -BackgroundColor White -ForegroundColor blue #total time taken
 }#End of Script
 
 SyncEsxiNet

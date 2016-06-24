@@ -21,7 +21,13 @@ $cluster     = Read-Host "Name of the Cluster?"
 $VMs         = Read-Host "Type the Name of the VM/VMs (separated only by a comma and no spaces)"
 $VMs         = $VMs.split(',')
 $vmgroup     = Read-Host "Type the Name of the VM group"
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
 Get-VM $VMs | New-DrsVmGroup -Name $vmgroup -Cluster $cluster
 
-#End of Script
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
+#End of Script#
 }#End of function

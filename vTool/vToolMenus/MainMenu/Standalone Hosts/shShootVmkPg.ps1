@@ -20,6 +20,10 @@ function shShootVmkPg
 #>
 #Start of script#
 $pg      = Read-Host "Name of the portgroup?"
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
  foreach ($vmhost in (get-vmhost | sort)) 
  {
   $vmk = Get-VMHostNetworkAdapter -VMHost $vmhost | where PortgroupName -eq $pg
@@ -28,5 +32,8 @@ $pg      = Read-Host "Name of the portgroup?"
  
   Write-Host "removing $pg on $vmhost"
   get-vmhost $vmhost | get-virtualportgroup -Name $pg | Remove-VirtualPortGroup -Confirm:$false 
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
  }#End of Script#
 }#End of function

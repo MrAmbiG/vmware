@@ -20,6 +20,11 @@ $vds = Read-Host "name of the vds?"
 $pg  = Read-Host "name of the source portgroup on vss?" 
 $dpg = Read-Host "name of the destination portgroup on vds?"
 
+$TimeStart = Get-Date #start time
+$TimeEnd   = Get-Date #end time
+$TimeTaken = $TimeEnd - $TimeStart #total time taken
+$TimeStart #starting the timer
+
 $dpg = Get-VDSwitch -Name 
 $DvsHosts = Get-VDSwitch -Name $vds | get-vmhost | sort
 foreach ($vmhost in $DvsHosts)
@@ -28,4 +33,7 @@ foreach ($vmhost in $DvsHosts)
      Set-VMHostNetworkAdapter -PortGroup $dpg -VirtualNic $vmk -Confirm:$false
      Get-VMHost $vmhost | Get-VirtualPortGroup -Standard -Name $pg | Remove-VirtualPortGroup -Confirm:$false
     }
+
+$TimeEnd #stopping the timer
+Write-Host "Time taken - $TimeTaken" -BackgroundColor White -ForegroundColor blue #total time taken
 }#End of function

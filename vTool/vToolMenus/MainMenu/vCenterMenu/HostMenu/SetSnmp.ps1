@@ -19,6 +19,10 @@ function SetSnmp
 $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 $snmp    = Read-Host "Type the snmp target"
 $string  = Read-Host "Type the snmp communities string"
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
   foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
   $esxcli = get-vmhost $vmhost | get-esxcli
   $esxcli.system.snmp.set($null,$null,$null,$null,$null,$null,$null,$null,$null,$null,$null,"true",$null,$null,$null,$null)
@@ -26,5 +30,9 @@ $string  = Read-Host "Type the snmp communities string"
   $esxcli.system.snmp.set($null,$null,$null,$null,$null,$null,$null,$null,$null,$null,$null,$null,$null,"$snmp/$string","$snmp/$string",$null)
   $esxcli.system.snmp.set($null,$null,"true",$null,$null,$null,$null,$null,$null,$null,$null,$null,$null,$null,$null,$null)
   $esxcli.system.snmp.get()
-  }#End of Script#
+  }
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
+#End of Script#
 }#End of function
