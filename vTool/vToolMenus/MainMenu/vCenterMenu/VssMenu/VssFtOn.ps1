@@ -1,5 +1,4 @@
-﻿
-#start of function
+﻿#start of function
 Function VssFtOn 
 {
 <#

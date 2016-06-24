@@ -1,5 +1,4 @@
-﻿
-#start of function
+﻿#start of function
 Function VssPorts 
 {
 <#
@@ -21,14 +20,12 @@ $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 $vss     = Read-Host "name of the vSphere standard Switch?"
 $ports   = Read-Host "number of ports?"
 
-$TimeStart = Get-Date #start time
-$TimeEnd   = Get-Date #end time
-$TimeTaken = $TimeEnd - $TimeStart #total time taken
-$TimeStart #starting the timer
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
 
 Get-Cluster $cluster | Get-VMHost | Get-VirtualSwitch -Name $vss | Set-VirtualSwitch -NumPorts $ports -Confirm:$false
 
-$TimeEnd #stopping the timer
-Write-Host "Time taken - $TimeTaken" -BackgroundColor White -ForegroundColor blue #total time taken
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
  #End of Script#
 }#End of function

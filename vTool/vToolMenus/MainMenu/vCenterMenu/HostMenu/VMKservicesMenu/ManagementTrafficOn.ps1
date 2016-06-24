@@ -19,12 +19,11 @@ function ManagementTrafficOn
 $cluster  = Read-Host "name of the cluster[type * to include all clusters]?"
 $pg       = Read-Host "name of the portgroup?"
 
-$TimeStart = Get-Date #start time
-$TimeEnd   = Get-Date #end time
-$TimeTaken = $TimeEnd - $TimeStart #total time taken
-$TimeStart #starting the timer
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
 
 Get-Cluster $cluster | Get-VMHost | Get-VMHostNetworkAdapter | where PortGroupname -EQ $pg | Set-VMHostNetworkAdapter -ManagementTrafficEnabled $false -Confirm:$false
+
 $stopWatch.Stop()
 Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
 #End of Script#

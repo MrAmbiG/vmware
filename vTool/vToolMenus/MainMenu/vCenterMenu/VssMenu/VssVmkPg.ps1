@@ -1,5 +1,4 @@
-﻿
-#start of function
+﻿#start of function
 Function VssVmkPg 
 {
 <#
@@ -25,10 +24,8 @@ $ip      = Read-Host "starting ip address?"
 $mask    = Read-Host "subnet mask"
 $vlan    = Read-Host "Vlan?"
 
-$TimeStart = Get-Date #start time
-$TimeEnd   = Get-Date #end time
-$TimeTaken = $TimeEnd - $TimeStart #total time taken
-$TimeStart #starting the timer
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
 
 $a       = $ip.Split('.')[0..2]
    
@@ -46,7 +43,7 @@ $a       = $ip.Split('.')[0..2]
   $esxcli.network.ip.interface.ipv4.set("$vmk", "$b.$(($c++))", "$mask", $null, "static")
  }
 
-$TimeEnd #stopping the timer
-Write-Host "Time taken - $TimeTaken" -BackgroundColor White -ForegroundColor blue #total time taken
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
  #End of Script#
 }#End of function

@@ -23,6 +23,7 @@ $stopWatch = [system.diagnostics.stopwatch]::startNew()
 $stopWatch.Start()
 
 Get-Cluster $cluster | Get-VMHost | Get-VMHostNetworkAdapter | where PortGroupname -EQ $pg | Set-VMHostNetworkAdapter -VsanTrafficEnabled $true -Confirm:$false
+
 $stopWatch.Stop()
 Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
 #End of Script#

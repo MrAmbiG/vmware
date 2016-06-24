@@ -1,5 +1,4 @@
-﻿
-#Start of DrsRulesMenu
+﻿#Start of DrsRulesMenu
 function DrsRulesMenu
 {
  do {
@@ -34,5 +33,4 @@ function DrsRulesMenu
     "Y" { MainMenu }  
     }
     } until ( $choice -match "Z" )
-}
-#end of DrsRulesMenu
+}#end of DrsRulesMenu

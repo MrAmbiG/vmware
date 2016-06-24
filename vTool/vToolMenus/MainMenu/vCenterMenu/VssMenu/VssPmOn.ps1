@@ -1,5 +1,4 @@
-﻿
-#start of function
+﻿#start of function
 Function VssPmOn 
 {
 <#
@@ -20,14 +19,12 @@ Function VssPmOn
 $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 $vss     = Read-Host "Name of the vSwitch?"
 
-$TimeStart = Get-Date #start time
-$TimeEnd   = Get-Date #end time
-$TimeTaken = $TimeEnd - $TimeStart #total time taken
-$TimeStart #starting the timer
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
 
 Get-cluster $cluster | Get-VMHost | Get-VirtualSwitch -Name $vss | Get-SecurityPolicy | Set-SecurityPolicy -AllowPromiscuous $true -Confirm:$false
 
-$TimeEnd #stopping the timer
-Write-Host "Time taken - $TimeTaken" -BackgroundColor White -ForegroundColor blue #total time taken
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
  #End of Script#
 }#End of function

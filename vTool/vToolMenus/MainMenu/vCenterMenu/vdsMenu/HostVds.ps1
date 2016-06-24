@@ -1,5 +1,4 @@
-﻿
-#start of function
+﻿#start of function
 Function HostVds 
 {
 <#
@@ -49,5 +48,3 @@ $stopWatch.Stop()
 Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
  #End of Script#
 }#End of function
-
-

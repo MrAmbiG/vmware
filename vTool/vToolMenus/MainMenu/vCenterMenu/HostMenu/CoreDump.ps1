@@ -1,4 +1,4 @@
-﻿
+﻿#Start of function
 function CoreDump 
 {
 <#

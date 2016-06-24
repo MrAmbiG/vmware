@@ -1,4 +1,5 @@
-﻿function l3vmotion
+﻿#start of function
+function l3vmotion
 {
 <#
 .SYNOPSIS

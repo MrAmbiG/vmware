@@ -1,5 +1,4 @@
-﻿
-#start of function
+﻿#start of function
 Function VssNic 
 {
 <#
@@ -21,17 +20,15 @@ $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 $vss     = Read-Host "name of the vSphere standard Switch?"
 $newnic  = Read-Host "Name of the Nic (ex:vmnic5)?"
 
-$TimeStart = Get-Date #start time
-$TimeEnd   = Get-Date #end time
-$TimeTaken = $TimeEnd - $TimeStart #total time taken
-$TimeStart #starting the timer
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
 
 foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
  $vmnic = get-vmhost $vmhost | Get-VMHostNetworkAdapter -Physical -Name $newnic
  get-vmhost $vmhost | get-virtualswitch -Name $vss | Add-VirtualSwitchPhysicalNetworkAdapter -VMHostPhysicalNic $vmnic -confirm:$false
  }
 
-$TimeEnd #stopping the timer
-Write-Host "Time taken - $TimeTaken" -BackgroundColor White -ForegroundColor blue #total time taken
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
  #End of Script#
 }#End of function

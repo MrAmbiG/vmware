@@ -1,5 +1,4 @@
-﻿
-#start of function
+﻿#start of function
 Function VssVmPg1
 {
 <#
@@ -28,10 +27,8 @@ get-process | Select-Object VMHost,vSwitch,Portgroup,vlan | Export-Csv -Path $cs
 Start-Process $csv
 Read-Host "Hit Enter/Return to proceed"
 
-$TimeStart = Get-Date #start time
-$TimeEnd   = Get-Date #end time
-$TimeTaken = $TimeEnd - $TimeStart #total time taken
-$TimeStart #starting the timer
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
 
 $csv = Import-Csv $csv
  foreach ($line in $csv) 
@@ -43,7 +40,7 @@ $csv = Import-Csv $csv
   Get-VMHost $vmhost | Get-VirtualSwitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false
  }
 
-$TimeEnd #stopping the timer
-Write-Host "Time taken - $TimeTaken" -BackgroundColor White -ForegroundColor blue #total time taken
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
  #End of Script#
 }#End of function
