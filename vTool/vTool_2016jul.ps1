@@ -129,15 +129,17 @@ function l3vmotion
 .SYNOPSIS
     Configure l3 vmotion.
 .DESCRIPTION
-    You must have created an l3 vmotion portgroup before it configures it.
-    1. create a vmkernel portgorup, select your vSwitch with tcp ip stack as vmotion but with everything else as default 
-    (leave portgroup name, vlan, ip address, subnet mask as default or blank)
-    2. then run this part of the script which will update the portgroup from the default value of VMkernel, vlan, ip, subnet mask.
-    3. update the default gateway
+    It will
+    create the l3 vmotion portgroup
+    add vmk to the portgroup
+    assign vlan to the portgroup
+    add ip, subnet mask to the portgroup
+    enable netstack l3 vmotion for the portgroup
+    1. update the default gateway
 .NOTES
     File Name      : l3vmotion.ps1
     Author         : gajendra d ambi
-    Date           : May 2016
+    Date           : June 2016
     Prerequisite   : PowerShell v4+, powercli 6.3+ over win7 and upper.
     Copyright      - None
 .LINK
@@ -153,8 +155,6 @@ You must have created an l3 vmotion portgroup before it configures it.
 " -BackgroundColor White -ForegroundColor Black
 
 $cluster = Read-Host "Name of the cluster?"
-$oldpg   = "VMkernel" #don't change it unless the default portgroup name is something else
-Write-Host 'The default portgroup "VMkernel" will be renamed to the below value' -ForegroundColor Black -BackgroundColor Yellow
 $pg      = Read-Host "name of the portgroup?"
 $vlan    = Read-Host "vlan?"
 $ip      = Read-Host "What is the 1st vmkernel ip address?"
@@ -175,9 +175,10 @@ $c     = [int]$c
 $vmhosts = get-cluster $cluster | get-vmhost | sort
 foreach ($vmhost in $vmhosts)
  {
- get-vmhost $vmhost | get-virtualportgroup -Name $oldpg | set-virtualportgroup -Name $pg -VLanId $vlan -Confirm:$false
+ Get-VMHost $vmhost | Get-VirtualSwitch -Name $vss | New-VirtualPortGroup $l3vmotion -VLanId $vlan -Confirm:$false #creating new VM portgroup
  $esxcli  = get-vmhost $vmhost | get-esxcli
- $esxcli.network.ip.interface.ipv4.set("$vmk", "$b.$(($c++))", "$mask", $null, "static") #update ip informaiton to the vmkernel
+ $esxcli.network.ip.netstack.add($false, "vmotion") #enabling and adding vmotion tcp/ip stack (netstack)
+ $esxcli.network.ip.interface.ipv4.set("$vmk", "$b.$(($c++))", "$mask", $null, "static") #update ip informaiton to the vmk
  }
 
 $stopWatch.Stop()
