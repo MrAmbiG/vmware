@@ -11,7 +11,7 @@ function l3vmotion
     assign vlan to the portgroup
     add ip, subnet mask to the portgroup
     enable netstack l3 vmotion for the portgroup
-    1. update the default gateway
+    1. update the default gateway manually for now
 .NOTES
     File Name      : l3vmotion.ps1
     Author         : gajendra d ambi
