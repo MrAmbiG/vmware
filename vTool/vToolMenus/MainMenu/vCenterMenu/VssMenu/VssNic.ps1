@@ -24,6 +24,7 @@ $stopWatch = [system.diagnostics.stopwatch]::startNew()
 $stopWatch.Start()
 
 foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
+ $vmhost.name
  $vmnic = get-vmhost $vmhost | Get-VMHostNetworkAdapter -Physical -Name $newnic
  get-vmhost $vmhost | get-virtualswitch -Name $vss | Add-VirtualSwitchPhysicalNetworkAdapter -VMHostPhysicalNic $vmnic -confirm:$false
  }

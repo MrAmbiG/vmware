@@ -31,6 +31,7 @@ You must have created an l3 vmotion portgroup before it configures it.
 " -BackgroundColor White -ForegroundColor Black
 
 $cluster = Read-Host "Name of the cluster?"
+$vss     = Read-Host "Name of the vSwitch?"
 $pg      = Read-Host "name of the portgroup?"
 $vlan    = Read-Host "vlan?"
 $ip      = Read-Host "What is the 1st vmkernel ip address?"

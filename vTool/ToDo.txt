@@ -1,3 +1,1 @@
-* power management actions for hosts where powered on VM count is less than 1
-* update nic verbose
 * win2esxi into vtool (open text file, post commands and it will run inside esxi)
