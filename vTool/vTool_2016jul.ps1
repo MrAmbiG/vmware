@@ -144,6 +144,7 @@ function l3vmotion
     Copyright      - None
 .LINK
     Script posted over: github.com/MrAmbiG/vmware
+    https://communities.vmware.com/thread/519794?start=0&tstart=0 (inok)
 #>
 #Start of Script
 Write-Host "
@@ -176,9 +177,10 @@ $c     = [int]$c
 $vmhosts = get-cluster $cluster | get-vmhost | sort
 foreach ($vmhost in $vmhosts)
  {
- Get-VMHost $vmhost | Get-VirtualSwitch -Name $vss | New-VirtualPortGroup $l3vmotion -VLanId $vlan -Confirm:$false #creating new VM portgroup
+ Get-VMHost $vmhost | Get-VirtualSwitch -Name $vss | New-VirtualPortGroup $pg -VLanId $vlan -Confirm:$false #creating new VM portgroup
  $esxcli  = get-vmhost $vmhost | get-esxcli
  $esxcli.network.ip.netstack.add($false, "vmotion") #enabling and adding vmotion tcp/ip stack (netstack)
+ $esxcli.network.ip.interface.add($null, $null, "$vmk", $null, "1500", "vmotion", "$pg")
  $esxcli.network.ip.interface.ipv4.set("$vmk", "$b.$(($c++))", "$mask", $null, "static") #update ip informaiton to the vmk
  }
 
