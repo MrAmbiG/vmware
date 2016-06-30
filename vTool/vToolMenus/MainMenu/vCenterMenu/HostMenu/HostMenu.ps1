@@ -19,6 +19,7 @@ function HostMenu
      k. Enable/disable services
      L. IPv6
      M. VMKernel Services
+     N. WinSSH (Run SSH commands on esxi from directly from windows)
 
      W. Others" #[Others menu is to include miscellaneous settings as per business needs] #options to choose from
    
@@ -28,7 +29,7 @@ function HostMenu
      Z. Exit" -BackgroundColor Black -ForegroundColor Green #return to main menu
     
      $choice = Read-Host "choose one of the above"  #Get user's entry
-     $ok     = $choice -match '^[abcdefghijklmwxyz]+$'
+     $ok     = $choice -match '^[abcdefghijklmnwxyz]+$'
      if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
     } until ( $ok )
     switch -Regex ($choice) 
@@ -46,6 +47,7 @@ function HostMenu
     "K" { HostServicesMenu }
     "L" { SetIpv6 }
     "M" { VMKservicesMenu }
+    "N" { WinSSH }
     "W" { Write-Host you chose others. This is not implemented yet }
     "X" { vCenterMenu }
     "Y" { MainMenu }  

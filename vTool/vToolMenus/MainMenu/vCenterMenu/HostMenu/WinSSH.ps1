@@ -51,8 +51,10 @@ Copy-Item $PSScriptRoot\plink.exe C:\
 $name     = "commands"
 $commands = "$PSScriptRoot\$name.txt" #create text file
 ni -ItemType file $commands -Force
-ac $commands "#Paste your each command in a new line"
+ac $commands "#Paste your each command in a new line which you want to run on each host"
 Start-Process $commands
+
+Read-Host "Hit Return/Enter once you are done copying the commands to the pop up text"
 
 $stopWatch = [system.diagnostics.stopwatch]::startNew() #timer start
 $stopWatch.Start()
@@ -64,13 +66,13 @@ Copy-Item $PSScriptRoot\plink.exe C:\ #copy plink to c:\ for now
 ForEach ($VMHost in $VMHosts)
     {
     Write-Host $vmhost.Name -ForegroundColor Black -BackgroundColor White
-    Get-VMHost $VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Start-VMHostService #start ssh    
+    Get-VMHost $VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Start-VMHostService -confirm:$false #start ssh    
     echo y | C:\plink.exe -ssh $user@$VMHost -pw $pass "exit" #store ssh keys    
     foreach ($line in $lines)
         {
         C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass "$line"
         }    
-    Get-VMHost $VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Stop-VMHostService #stop ssh
+    Get-VMHost $VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Stop-VMHostService -confirm:$false #stop ssh
     }
 
 $stopWatch.Stop()
