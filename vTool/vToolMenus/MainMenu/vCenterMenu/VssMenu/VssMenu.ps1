@@ -44,7 +44,7 @@ Function VssMenu
     {
      "A" { CreateVss }
      "B" { VssPorts }
-     "C" { VssNic }
+     "C" { NicMenu }
      "D" { VssMtu }
      "E" { VssVmPg }
      "F" { VssVmkPg }
@@ -68,5 +68,4 @@ Function VssMenu
      "Y" { MainMenu }      
     }
     } until ( $choice -match "Z" )
-}
-#End of VssMenu
+} #End of VssMenu
