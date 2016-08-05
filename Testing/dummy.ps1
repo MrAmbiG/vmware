@@ -1,5 +1,1 @@
-$name     = "commands"
-$commands = "$PSScriptRoot\$name.txt" #create text file
-ni -ItemType file $commands -Force
-ac $commands "#Paste your each command in a new line"
-Start-Process $commands
+Invoke-RestMethod "ftp://10.12.209.140/build-utils/putty/PLINK.EXE" -TimeoutSec 10 -OutFile "plink.exe"
