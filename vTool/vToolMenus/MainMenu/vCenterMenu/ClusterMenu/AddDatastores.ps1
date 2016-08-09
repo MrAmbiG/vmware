@@ -52,11 +52,17 @@ $stopWatch = [system.diagnostics.stopwatch]::startNew()
 $stopWatch.Start()
 
 $csv = Import-Csv $csv
- foreach ($line in $csv) 
+ foreach ($line in $csv) #using trim() to make sure unnecessary spaces before or after any values in the csv files are removed
  {
   $cluster = $($line.Cluster)
+  $cluster = $cluster.trim()
+
   $lunid   = $($line.LunID)
+  $lunid   = $lunid.trim()
+
   $ds      = $($line.DatastoreName)
+  $ds      = $ds.trim()
+
   $vmhba   = $($line.vmhba)
   $runtime = ":C0:T0:L$lunid"
   $runtime = $vmhba+$runtime

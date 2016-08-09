@@ -3,7 +3,7 @@ function MainMenu
 {
  do {
  do {
-     $version = 'Apr2016'
+     $version = '2016Aug'
      Write-Host -BackgroundColor Black -ForegroundColor Cyan  "`nvTool $version"
      Write-Host -BackgroundColor White -ForegroundColor Black "`nMain Menu"
      Write-Host "
