@@ -1709,6 +1709,12 @@ function SetScratch
 #Start of script#
 $resetloc = get-location
 $cluster  = Read-Host "name of the cluster[type * to include all clusters]?"
+Write-Host "
+Leave blank if there is just one datastore,
+to create scratch on a datastore with it's matching 'localstorage' type localstorage,
+" -BackgroundColor White -ForegroundColor Black
+$pattern  = Read-Host "?"
+$pattern = "*"+$pattern+"*"
 
 $stopWatch = [system.diagnostics.stopwatch]::startNew()
 $stopWatch.Start()
@@ -1716,7 +1722,7 @@ $stopWatch.Start()
 foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
  $vmhost        = (get-vmhost $vmhost).Name
  $scratchfolder = '.locker_'+($vmhost.Split('.')[0])
- $ds            = Get-VMHost -name $vmhost | get-datastore -Name '*-localstorage'
+ $ds            = Get-VMHost -name $vmhost | get-datastore -Name $pattern
   $location = ($vmhost.Split('.')[0])
   New-PSDrive -Name $location -Root \ -PSProvider VimDatastore -Datastore ($ds) -Scope global
   Set-Location $location":"
