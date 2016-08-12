@@ -24,7 +24,7 @@ $resetloc = get-location
 $cluster  = Read-Host "name of the cluster[type * to include all clusters]?"
 Write-Host "
 Leave blank if there is just one datastore,
-to create scratch on a datastore with it's matching 'localstorage' type localstorage,
+to create scratch on a datastore with it's name matching 'localstorage' type localstorage,
 " -BackgroundColor White -ForegroundColor Black
 $pattern  = Read-Host "?"
 $pattern = "*"+$pattern+"*"

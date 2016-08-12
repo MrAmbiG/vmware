@@ -51,6 +51,76 @@ Import-Module VMware.VumAutomation          -ErrorAction SilentlyContinue
 
 #------------------------------Start of Collection of Functions of automation------------------------------#
 
+#start of function
+function FaultToleranceOff 
+{
+<#
+.SYNOPSIS
+    Enable vMotion
+.DESCRIPTION
+    Enable vMotion across the Cluster
+.NOTES
+    File Name      : FaultToleranceOff.ps1
+    Author         : gajendra d ambi
+    Date           : Feb 2016
+    recommended    : PowerShell v4+, powercli 6+ over win7 and upper.
+    Copyright      - None
+.LINK
+    Script posted over: github.com/gajuambi/vmware
+#>
+#start of script
+$cluster  = Read-Host "name of the cluster[type * to include all clusters]?"
+$pg       = Read-Host "name of the portgroup?"
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
+Get-Cluster $cluster | Get-VMHost | Get-VMHostNetworkAdapter | where PortGroupname -EQ $pg | Set-VMHostNetworkAdapter -FaultToleranceLoggingEnabled $false -Confirm:$false
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
+#End of Script#
+}#End of function
+
+#start of function
+Function HostPerf 
+{
+<#
+.SYNOPSIS
+    Set esxi host performance level
+.DESCRIPTION
+    This will change the host's performance level to the following.
+.NOTES
+    File Name      : VssPmOn.ps1
+    Author         : gajendra d ambi
+    Date           : August 2016
+    Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
+    Copyright      - None
+.LINK
+    Script posted over: github.com/gajuambi/vmware
+#>
+#Start of Script
+$cluster = Read-Host "name of the cluster[type * to include all clusters]?"
+Write-Host "choose a number from below
+1. High performance
+2. Balanced
+3. LowPower
+" -BackgroundColor White -ForegroundColor Black
+$option = Read-Host "?"
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
+foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) 
+{$vmhost.Name
+(Get-View (Get-VMHost $vmhost | Get-View).ConfigManager.PowerSystem).ConfigurePowerPolicy($option)
+}
+
+$stopWatch.Stop()
+Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
+ #End of Script#
+}#End of function
+
 #Start of function
 function NicStatusPg
 {
@@ -1711,7 +1781,7 @@ $resetloc = get-location
 $cluster  = Read-Host "name of the cluster[type * to include all clusters]?"
 Write-Host "
 Leave blank if there is just one datastore,
-to create scratch on a datastore with it's matching 'localstorage' type localstorage,
+to create scratch on a datastore with it's name matching 'localstorage' type localstorage,
 " -BackgroundColor White -ForegroundColor Black
 $pattern  = Read-Host "?"
 $pattern = "*"+$pattern+"*"
@@ -4067,7 +4137,7 @@ function HostMenu
     "E" { EsxiAdvanced }
     "F" { SetFirewall }
     "G" { SetScratch }
-    "H" { HostPerfMenu }
+    "H" { HostPerf }
     "I" { CoreDump }
     "J" { PowerMgmt }
     "K" { HostServicesMenu }
