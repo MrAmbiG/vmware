@@ -1,0 +1,2 @@
+#Paste your each command in a new line which you want to run on each host
+hostname
