@@ -19,7 +19,7 @@ Function WinSSH
     http://www.virtu-al.net/2013/01/07/ssh-powershell-tricks-with-plink-exe/
 #>
 #Start of Script
-GetPlink #custom function gets plink.exe #https://github.com/MrAmbiG/vmware/blob/master/GetPlink.ps1
+GetPlink #custom function gets plink.exe #https://github.com/MrAmbiG/vmware/blob/master/vTool/vToolMenus/MainMenu/vCenterMenu/HostMenu/GetPlink.ps1
 
 #server's credentials
 $user     = Read-Host "Host's username?"
