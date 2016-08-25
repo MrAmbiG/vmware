@@ -2946,7 +2946,7 @@ $dvs = Read-Host "name of the dvSwitch?"
 $stopWatch = [system.diagnostics.stopwatch]::startNew()
 $stopWatch.Start()
 
-Get-VDswitch -Name $dvs | Set-NicTeamingPolicy -LoadBalancingPolicy ExplicitFailover -Confirm:$false
+Get-VDSwitch -Name $dvs | Get-VDUplinkTeamingPolicy | Set-VDUplinkTeamingPolicy -LoadBalancingPolicy ExplicitFailover -Confirm:$false
 
 $stopWatch.Stop()
 Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
@@ -2976,7 +2976,7 @@ $dvs = Read-Host "name of the dvSwitch?"
 $stopWatch = [system.diagnostics.stopwatch]::startNew()
 $stopWatch.Start()
 
-Get-VDswitch -Name $dvs | Set-NicTeamingPolicy -LoadBalancingPolicy LoadBalanceSrcMac -Confirm:$false
+Get-VDSwitch -Name $dvs | Get-VDUplinkTeamingPolicy | Set-VDUplinkTeamingPolicy -LoadBalancingPolicy LoadBalanceSrcMac -Confirm:$false
 
 $stopWatch.Stop()
 Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
@@ -3006,7 +3006,7 @@ $dvs = Read-Host "name of the dvSwitch?"
 $stopWatch = [system.diagnostics.stopwatch]::startNew()
 $stopWatch.Start()
 
-Get-VDswitch -Name $dvs | Set-NicTeamingPolicy -LoadBalancingPolicy LoadBalanceIP -Confirm:$false
+Get-VDSwitch -Name $dvs | Get-VDUplinkTeamingPolicy | Set-VDUplinkTeamingPolicy -LoadBalancingPolicy LoadBalanceIP -Confirm:$false
 
 $stopWatch.Stop()
 Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
@@ -3036,7 +3036,7 @@ $dvs = Read-Host "name of the dvSwitch?"
 $stopWatch = [system.diagnostics.stopwatch]::startNew()
 $stopWatch.Start()
 
-Get-VDswitch -Name $dvs | Set-NicTeamingPolicy -LoadBalancingPolicy LoadBalanceSrcId -Confirm:$false
+Get-VDSwitch -Name $dvs | Get-VDUplinkTeamingPolicy | Set-VDUplinkTeamingPolicy -LoadBalancingPolicy LoadBalanceSrcId -Confirm:$false
 
 $stopWatch.Stop()
 Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
@@ -3066,7 +3066,7 @@ $dvs = Read-Host "name of the dvSwitch?"
 $stopWatch = [system.diagnostics.stopwatch]::startNew()
 $stopWatch.Start()
 
-Get-VDswitch -Name $dvs | Set-NicTeamingPolicy -LoadBalancingPolicy LoadBalanceLoadBased -Confirm:$false
+Get-VDSwitch -Name $dvs | Get-VDUplinkTeamingPolicy | Set-VDUplinkTeamingPolicy -LoadBalancingPolicy LoadBalanceLoadBased -Confirm:$false
 
 $stopWatch.Stop()
 Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
