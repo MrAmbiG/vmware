@@ -64,7 +64,7 @@ function GetPlink
     File Name      : GetPlink.ps1
     Author         : gajendra d ambi
     Date           : Audust 2016
-    Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
+    Prerequisite   : PowerShell v4+, over win7 and upper.
     Copyright      - None
 .LINK
     Script posted over: 
