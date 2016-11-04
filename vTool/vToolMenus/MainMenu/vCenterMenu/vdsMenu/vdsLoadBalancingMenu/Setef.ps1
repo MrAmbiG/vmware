@@ -16,12 +16,13 @@ Function Setef
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of Script
-$dvs = Read-Host "name of the dvSwitch?"
+$dvs = Read-Host "name of the dvSwitch [type * to include all dvSwitchs]?"
+$dpg = Read-Host "name of the portgroup [type * to include all dvPortGroups]?"
 
 $stopWatch = [system.diagnostics.stopwatch]::startNew()
 $stopWatch.Start()
 
-Get-VDSwitch -Name $dvs | Get-VDUplinkTeamingPolicy | Set-VDUplinkTeamingPolicy -LoadBalancingPolicy ExplicitFailover -Confirm:$false
+Get-VDSwitch -Name $dvs | Get-VDPortgroup -name $dpg | Get-VDUplinkTeamingPolicy | Set-VDUplinkTeamingPolicy -LoadBalancingPolicy ExplicitFailover -Confirm:$false
 
 $stopWatch.Stop()
 Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
