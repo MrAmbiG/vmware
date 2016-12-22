@@ -25,7 +25,7 @@ $value   = Read-Host "value for the advancedsetting?"
 $stopWatch = [system.diagnostics.stopwatch]::startNew()
 $stopWatch.Start()
 
- foreach ($vmhost in (Get-Cluster $cluster)) 
+ foreach ($vmhost in (Get-Cluster $cluster | get-vmhost)) 
  {
  Get-VMHost $vmhost | get-advancedsetting -Name $AdvSet | Set-AdvancedSetting -Value $value -Confirm:$false
  }
