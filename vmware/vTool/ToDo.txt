@@ -1,0 +1,1 @@
+* win2esxi into vtool (open text file, post commands and it will run inside esxi)
