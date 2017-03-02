@@ -886,7 +886,7 @@ function PgSync
     NotifySwitches
     FailoverOrder
 .NOTES
-    File Name      : PowerMgmt.ps1
+    File Name      : PgSync.ps1
     Author         : gajendra d ambi
     Date           : March 2016
     Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
@@ -2002,6 +2002,7 @@ function PowerMgmt
     File Name      : PowerMgmt.ps1
     Author         : gajendra d ambi
     Date           : March 2016
+    last update    : March 2017
     Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
     Copyright      - None
 .LINK
@@ -2026,7 +2027,7 @@ if ($axn -eq 2) {$vmhosts | set-vmhost -State Connected}
 $vmhosts = get-cluster $cluster | get-vmhost -State Maintenance
 if ($axn -eq 3) 
  {Write-Host "enter a reason for this action" -ForegroundColor Yellow
-  $reason = Read-Host ""
+  $reason = Read-Host "what is the reason?"
   foreach ($vmhost in $vmhosts) {
   $esxcli = get-esxcli
   $esxcli.system.shutdown.poweroff($null,$reason)
@@ -2034,10 +2035,10 @@ if ($axn -eq 3)
  }
 if ($axn -eq 4) 
  {Write-Host "enter a reason for this action" -ForegroundColor Yellow
-  $reason = Read-Host ""
+  $reason = Read-Host "what is the reason?"
   foreach ($vmhost in $vmhosts) {
   $esxcli = get-esxcli
-  $esxcli.system.shutdown.poweroff($null,$reason)
+  $esxcli.system.shutdown.reboot($null,$reason)
   }
  }
 

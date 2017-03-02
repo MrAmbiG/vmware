@@ -11,7 +11,7 @@ function PgSync
     NotifySwitches
     FailoverOrder
 .NOTES
-    File Name      : PowerMgmt.ps1
+    File Name      : PgSync.ps1
     Author         : gajendra d ambi
     Date           : March 2016
     Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.

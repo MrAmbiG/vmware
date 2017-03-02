@@ -27,4 +27,3 @@ $vmk
 Remove-VMHostNetworkAdapter -Nic $vmk -confirm:$false
 }
 } #end of function shootVmk
-shootVmk
