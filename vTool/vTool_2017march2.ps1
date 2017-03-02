@@ -6,7 +6,7 @@
 .NOTES
     File Name      : vTool.ps1
     Author         : gajendra d ambi
-    updated        : August 2016
+    updated        : Mar 2017
     Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
     Copyright      - None
 .LINK
