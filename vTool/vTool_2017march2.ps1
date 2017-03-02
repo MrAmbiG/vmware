@@ -94,6 +94,65 @@ if (-not $presence)
 if ($presence) { Write-Host "Detected Plink.exe" -BackgroundColor White -ForegroundColor Black }
 } #End of function
 
+#start of function
+function vmkpin
+{
+<#
+.SYNOPSIS
+    pin vmk to software iscsi.
+.DESCRIPTION
+    pin vmk to software iscsi
+.NOTES
+    File Name      : vmkpin.ps1
+    Author         : gajendra d ambi
+    Date           : march 2017
+    Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
+    Copyright      - None
+.LINK
+    Script posted over: VCE Internal
+#>
+$cluster = Read-Host 'name of the cluster?'
+$vmks = Read-Host "type the vmk numbers to pin, separated by a comma, ex:- vmk3,vmk4"
+if ($vmks -match ',') {
+$vmks = $vmks.split(',') | where {$_.Length -gt 2} }
+$vmks = @($vmks)
+$vmhosts = get-cluster $cluster | get-vmhost | sort
+foreach ($vmhost in $vmhosts)
+{
+$vmhost.Name
+$hba = Get-VMHostHba -VMHost $vmhost -Type iScsi | Where-Object {$_.Model -eq "iSCSI Software Adapter"}
+$esxcli = get-vmhost $vmhost | get-esxcli
+foreach ($vmk in $vmks)
+    {$esxcli.iscsi.networkportal.add($hba.device, $null, $vmk)}
+}
+}#end of function
+
+#start of function
+function softIscsi
+{
+<#
+.SYNOPSIS
+    enable software iscsi adapater
+.DESCRIPTION
+    enable software iscsi adapater
+.NOTES
+    File Name      : softIscsi.ps1
+    Author         : gajendra d ambi
+    Date           : march 2017
+    Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
+    Copyright      - None
+.LINK
+    Script posted over: VCE Internal
+#>
+$cluster = Read-Host 'name of the cluster?'
+$vmhosts = get-cluster $cluster | get-vmhost | sort
+foreach ($vmhost in $vmhosts)
+{
+$vmhost.Name
+get-vmhoststorage $vmhost | set-vmhoststorage -softwareiscsienabled $True
+}
+}#end of function
+
 #start of function shootVmk
 function shootVmk 
 {
@@ -123,6 +182,38 @@ $vmk
 Remove-VMHostNetworkAdapter -Nic $vmk -confirm:$false
 }
 } #end of function shootVmk
+
+#start of function
+function PgVssToVds
+{
+<#
+.SYNOPSIS
+    Migrate Portgroup from Vss to Vds.
+.DESCRIPTION
+    This will migrate vmkernel portgroup from vswitch to dvswitch
+.NOTES
+    File Name      : PgVssToVds.ps1
+    Author         : gajendra d ambi
+    Date           : June 2016
+    Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
+    Copyright      - None
+.LINK
+    Script posted over: VCE Internal
+#>
+Write-Host "this will work on only those hosts which are part of the VDS" -BackgroundColor Black -ForegroundColor White
+$vds = Read-Host "name of the vds?"
+$pg  = Read-Host "name of the source portgroup on vss?" 
+$dpg = Read-Host "name of the destination portgroup on vds?"
+$cluster = Read-Host "Name of the cluster?"
+$vmhosts = Get-cluster $cluster| get-vmhost | sort
+
+foreach ($vmhost in $vmhosts)
+    {$vmhost.Name
+     $vmk = Get-VMHostNetworkAdapter -VMHost $vmhost | where PortgroupName -eq $pg
+     Set-VMHostNetworkAdapter -PortGroup $dpg -VirtualNic $vmk -Confirm:$false
+     Get-VMHost $vmhost | Get-VirtualPortGroup -Standard -Name $pg | Remove-VirtualPortGroup -Confirm:$false
+    }
+}#End of function
 
 #Start of function L3VmotionGateway
 function L3VmotionGateway
@@ -3510,6 +3601,7 @@ Function VssVmkPg
     File Name      : VssVmkPg.ps1
     Author         : gajendra d ambi
     Date           : March 2016
+    last update    : March 2017[added mtu option]
     Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
     Copyright      - None
 .LINK
@@ -3520,6 +3612,7 @@ $cluster = Read-Host "name of the cluster[type * to include all clusters]?"
 $vss     = Read-Host "name of the vSphere standard Switch?"
 $pg      = Read-Host "Name of the portgroup?"
 $vmk     = Read-Host "vmk number? ex:- vmk9"
+$mtu     = Read-Host "mtu?"
 $ip      = Read-Host "starting ip address?" 
 $mask    = Read-Host "subnet mask"
 $vlan    = Read-Host "Vlan?"
@@ -3537,9 +3630,10 @@ $a       = $ip.Split('.')[0..2]
   $c     = [int]$c
 
   foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
+  $vmhost.name
   get-vmhost $vmhost | get-virtualswitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false
   $esxcli = get-vmhost $vmhost | Get-EsxCli
-  $esxcli.network.ip.interface.add($null, $null, "$vmk", $null, "1500", $null, "$pg")
+  $esxcli.network.ip.interface.add($null, $null, "$vmk", $null, "$mtu", $null, "$pg")
   $esxcli.network.ip.interface.ipv4.set("$vmk", "$b.$(($c++))", "$mask", $null, "static")
  }
 
@@ -3773,6 +3867,39 @@ Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapse
 
 #------------------------------Start of Collection of Menu Functions-------------------------------#
 
+#Start of IscsiMenu
+function IscsiMenu
+{
+ do {
+ do {
+     Write-Host "Make sure you are connected to a vCenter" -ForegroundColor Yellow
+     Write-Host "`nIscsiMenu" -BackgroundColor White -ForegroundColor Black
+     Write-Host "
+     A. enable software iscsi adapter
+     B. pin vmk to software iscsi adapter
+     C. iscsi delay ack
+    " #options to choose from
+   
+     Write-Host "
+     X. Previous Menu
+     Y. Main Menu
+     Z. Exit" -BackgroundColor Black -ForegroundColor Green #return to main menu
+    
+     $choice = Read-Host "choose one of the above"  #Get user's entry
+     $ok     = $choice -match '^[abcxyz]+$'
+     if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
+    } until ( $ok )
+    switch -Regex ($choice) 
+    {
+    "A" { softIscsi }
+    "B" { vmkpin }
+    "C" { write-host 'yet to come' }
+    "X" { vCenterMenu }
+    "Y" { MainMenu }  
+    }
+    } until ( $choice -match "Z" )
+}#end of IscsiMenu
+
 #Start of NicMenu
 function NicMenu
 {
@@ -3938,8 +4065,10 @@ function vdsMenu
      A. Create VDS
      B. Create dvPortgroup
      C. Add hosts to VDS
-     D. Load balancing
-     E. (L3)TCP/IP stack" #options to choose from
+     D. Load balancing     
+     E. (L3)TCP/IP stack
+     F. migrate vmkernel portgroup to vds
+     " #options to choose from
    
      Write-Host "
      X. Previous Menu
@@ -3947,7 +4076,7 @@ function vdsMenu
      Z. Exit" -BackgroundColor Black -ForegroundColor Green #return to main menu
     
      $choice = Read-Host "choose one of the above"  #Get user's entry
-     $ok     = $choice -match '^[abcdexyz]+$'
+     $ok     = $choice -match '^[abcdefxyz]+$'
      if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
     } until ( $ok )
     switch -Regex ($choice) 
@@ -3957,6 +4086,7 @@ function vdsMenu
     "C" { HostVds }
     "D" { vdsLoadBalancingMenu }
     "E" { Write-Host This feature is not available yet }
+    "F" { PgVssToVds }
     "X" { vCenterMenu }
     "Y" { MainMenu }  
     }
@@ -4223,6 +4353,7 @@ function HostMenu
      M. VMKernel Services
      N. WinSSH (Run SSH commands on esxi from directly from windows)
      O. Remove vmkernel on host (from vswitch or dvswitch)
+     P. Iscsi Adapter configuration
 
      W. Others" #[Others menu is to include miscellaneous settings as per business needs] #options to choose from
    
@@ -4232,7 +4363,7 @@ function HostMenu
      Z. Exit" -BackgroundColor Black -ForegroundColor Green #return to main menu
     
      $choice = Read-Host "choose one of the above"  #Get user's entry
-     $ok     = $choice -match '^[abcdefghijklmnowxyz]+$'
+     $ok     = $choice -match '^[abcdefghijklmnowpxyz]+$'
      if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
     } until ( $ok )
     switch -Regex ($choice) 
@@ -4252,6 +4383,7 @@ function HostMenu
     "M" { VMKservicesMenu }
     "N" { WinSSH }
     "O" { shootVmk }
+    "P" { IscsiMenu }
     "W" { Write-Host you chose others. This is not implemented yet }
     "X" { vCenterMenu }
     "Y" { MainMenu }  

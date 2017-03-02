@@ -1,1 +1,1 @@
-Invoke-RestMethod "ftp://10.12.209.140/build-utils/putty/PLINK.EXE" -TimeoutSec 10 -OutFile "plink.exe"
+Connect-VIServer 10.12.212.49 -User administrator@vsphere.local -Password VMwar3!!
