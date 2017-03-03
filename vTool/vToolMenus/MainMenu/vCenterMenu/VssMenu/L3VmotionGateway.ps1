@@ -17,15 +17,13 @@ function L3VmotionGateway
     github.com/mrambig
 #>
 #Start of function
-GetPlink
-#If using in powershell then add snapins below for VMware ESXi.
-Add-PSSnapin VMware.VimAutomation.Core -ErrorAction SilentlyContinue
+GetPlink #Custom plink function
 
 Write-Host "This will only work if you can dns resolve hostnames from this machine"
 
 #X server's credentials
-$user = Read-Host "Host's username?"
-$pass = Read-Host "Host's password?"
+$script:user = Read-Host "Host's username?"
+$script:pass = Read-Host "Host's password?"
 $l3gw = Read-Host "L3 vmotion Gateway to be added?"
 $cluster = Read-Host "Name of the cluster?"
 $VMHosts = get-cluster $cluster | get-vmhost
