@@ -36,13 +36,12 @@ ni -ItemType file $commands -Force
 ac $commands "#Paste your each command in a new line which you want to run on each host"
 Start-Process $commands
 
-Read-Host "
-copy all the ssh commands to the text file(enclose each command with single quotes in a new line),
-save it
-Hit enter/return to proceed further
-"
+Read-Host "Hit Return/Enter once you are done copying the commands to the pop up text"
+
 $stopWatch = [system.diagnostics.stopwatch]::startNew() #timer start
 $stopWatch.Start()
+
+$lines = gc $commands
 
 Copy-Item $PSScriptRoot\plink.exe C:\ #copy plink to c:\ for now
 
@@ -50,8 +49,11 @@ ForEach ($VMHost in $VMHosts)
     {
     Write-Host $vmhost.Name -ForegroundColor Black -BackgroundColor White
     Get-VMHost $VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Start-VMHostService -confirm:$false #start ssh    
-    echo y | C:\plink.exe -ssh $user@$VMHost -pw $pass "exit" #store ssh keys
-    C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass -m $commands
+    echo y | C:\plink.exe -ssh $user@$VMHost -pw $pass "exit" #store ssh keys    
+    foreach ($line in $lines)
+        {
+        C:\plink.exe -ssh -v -noagent $VMHost -l $user -pw $pass "$line"
+        }    
     Get-VMHost $VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Stop-VMHostService -confirm:$false #stop ssh
     }
 
@@ -59,4 +61,3 @@ $stopWatch.Stop()
 Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
  #End of Script#
 }#End of function
-WinSSH
