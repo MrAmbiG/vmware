@@ -16,7 +16,7 @@
 Clear-Host  #Clear the screen.
 
 #version
-$lastupdate = '2017march4'
+$lastupdate = '2017march10'
 $version = "vTool "+$lastupdate
 
 #start of function
@@ -2996,9 +2996,9 @@ $csv = Import-Csv $csv
   $dvs    = $($line.dvSwitch)
   $vmhost = $($line.hostname)  
   $vmnic  = $($line.vmnic)  
-  Get-VDSwitch -Name $dvs | Add-VDSwitchVMHost -VMHost $vmhost
+  Get-VDSwitch -Name $dvs | Add-VDSwitchVMHost -VMHost $vmhost -Confirm:$false
   $vmhostNetworkAdapter = Get-VMHost $vmhost | Get-VMHostNetworkAdapter -Physical -Name $vmnic
-  Get-VDSwitch $dvs | Add-VDSwitchPhysicalNetworkAdapter -VMHostNetworkAdapter $vmhostNetworkAdapter
+  Get-VDSwitch $dvs | Add-VDSwitchPhysicalNetworkAdapter -VMHostNetworkAdapter $vmhostNetworkAdapter -Confirm:$false
  }
 
 $stopWatch.Stop()
@@ -4159,7 +4159,7 @@ Function VssMenu
      "T" { ShootVmkPg }
      "U" { PgSync }
      "V" { l3vmotion }
-     "V" { L3VmotionGateway }
+     "w" { L3VmotionGateway }
      "X" { vCenterMenu }
      "Y" { MainMenu }      
     }
