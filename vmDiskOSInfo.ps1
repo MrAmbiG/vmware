@@ -2,7 +2,7 @@
 .SYNOPSIS
     Get linux vms and their disk info
 .DESCRIPTION
-    Gets the VMs and filters them by linux OS, get their disk count and their sizes.    
+    Gets the VMs and filters them by linux OS, get their disk count and their sizes and ip address  
 .NOTES
     File Name      : vmDiskOSInfo.ps1
     Author         : gajendra d ambi
@@ -21,5 +21,6 @@ New-Object PSObject -Property @{
             'OS' = $vm.Guest.OSFullName
             'DiskCount' = ($vm | Get-HardDisk).count
             'DiskSizes' = ($vm | Get-HardDisk).CapacityGB -join ';'
+            'IP Address' = $vm.Guest.IPAddress
              }
 }
