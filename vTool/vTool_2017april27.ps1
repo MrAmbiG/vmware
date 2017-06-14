@@ -10,7 +10,7 @@
     Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
     Copyright      - None
 .LINK
-    Script posted over: github.com/gajuambi/vmware
+    Script posted over: github.com/MrAmbig/vmware
 #>
 ##Start of the script##
 Clear-Host  #Clear the screen.
@@ -1057,7 +1057,7 @@ populate the values,
 save & close the file,
 Hit Enter to proceed
 " -ForegroundColor Blue -BackgroundColor White
-$csv = "$PSScriptRoot/addhosts.csv"
+$csv = "$PSScriptRoot/nameCompare.csv"
 get-process | Select-Object cluster,hostname,username,password | Export-Csv -Path $csv -Encoding ASCII -NoTypeInformation
 Start-Process $csv
 Read-Host "Hit Enter/Return to proceed"
