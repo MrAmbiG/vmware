@@ -8,25 +8,15 @@ Function VssMenu
      A. Create vSwitch
      B. Update NumPorts
      C. Update Nic
-     D  Update MTU
-     E. Create VM Portgroup
-     F. Create VMkernel Portgroup
-     G. Rename Portgroup
-     H. Update Portgroup's Vlan
-     I. LoadBalanceIP
-     J. LoadBalanceSrcMac
-     K. LoadBalanceSrcId
-     L. ExplicitFailover
-     M. Delete VM Portgroup
-     N. Enable AllowPromiscuous
-     O. Enable ForgedTransmits
-     P. Enable MacChanges
-     Q. Disable AllowPromiscuous
-     R. Disable ForgedTransmits
-     S. Disable MacChanges
-     T. Delete VMkernel Portgroup  
-     U. Sync portgroup with vSwitch(inherit all properties of vswitch to portgroup)
-     V. L3 vMotion Portgroup
+     D. Update MTU    
+     E. Enable AllowPromiscuous
+     F. Enable ForgedTransmits
+     G. Enable MacChanges
+     H. Disable AllowPromiscuous
+     I. Disable ForgedTransmits
+     J. Disable MacChanges
+     K. Remove vSwitch
+     L. PORTGROUP OPTIONS [portgroup workflows]
      " #options to choose from...
 
      Write-Host "
@@ -37,7 +27,7 @@ Function VssMenu
 
      $user   = [Environment]::UserName
      $choice = Read-Host "choose one of the above"  #Get user's entry
-     $ok     = $choice -match '^[abcdefghijklmnopqrstuvxyz]+$'
+     $ok     = $choice -match '^[abcdefghijklmnopxyz]+$'
      if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
     } until ( $ok )
     switch -Regex ($choice) 
@@ -46,26 +36,17 @@ Function VssMenu
      "B" { VssPorts }
      "C" { NicMenu }
      "D" { VssMtu }
-     "E" { VssVmPg }
-     "F" { VssVmkPg }
-     "G" { PgRename }
-     "H" { PgVlan }
-     "I" { Pglbip }
-     "J" { Pglbsm }
-     "K" { Pglbsi }
-     "L" { Pgef }
-     "M" { ShootVmPg }
-     "N" { VssPmOn }
-     "O" { VssFtOn }
-     "P" { VssMcOn }
-     "Q" { VssPmOff }
-     "R" { VssFtOff }
-     "S" { VssMcOff }
-     "T" { ShootVmkPg }
-     "U" { PgSync }
-     "V" { l3vmotion }
-     "X" { vCenterMenu }
-     "Y" { MainMenu }      
+     "E" { VssPmOn }
+     "F" { VssFtOn }
+     "G" { VssMcOn }
+     "H" { VssPmOff }
+     "I" { VssFtOff }
+     "J" { VssMcOff }
+     "K" { ShootVss }
+     "L" { PgMenu }
+     
+     "X" { VssMenu }
+     "Y" { MainMenu }  
     }
     } until ( $choice -match "Z" )
 } #End of VssMenu
