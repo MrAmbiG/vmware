@@ -94,6 +94,70 @@ if (-not $presence)
 if ($presence) { Write-Host "Detected Plink.exe" -BackgroundColor White -ForegroundColor Black }
 } #End of function
 
+# start of function
+function checkIpConnectivity 
+{
+<#
+.SYNOPSIS
+    test connection of an ip range
+.DESCRIPTION
+    Takes the starting and ending ip from the user as input then
+    1. prints the list of IPs which are not reachable and their count
+    2. prints the list of IPs which are reachable and their count
+    repeats the process 1 and 2 till the unreachable ip count is 0
+.NOTES
+    File Name      : checkIpConnectivity.ps1
+    Author         : gajendra d ambi
+    Date           : June 2017
+    Prerequisite   : PowerShell v4+ over win7 and upper.
+    Copyright      - None
+.LINK
+    Script posted over: github.com/MrAmbiG/
+#>
+#Start of Script
+
+$startIp = Read-Host "Starting IP?"
+$endIp = Read-Host "Ending IP?"
+
+$a     = $startIp.Split('.')[0..2]   
+#first 3 octets of the ip address
+$b     = [string]::Join(".",$a)
+#last octet of the ip address
+$c     = $startIp.Split('.')[3]
+$c     = [int]$c
+
+$ipArray = @()
+do {
+$ip = "$b.$(($c++))"
+$ipArray += $ip
+} until ($ip -eq $endIp)
+
+do {
+$reachable = @()
+$notReachable = @()
+Write-Host "
+
+"
+foreach ($ip in $ipArray)
+    {
+    write-host checking $ip -foregroundcolor yellow
+    $check = Test-Connection -ComputerName $ip -ErrorAction SilentlyContinue
+    if ($check) { $reachable += $ip} else { $notReachable += $ip }
+    }
+    Write-Host Not Reachable -ForegroundColor Red
+    Write-Host ------------- -ForegroundColor White
+    foreach ($ip in $notReachable) { Write-Host $ip -ForegroundColor Red }
+    write-host Total Count: $notReachable.count
+    Write-Host "
+
+    "
+    Write-Host Reachable -ForegroundColor Green
+    Write-Host --------- -ForegroundColor White
+    foreach ($ip in $reachable) { Write-Host $ip -ForegroundColor Green }
+    write-host Total Count: $reachable.count
+    } until (!$notReachable)
+}# end of function
+
 function ShootVss  # Start of function
 {
 <#
@@ -3942,6 +4006,35 @@ get-vmhost | Get-VirtualSwitch -Name $vss | Remove-VirtualSwitch -Confirm:$false
 
 #------------------------------Start of Collection of Menu Functions-------------------------------#
 
+#Start of othersMenu
+function othersMenu
+{
+ do {
+ do {
+     Write-Host "Make sure you are connected to a vCenter" -ForegroundColor Yellow
+     Write-Host "`nothersMenu" -BackgroundColor White -ForegroundColor Black
+     Write-Host "
+     A. check reachability
+     " 
+   
+     Write-Host "
+     X. Previous Menu
+     Y. Main Menu
+     Z. Exit" -BackgroundColor Black -ForegroundColor Green #return to main menu
+    
+     $choice = Read-Host "choose one of the above"  #Get user's entry
+     $ok     = $choice -match '^[axyz]+$'
+     if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
+    } until ( $ok )
+    switch -Regex ($choice) 
+    {
+    "A" { checkIpConnectivity }
+    "X" { HostMenu }
+    "Y" { MainMenu }  
+    }
+    } until ( $choice -match "Z" )
+}#end of HostMenu
+
 #Start of IscsiMenu
 function IscsiMenu
 {
@@ -4491,7 +4584,7 @@ function HostMenu
     "M" { VMKservicesMenu }
     "N" { WinSSH }
     "o" { vmkMtu }
-    "W" { Write-Host you chose others. This is not implemented yet }
+    "W" { othersMenu}
     "X" { vCenterMenu }
     "Y" { MainMenu }  
     }
