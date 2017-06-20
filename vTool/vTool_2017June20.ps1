@@ -6,7 +6,7 @@
 .NOTES
     File Name      : vTool.ps1
     Author         : gajendra d ambi
-    updated        : Mar 2017
+    updated        : June 2017
     Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
     Copyright      - None
 .LINK
@@ -16,7 +16,7 @@
 Clear-Host  #Clear the screen.
 
 #version
-$lastupdate = '2017march10'
+$lastupdate = '2017June20'
 $version = "vTool "+$lastupdate
 
 #start of function
