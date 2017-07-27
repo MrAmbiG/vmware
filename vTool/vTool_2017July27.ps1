@@ -155,7 +155,7 @@ $csv = Import-Csv $csv
   ni -ItemType file $commands -Force
   add-content $commands "esxcli network ip interface ipv4 set -i $VMK -I $NewIp -N $subnetMask -t static"
     
-  C:\plink.exe -ssh -v -noagent $OldIp -l $user -pw $pass -m $commands  
+  C:\plink.exe -ssh -v -noagent $OldIp -l $user -pw $pass -m $commands
  }
 
   foreach ($line in $csv) 
