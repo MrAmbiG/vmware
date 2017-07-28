@@ -5,9 +5,7 @@ function IpChanger
 .SYNOPSIS
     Changes the ip address and gateway of the given vmkernel
 .DESCRIPTION
-    needs plink.exe to be copied to root directory. If you have not run this command windows as an administrator
-    then you have to copy it manually to the C:/ drive. It will launch a CSV file, populate those details. save the file.
-    proceed with the script. script will enable ssh, change the ip and gateway as per your input and close the ssh.
+    Imports esxcli in powercli to update the vmkernel's networking details
 .NOTES
     File Name      : IpChanger.ps1
     Author         : gajendra d ambi
@@ -18,9 +16,6 @@ function IpChanger
     Script posted over: github.com/MrAmbig
 #>
 #Start of Script
-GetPlink #custom function
-Copy-Item $PSScriptRoot\plink.exe C:\ #copy plink to c:\ for now
-
 Write-Host "
 A CSV file will be opened (open in excel/spreadsheet)
 populate the values,
@@ -35,40 +30,24 @@ Read-Host "Hit Enter/Return to proceed"
 $csv = Import-Csv $csv
 
   foreach ($line in $csv) 
- {  
-  $OldIp = $($line.OldIp)  
-  $user  = $($line.username)  
-  $pass  = $($line.password)
-  connect-viserver $OldIp -user $user -password $pass   
+ {  # importing data from csv and go line by line
+    $OldIp = $($line.OldIp)  
+    $user  = $($line.username)  
+    $pass  = $($line.password)
+    $NewIp  = $($line.NewIp)
+    $VMK  = $($line.VMK)
+    $subnetMask  = $($line.subnetMask)
+
+    # connect to each esxi host and update the ip and subnet mask for a given vmkernel
+    Connect-VIServer $OldIp -User $user -Password $pass
+    $esxcli = Get-VMHost $OldIp | Get-EsxCli -v2
+    $esxcliset = $esxcli.network.ip.interface.ipv4.set
+    $args = $esxcliset.CreateArgs()
+    $args.interfacename = $VMK
+    $args.type = 'static'
+    $args.ipv4 = $NewIp
+    $args.netmask = $subnetMask
+    $esxcliset.Invoke($args)
+    Disconnect-VIServer * -Confirm:$false -ErrorAction SilentlyContinue
   }
-  Get-VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Start-VMHostService -confirm:$false #start ssh
-
- foreach ($line in $csv) 
- {
-  $OldIp = $($line.OldIp)
-  $NewIp = $($line.NewIp)  
-  $user  = $($line.username)  
-  $pass  = $($line.password)
-  $VMK = $($line.VMK)
-  $subnetMask = $($line.subnetMask)
-  
-  echo y | C:\plink.exe -ssh $user@$OldIp -pw $pass "exit" #store ssh keys
-
-  $commands = "$PSScriptRoot\commands.txt" #create text file
-  if ((Test-Path $commands) -eq "True") {ri $commands -Force -Confirm:$false } #remove old text report file
-  ni -ItemType file $commands -Force
-  add-content $commands "esxcli network ip interface ipv4 set -i $VMK -I $NewIp -N $subnetMask -t static"
-    
-  C:\plink.exe -ssh -v -noagent $OldIp -l $user -pw $pass -m $commands  
- }
-
-  foreach ($line in $csv) 
- {  
-  $NewIp = $($line.NewIp)  
-  $user  = $($line.username)  
-  $pass  = $($line.password)
-  connect-viserver $NewIp -user $user -password $pass 
-  }
-  Get-VMHost | Get-VMHostService | where {$_.Key -eq "TSM-SSH"} | Stop-VMHostService -confirm:$false #start ssh 
-
  } #End of function
