@@ -1,3 +1,7 @@
 vmkpin - sneha
-l3vmotion -sneha 
-shNewVMkernelPg - sneha
+l3vmotion -prakash
+shNewVMkernelPg 
+CoreDump
+SetSnmp
+PowerMgmt
+VssVmkPg
