@@ -22,13 +22,13 @@ $vmks = $vmks.split(',') | where {$_.Length -gt 2} }
 $vmks = @($vmks)
 $vmhosts = get-cluster $cluster | get-vmhost | sort
 foreach ($vmhost in $vmhosts)
-{
-$vmhost.Name
-$hba = Get-VMHostHba -VMHost $vmhost -Type iScsi | Where-Object {$_.Model -eq "iSCSI Software Adapter"}
-$esxcli = get-vmhost $vmhost | get-esxcli
-foreach ($vmk in $vmks)
-    {$esxcli.iscsi.networkportal.add($hba.device, $null, $vmk)}
-}
-}#end of function
-
-vmkpin
+    {
+    $vmhost.Name
+    $hba = Get-VMHostHba -VMHost $vmhost -Type iScsi | Where-Object {$_.Model -eq "iSCSI Software Adapter"}
+    $esxcli = Get-VMHost $vmhost | Get-EsxCli -v2
+    foreach ($vmk in $vmks)
+        {$esxcliset = $esxcli.iscsi.networkportal.add
+        $args = $esxcliset.CreateArgs()
+        $args.adapter = $hba.device
+        $args.nic = $vmk
+        $esxcliset.Invoke($args)  }  }  }#end of function
