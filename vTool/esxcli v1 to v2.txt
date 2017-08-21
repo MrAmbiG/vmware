@@ -1,6 +1,6 @@
-vmkpin - sneha
+vmkpin - sneha done
 l3vmotion -prakash
-shNewVMkernelPg - neha
+shNewVMkernelPg - neha working
 CoreDump
 SetSnmp
 PowerMgmt
