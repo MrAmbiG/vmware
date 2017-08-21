@@ -1,5 +1,5 @@
 #start of function
-function vmkpin
+function vmkpin2
 {
 <#
 .SYNOPSIS
