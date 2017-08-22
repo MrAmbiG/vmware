@@ -3,5 +3,5 @@ l3vmotion -prakash
 shNewVMkernelPg - Sneha done
 CoreDump - Sneha done
 SetSnmp  - Sneha Working
-PowerMgmt
-VssVmkPg
+PowerMgmt - Sneha done
+VssVmkPg  - Sneha Done
