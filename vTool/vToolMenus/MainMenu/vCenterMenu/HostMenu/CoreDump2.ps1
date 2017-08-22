@@ -26,7 +26,6 @@ $stopWatch = [system.diagnostics.stopwatch]::startNew()
 $stopWatch.Start()
 
  foreach ($vmhost in (get-vmhost | sort)) {
-  if ((get-vmhost $vmhost).version -match 5.) {
         $esxcli = get-vmhost $vmhost | Get-EsxCli -v2
         $esxcliset1 =$esxcli.system.coredump.network.set
         $args = $esxcliset1.CreateArgs()
@@ -37,21 +36,7 @@ $stopWatch.Start()
         $esxcliset1.Invoke($args)
         $esxcliset2 = $esxcli.system.coredump.network.get()
         $esxcliset2.Invoke()
-  }
-
-  if ((get-vmhost $vmhost).version -match 6.) {
-        $esxcli = get-vmhost $vmhost | Get-EsxCli -v2
-        $esxcliset1 =$esxcli.system.coredump.network.set
-        $args = $esxcliset1.CreateArgs()
-        $args.interfacename = "$vmk"
-        $args.serveripv4 = "$DumpTarget"
-        $args.serverport = "6500"
-        $args.enable = "true"
-        $esxcliset1.Invoke($args)
-        $esxcliset2 = $esxcli.system.coredump.network.get()
-        $esxcliset2.Invoke()
-  }
- }
+   }
 
 $stopWatch.Stop()
 Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
