@@ -12,8 +12,8 @@ Function PgMenu
      E. Delete VM Portgroup
      F. Delete VMkernel Portgroup  
      G. Sync portgroup with vSwitch(inherit all properties of vswitch to portgroup)
-     H. L3 vMotion Portgroup
-     I. L3 vMotion gateway
+     H. Add TCP/IP stack (vmotion, provisioning etc.)
+     I. L3 vMotion gateway (requires hostname resolution)
      J. LoadBalanceIP
      K. LoadBalanceSrcMac
      L. LoadBalanceSrcId
@@ -28,7 +28,7 @@ Function PgMenu
 
      $user   = [Environment]::UserName
      $choice = Read-Host "choose one of the above"  # Get user's entry
-     $ok     = $choice -match '^[axyz]+$'
+     $ok     = $choice -match '^[abcdefghijklmxyz]+$'
      if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
     } until ( $ok )
     switch -Regex ($choice) 
@@ -40,7 +40,7 @@ Function PgMenu
      "E" { ShootVmPg }
      "F" { ShootVmkPg }
      "G" { PgSync }
-     "H" { l3vmotion }
+     "H" { PgTcpIpStack }
      "I" { L3VmotionGateway }
      "J" { Pglbip }
      "K" { Pglbsm }

@@ -41,9 +41,7 @@ $c     = $ip.Split('.')[3]
 $c     = [int]$c
 
  foreach ($vmhost in (get-vmhost | sort)){
-
           $esxcli = get-esxcli $vmhost -v2
-
           $esxcliset1 = $esxcli.network.ip.interface.add   #add vmkernel to the portgroup
           $args1 = $esxcliset1.CreateArgs()
           $args1.mtu = 1500
@@ -57,9 +55,8 @@ $c     = [int]$c
           $args2.ipv4 = "$b.$(($c++))"
           $args2.netmask = "$mask"
           $esxcliset2.Invoke($args2)
-
+}
 $stopWatch.Stop()
 Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
- }#End of Script#
 }#End of function
 

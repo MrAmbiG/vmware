@@ -10,14 +10,14 @@ Function VssVmkPg
     File Name      : VssVmkPg.ps1
     Author         : gajendra d ambi
     Date           : March 2016
-    last update    : March 2017[added mtu option]
+    last update    : Aug 2017
     Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
     Copyright      - None
 .LINK
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of Script
-$cluster = Read-Host "name of the cluster[type * to include all clusters]?"
+$vmhosts = clusterHosts # custom function
 $vss     = Read-Host "name of the vSphere standard Switch?"
 $pg      = Read-Host "Name of the portgroup?"
 $vmk     = Read-Host "vmk number? ex:- vmk9"
@@ -38,7 +38,7 @@ $a       = $ip.Split('.')[0..2]
   $c     = $ip.Split('.')[3]
   $c     = [int]$c
 
-  foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
+  foreach ($vmhost in $vmhosts) {
   $vmhost.name
   get-vmhost $vmhost | get-virtualswitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false
         $esxcli = get-vmhost $vmhost | get-esxcli -v2
@@ -48,6 +48,7 @@ $a       = $ip.Split('.')[0..2]
         $args1.mtu = "$mtu"
         $args1.portgroupname = "$pg"
         $esxcliset1.Invoke($args1)
+
         $esxcliset2 = $esxcli.network.ip.interface.ipv4.set 
         $args2 = $esxcliset2.CreateArgs()
         $args2.interefacename = "$vmk"

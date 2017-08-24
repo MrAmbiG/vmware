@@ -1,7 +1,1 @@
-vmkpin - sneha done
-l3vmotion -prakash done
-shNewVMkernelPg - Sneha done
-CoreDump - Sneha done
-SetSnmp  - Sneha done
 PowerMgmt - Sneha done
-VssVmkPg - Sneha done

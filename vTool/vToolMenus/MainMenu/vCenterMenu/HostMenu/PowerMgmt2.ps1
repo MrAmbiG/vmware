@@ -25,7 +25,6 @@ function PowerMgmt
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of script#
-$cluster   = Read-Host "name of the cluster[type * to include all clusters]?"
 Write-Host "
 1.Enter Maintenance Mode
 2.Exit Maintenance Mode
@@ -33,11 +32,11 @@ Write-Host "
 4.Reboot (the hosts which are in maintenance mode)
 " -ForegroundColor Blue -BackgroundColor White
 $axn     = Read-Host "Type a number from 1 to 4"
+$vmhosts = clusterHosts # custom function
 
 $stopWatch = [system.diagnostics.stopwatch]::startNew()
 $stopWatch.Start()
 
-$vmhosts = Get-cluster $cluster | get-vmhost
 if ($axn -eq 1) {$vmhosts | set-vmhost -State Maintenance}
 if ($axn -eq 2) {$vmhosts | set-vmhost -State Connected}
 if ($axn -eq 3) 
@@ -48,9 +47,7 @@ if ($axn -eq 3)
         $esxcliset = $esxcli.system.shutdown.poweroff
         $args = $esxcliset.CreateArgs()
         $args.reason = "$reason"
-        $esxcliset.Invoke($args)
-  }
- }
+        $esxcliset.Invoke($args) } }
 if ($axn -eq 4) 
  {Write-Host "enter a reason for this action" -ForegroundColor Yellow
   $reason = Read-Host "what is the reason?"
@@ -59,8 +56,7 @@ if ($axn -eq 4)
         $esxcliset = $esxcli.system.shutdown.reboot
         $args = $esxcliset.CreateArgs()
         $args.reason = "$reason"
-        $esxcliset.Invoke($args)     
-  }
+        $esxcliset.Invoke($args) }
  }
 
 $stopWatch.Stop()

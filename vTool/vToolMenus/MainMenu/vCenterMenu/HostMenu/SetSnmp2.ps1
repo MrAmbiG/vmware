@@ -16,22 +16,21 @@ function SetSnmp
     Script posted over: github.com/gajuambi/vmware
 #>
 #Start of script#
-$cluster = Read-Host "name of the cluster[type * to include all clusters]?"
+$vmhosts = clusterHosts # custom function
 $snmp    = Read-Host "Type the snmp target"
 $string  = Read-Host "Type the snmp communities string"
 
 $stopWatch = [system.diagnostics.stopwatch]::startNew()
 $stopWatch.Start()
 
-  foreach ($vmhost in (get-cluster $cluster | get-vmhost | sort)) {
+  foreach ($vmhost in $vmhosts) {
         $esxcli = get-vmhost $vmhost | get-esxcli -v2
         $esxcliset = $esxcli.system.snmp.set
         $args = $esxcliset.CreateArgs()
         $args.communities = "$string"
         $args.enable = "true"
         $args.targets = "$snmp"
-        $esxcli.Invoke($args)
-  
+        $esxcli.Invoke($args) 
   }
 
 $stopWatch.Stop()

@@ -10,15 +10,13 @@ function CoreDump
     File Name      : CoreDump.ps1
     Author         : gajendra d ambi
     Date           : January 2016
+    Last updae     : August 2017
     recommended    : PowerShell v4+, powercli 6+ over win7 and upper.
     Copyright      - None
 .LINK
     Script posted over: github.com/gajuambi/vmware   
 #>
-
-#start of the script
 #start of the function
-
 $DumpTarget = Read-Host "Type the DumpTarget?:"
 $vmk        = Read-Host "Type the vmk number?:"
 
@@ -35,14 +33,7 @@ $stopWatch.Start()
         $args.enable = "true"
         $esxcliset1.Invoke($args)
         $esxcliset2 = $esxcli.system.coredump.network.get()
-        $esxcliset2.Invoke()
-   }
-
+        $esxcliset2.Invoke()  }
 $stopWatch.Stop()
 Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
-#End of Script#
 }#End of function
-
-
-
-

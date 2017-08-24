@@ -1,5 +1,5 @@
 #start of function
-function vmkpin2
+function vmkpin
 {
 <#
 .SYNOPSIS
@@ -15,12 +15,11 @@ function vmkpin2
 .LINK
     Script posted over: VCE Internal
 #>
-$cluster = Read-Host 'name of the cluster?'
+$vmhosts = clusterHosts # custom function
 $vmks = Read-Host "type the vmk numbers to pin, separated by a comma, ex:- vmk3,vmk4"
 if ($vmks -match ',') {
 $vmks = $vmks.split(',') | where {$_.Length -gt 2} }
 $vmks = @($vmks)
-$vmhosts = get-cluster $cluster | get-vmhost | sort
 foreach ($vmhost in $vmhosts)
     {
     $vmhost.Name
