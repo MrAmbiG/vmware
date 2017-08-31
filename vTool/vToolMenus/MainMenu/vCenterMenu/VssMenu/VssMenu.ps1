@@ -44,8 +44,8 @@ Function VssMenu
      "J" { VssMcOff }
      "K" { ShootVss }
      "L" { PgMenu }
-     
-     "X" { VssMenu }
+
+     "X" { vCenterMenu }
      "Y" { MainMenu }  
     }
     } until ( $choice -match "Z" )

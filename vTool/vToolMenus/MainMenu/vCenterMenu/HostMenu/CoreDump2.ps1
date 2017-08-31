@@ -32,8 +32,8 @@ $stopWatch.Start()
         $args.serverport = "6500"
         $args.enable = "true"
         $esxcliset1.Invoke($args)
-        $esxcliset2 = $esxcli.system.coredump.network.get()
-        $esxcliset2.Invoke()  }
+        $esxcli = get-vmhost $vmhost | Get-EsxCli
+        $esxcli.system.coredump.network.get()  }
 $stopWatch.Stop()
 Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
 }#End of function

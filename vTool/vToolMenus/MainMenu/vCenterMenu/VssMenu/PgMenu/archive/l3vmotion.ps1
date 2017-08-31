@@ -27,7 +27,6 @@ Write-Host "
 Don't forget to add gateway after it's completion
 " -BackgroundColor White -ForegroundColor Black
 
-
 $cluster = Read-Host "Name of the cluster?"
 $vss     = Read-Host "Name of the vSwitch?"
 $pg      = Read-Host "name of the portgroup?"

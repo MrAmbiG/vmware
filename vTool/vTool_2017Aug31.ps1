@@ -814,11 +814,9 @@ $stopWatch = [system.diagnostics.stopwatch]::startNew()
 $stopWatch.Start()
 
 foreach ($vmhost in $vmhosts)
-{$esxcli = get-vmhost $amphost | get-esxcli -v2
-$esxcliset = $esxcli.network.ip.netstack.add.CreateArgs()
-$args.disabled = $false
-$netstack = $stackname
-$esxcli.Invoke($args) }
+{$vmhost.name
+$esxcli  = get-vmhost $vmhost | get-esxcli
+ $esxcli.network.ip.netstack.add($false, "vmotion") }
 Write-Host "now create vmkernel portgroups to utilize this new tcp/ip stack"
 
 $stopWatch.Stop()
@@ -1912,8 +1910,8 @@ $stopWatch.Start()
         $args.serverport = "6500"
         $args.enable = "true"
         $esxcliset1.Invoke($args)
-        $esxcliset2 = $esxcli.system.coredump.network.get()
-        $esxcliset2.Invoke()  }
+        $esxcli = get-vmhost $vmhost | Get-EsxCli
+        $esxcli.system.coredump.network.get()  }
 $stopWatch.Stop()
 Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
 }#End of function
@@ -4330,7 +4328,7 @@ function vdsMenu
 }
 #end of vdsMenu
 
-#Start of VssMenu
+#Start of PgMenu
 Function PgMenu
 {
  do {
@@ -4383,7 +4381,7 @@ Function PgMenu
      "Y" { MainMenu }      
     }
     } until ( $choice -match "Z" )
-} #End of VssMenu
+} #End of PgMenu
 
 #Start of VssMenu
 Function VssMenu
@@ -4432,7 +4430,7 @@ Function VssMenu
      "K" { ShootVss }
      "L" { PgMenu }
 
-     "X" { VssMenu }
+     "X" { vCenterMenu }
      "Y" { MainMenu }  
     }
     } until ( $choice -match "Z" )

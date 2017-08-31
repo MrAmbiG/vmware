@@ -1,4 +1,4 @@
-#Start of VssMenu
+#Start of PgMenu
 Function PgMenu
 {
  do {
@@ -51,4 +51,4 @@ Function PgMenu
      "Y" { MainMenu }      
     }
     } until ( $choice -match "Z" )
-} #End of VssMenu
+} #End of PgMenu
