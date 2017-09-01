@@ -18,6 +18,7 @@ Function PgMenu
      K. LoadBalanceSrcMac
      L. LoadBalanceSrcId
      M. ExplicitFailover 
+     N. L3 vmotion portgroup
      " #options to choose from...
 
      Write-Host "
@@ -45,7 +46,8 @@ Function PgMenu
      "J" { Pglbip }
      "K" { Pglbsm }
      "L" { Pglbsi }
-     "M" { Pgef }     
+     "M" { Pgef }  
+     "N" { l3vmotion }   
         
      "X" { VssMenu }
      "Y" { MainMenu }      

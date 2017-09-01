@@ -109,6 +109,79 @@ if (-not $presence)
 if ($presence) { Write-Host "Detected Plink.exe" -BackgroundColor White -ForegroundColor Black }
 } #End of function
 
+#start of function
+function l3vmotion
+{
+<#
+.SYNOPSIS
+    Configure l3 vmotion.
+.DESCRIPTION
+    It will
+    create the l3 vmotion portgroup
+    add vmk to the portgroup
+    assign vlan to the portgroup
+    add ip, subnet mask to the portgroup
+    enable netstack l3 vmotion for the portgroup
+    1. update the default gateway manually for now
+.NOTES
+    File Name      : l3vmotion.ps1
+    Author         : gajendra d ambi
+    Date           : June 2016
+    Prerequisite   : PowerShell v4+, powercli 6.3+ over win7 and upper.
+    Copyright      - None
+.LINK
+    Script posted over: github.com/MrAmbiG/vmware
+    https://communities.vmware.com/thread/519794?start=0&tstart=0 (inok)
+#>
+#Start of Script
+Write-Host "
+Don't forget to add gateway after it's completion
+" -BackgroundColor White -ForegroundColor Black
+
+$cluster = Read-Host "Name of the cluster?"
+$vss     = Read-Host "Name of the vSwitch?"
+$pg      = Read-Host "name of the portgroup?"
+$vlan    = Read-Host "vlan?"
+$ip      = Read-Host "What is the 1st vmkernel ip address?"
+$mask    = Read-Host "subnet mask?"
+$vmk     = Read-Host "vmk number? ex: vmk7?"
+$mtu     = Read-Host "mtu ?"
+
+$stopWatch = [system.diagnostics.stopwatch]::startNew()
+$stopWatch.Start()
+
+$a     = $ip.Split('.')[0..2]   
+#first 3 octets of the ip address
+$b     = [string]::Join(".",$a)
+
+#last octet of the ip address
+$c     = $ip.Split('.')[3]
+$c     = [int]$c
+
+$vmhosts = get-cluster $cluster | get-vmhost | sort
+
+  foreach ($vmhost in $vmhosts) {
+  $vmhost.name
+  get-vmhost $vmhost | get-virtualswitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false
+        $esxcli = get-vmhost $vmhost | get-esxcli -v2
+        $esxcliset1 = $esxcli.network.ip.interface.add 
+        $args1 = $esxcliset1.CreateArgs()
+        $args1.interfacename = "$vmk"
+        $args1.netstack = "vmotion"
+        $args1.mtu = "$mtu"
+        $args1.portgroupname = "$pg"
+        $esxcliset1.Invoke($args1)
+
+        $esxcliset2 = $esxcli.network.ip.interface.ipv4.set 
+        $args2 = $esxcliset2.CreateArgs()
+        $args2.interfacename = "$vmk"
+        $args2.type = "static"
+        $args2.ipv4 = "$b.$(($c++))"
+        $args2.netmask = "$mask"
+        $esxcliset2.Invoke($args2)
+ }
+}#End of function
+
 #Start of function
 function IpChanger 
 {
@@ -134,7 +207,7 @@ save & close the file,
 Hit Enter to proceed
 " -ForegroundColor Blue -BackgroundColor White
 $csv = "$PSScriptRoot/HostVds.csv"
-get-process | Select-Object OldIp,NewIp,username,password,VMK,subnetMask | Export-Csv -Path $csv -Encoding ASCII -NoTypeInformation
+get-process | Select-Object OldIp,NewIp,username,password,subnetMask | Export-Csv -Path $csv -Encoding ASCII -NoTypeInformation
 Start-Process $csv
 Read-Host "Hit Enter/Return to proceed"
 
@@ -145,8 +218,7 @@ $csv = Import-Csv $csv
     $OldIp = $($line.OldIp)  
     $user  = $($line.username)  
     $pass  = $($line.password)
-    $NewIp  = $($line.NewIp)
-    $VMK  = $($line.VMK)
+    $NewIp  = $($line.NewIp)    
     $subnetMask  = $($line.subnetMask)
 
     # connect to each esxi host and update the ip and subnet mask for a given vmkernel
@@ -154,7 +226,7 @@ $csv = Import-Csv $csv
     $esxcli = Get-VMHost $OldIp | Get-EsxCli -v2
     $esxcliset = $esxcli.network.ip.interface.ipv4.set
     $args = $esxcliset.CreateArgs()
-    $args.interfacename = $VMK
+    $args.interfacename = 'vmk0'
     $args.type = 'static'
     $args.ipv4 = $NewIp
     $args.netmask = $subnetMask
@@ -1094,7 +1166,7 @@ $c     = [int]$c
 
           $esxcliset2 = $esxcli.network.ip.interface.ipv4.set  #update ip informaiton to the vmkernel
           $args2 = $esxcliset2.CreateArgs()
-          $args2.interfacename = "$vmk"
+          $args2.interefacename = "$vmk"
           $args2.type = "static"
           $args2.ipv4 = "$b.$(($c++))"
           $args2.netmask = "$mask"
@@ -3810,7 +3882,7 @@ $a       = $ip.Split('.')[0..2]
 
         $esxcliset2 = $esxcli.network.ip.interface.ipv4.set 
         $args2 = $esxcliset2.CreateArgs()
-        $args2.interfacename = "$vmk"
+        $args2.interefacename = "$vmk"
         $args2.type = "static"
         $args2.ipv4 = "$b.$(($c++))"
         $args2.netmask = "$mask"
@@ -4348,6 +4420,7 @@ Function PgMenu
      K. LoadBalanceSrcMac
      L. LoadBalanceSrcId
      M. ExplicitFailover 
+     N. L3 vmotion portgroup
      " #options to choose from...
 
      Write-Host "
@@ -4375,7 +4448,8 @@ Function PgMenu
      "J" { Pglbip }
      "K" { Pglbsm }
      "L" { Pglbsi }
-     "M" { Pgef }     
+     "M" { Pgef }  
+     "N" { l3vmotion }   
         
      "X" { VssMenu }
      "Y" { MainMenu }      

@@ -23,7 +23,7 @@ save & close the file,
 Hit Enter to proceed
 " -ForegroundColor Blue -BackgroundColor White
 $csv = "$PSScriptRoot/HostVds.csv"
-get-process | Select-Object OldIp,NewIp,username,password,VMK,subnetMask | Export-Csv -Path $csv -Encoding ASCII -NoTypeInformation
+get-process | Select-Object OldIp,NewIp,username,password,subnetMask | Export-Csv -Path $csv -Encoding ASCII -NoTypeInformation
 Start-Process $csv
 Read-Host "Hit Enter/Return to proceed"
 
@@ -34,8 +34,7 @@ $csv = Import-Csv $csv
     $OldIp = $($line.OldIp)  
     $user  = $($line.username)  
     $pass  = $($line.password)
-    $NewIp  = $($line.NewIp)
-    $VMK  = $($line.VMK)
+    $NewIp  = $($line.NewIp)    
     $subnetMask  = $($line.subnetMask)
 
     # connect to each esxi host and update the ip and subnet mask for a given vmkernel
@@ -43,7 +42,7 @@ $csv = Import-Csv $csv
     $esxcli = Get-VMHost $OldIp | Get-EsxCli -v2
     $esxcliset = $esxcli.network.ip.interface.ipv4.set
     $args = $esxcliset.CreateArgs()
-    $args.interfacename = $VMK
+    $args.interfacename = 'vmk0'
     $args.type = 'static'
     $args.ipv4 = $NewIp
     $args.netmask = $subnetMask

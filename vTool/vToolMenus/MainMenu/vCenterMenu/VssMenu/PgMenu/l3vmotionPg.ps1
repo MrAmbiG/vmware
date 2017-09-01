@@ -1,4 +1,4 @@
-﻿#start of function
+#start of function
 function l3vmotion
 {
 <#
@@ -27,16 +27,14 @@ Write-Host "
 Don't forget to add gateway after it's completion
 " -BackgroundColor White -ForegroundColor Black
 
-
-$cluster = "E0900-NMXD-MB"
-$vss     = "vSwitch0"
-$pg      = "vcesys-esx-L3vmotion"
-$vlan    = "3165"
-$ip      = "10.3.165.101"
-$mask    = "255.255.255.0"
-$vmk     = "vmk2"
-$gw      = "10.3.165.254"
-$nw      = "10.3.165.0/24"
+$cluster = Read-Host "Name of the cluster?"
+$vss     = Read-Host "Name of the vSwitch?"
+$pg      = Read-Host "name of the portgroup?"
+$vlan    = Read-Host "vlan?"
+$ip      = Read-Host "What is the 1st vmkernel ip address?"
+$mask    = Read-Host "subnet mask?"
+$vmk     = Read-Host "vmk number? ex: vmk7?"
+$mtu     = Read-Host "mtu ?"
 
 $stopWatch = [system.diagnostics.stopwatch]::startNew()
 $stopWatch.Start()
@@ -50,17 +48,6 @@ $c     = $ip.Split('.')[3]
 $c     = [int]$c
 
 $vmhosts = get-cluster $cluster | get-vmhost | sort
-#foreach ($vmhost in $vmhosts)
-# {
-# Get-VMHost $vmhost | Get-VirtualSwitch -Name $vss | New-VirtualPortGroup $pg -VLanId $vlan -Confirm:$false #creating new VM portgroup
-# $esxcli  = get-vmhost $vmhost | get-esxcli
-# $esxcli.network.ip.route.ipv4.add("$gw", "vmotion", "$nw") #adds default route gateway
-# $esxcli.network.ip.netstack.add($false, "vmotion") #enabling and adding vmotion tcp/ip stack (netstack)
-# $esxcli.network.ip.interface.add($null, $null, "$vmk", $null, "1500", "vmotion", "$pg")
-# 
-# $esxcli.network.ip.interface.ipv4.set("$vmk", "$b.$(($c++))", "$mask", $null, "static") #update ip informaiton to the vmk 
-# 
-# }
 
   foreach ($vmhost in $vmhosts) {
   $vmhost.name
@@ -76,13 +63,10 @@ $vmhosts = get-cluster $cluster | get-vmhost | sort
 
         $esxcliset2 = $esxcli.network.ip.interface.ipv4.set 
         $args2 = $esxcliset2.CreateArgs()
-        $args2.interefacename = "$vmk"
+        $args2.interfacename = "$vmk"
         $args2.type = "static"
         $args2.ipv4 = "$b.$(($c++))"
         $args2.netmask = "$mask"
         $esxcliset2.Invoke($args2)
  }
-
 }#End of function
-
-l3vmotion
