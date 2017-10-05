@@ -11,7 +11,7 @@ function l3vmotion2
     assign vlan to the portgroup
     add ip, subnet mask to the portgroup
     enable netstack l3 vmotion for the portgroup
-    1. update the default gateway manually for now
+    updates the gateway
 .NOTES
     File Name      : l3vmotion.ps1
     Author         : gajendra d ambi
@@ -33,6 +33,7 @@ $pg      = Read-Host "name of the portgroup?"
 $vlan    = Read-Host "vlan?"
 $ip      = Read-Host "What is the 1st vmkernel ip address?"
 $mask    = Read-Host "subnet mask?"
+$gateway = Read-Host "gateway?"
 $vmk     = Read-Host "vmk number? ex: vmk7?"
 $mtu     = Read-Host "mtu ?"
 
@@ -47,42 +48,33 @@ $c     = [int]$c
 $vmhosts = get-cluster $cluster | get-vmhost | sort
   foreach ($vmhost in $vmhosts) {    
     $vmhost.name
+    $esxcli = get-vmhost $vmhost | get-esxcli -v2
     get-vmhost $vmhost | get-virtualswitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false
     # add vmotion netstack
-    $esxcli = get-vmhost $vmhost | get-esxcli -v2
     $esxcliset = $esxcli.network.ip.netstack.add
     $args = $esxcliset.CreateArgs()
     $args.disabled = $false
     $args.netstack = 'vmotion'
     $esxcli.network.ip.netstack.add
     $esxcliset.Invoke($args)
-
-    #add vmkernel with netstack
-    $esxcli = get-vmhost $vmhost | get-esxcli -v2
+    
+    # add vmkernel with netstack    
     $esxcliset = $esxcli.network.ip.interface.add 
     $args = $esxcliset.CreateArgs()
     $args.interfacename = "$vmk"
     $args.netstack = 'vmotion'
-    $args.mtu = "$mtu"
-    $args.portgroupname = "$pg"
-    $esxcliset.Invoke($args)
-
-    #update networking to the vmkernel
-    $esxcli = get-vmhost $vmhost | get-esxcli -v2
-    $esxcliset = $esxcli.network.ip.interface.add 
-    $args = $esxcliset.CreateArgs()
-    $args.interfacename = "$vmk"
-    $args.netstack = 'vmotion'
-    $args.mtu = "$mtu"
-    $args.portgroupname = "$pg"
-    $esxcliset.Invoke($args)
-
-    $esxcliset = $esxcli.network.ip.interface.ipv4.set 
+    $args.mtu = "$mtu"    
+    $args.portgroupname = "$pg"    
+    $esxcliset.Invoke($args)   
+     
+    # update networking to the vmkernel
+    $esxcliset = $esxcli.network.ip.interface.ipv4.set
     $args = $esxcliset.CreateArgs()
     $args.interfacename = "$vmk"
     $args.type = "static"
     $args.ipv4 = "$b.$(($c++))"
     $args.netmask = "$mask"
-    $esxcliset.Invoke($args)
+    $args.gateway = "$gateway"
+    $esxcliset.Invoke($args)    
  }
 }#End of function

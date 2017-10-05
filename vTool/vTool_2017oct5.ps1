@@ -122,15 +122,16 @@ function l3vmotion2
     assign vlan to the portgroup
     add ip, subnet mask to the portgroup
     enable netstack l3 vmotion for the portgroup
-    1. update the default gateway manually for now
+    updates the gateway
 .NOTES
-    File Name      : l3vmotion2.ps1
+    File Name      : l3vmotion.ps1
     Author         : gajendra d ambi
     Date           : June 2016
     Prerequisite   : PowerShell v4+, powercli 6.3+ over win7 and upper.
     Copyright      - None
 .LINK
     Script posted over: github.com/MrAmbiG/vmware
+    https://communities.vmware.com/thread/519794?start=0&tstart=0 (inok)
 #>
 #Start of Script
 Write-Host "
@@ -143,6 +144,7 @@ $pg      = Read-Host "name of the portgroup?"
 $vlan    = Read-Host "vlan?"
 $ip      = Read-Host "What is the 1st vmkernel ip address?"
 $mask    = Read-Host "subnet mask?"
+$gateway = Read-Host "gateway?"
 $vmk     = Read-Host "vmk number? ex: vmk7?"
 $mtu     = Read-Host "mtu ?"
 
@@ -183,7 +185,8 @@ $vmhosts = get-cluster $cluster | get-vmhost | sort
     $args.type = "static"
     $args.ipv4 = "$b.$(($c++))"
     $args.netmask = "$mask"
-    $esxcliset.Invoke($args)
+    $args.gateway = "$gateway"
+    $esxcliset.Invoke($args)    
  }
 }#End of function
 
