@@ -6,7 +6,7 @@
 .NOTES
     File Name      : vTool.ps1
     Author         : gajendra d ambi
-    updated        : Aug 2017
+    updated        : October 2017
     Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
     Copyright      - None
 .LINK
@@ -16,7 +16,7 @@
 Clear-Host  #Clear the screen.
 
 #version
-$lastupdate = '2017Aug24'
+$lastupdate = '2017Oct5'
 $version = "vTool "+$lastupdate
 
 #start of function
@@ -197,14 +197,13 @@ function l3vmotion2
     enable netstack l3 vmotion for the portgroup
     1. update the default gateway manually for now
 .NOTES
-    File Name      : l3vmotion.ps1
+    File Name      : l3vmotion2.ps1
     Author         : gajendra d ambi
     Date           : June 2016
     Prerequisite   : PowerShell v4+, powercli 6.3+ over win7 and upper.
     Copyright      - None
 .LINK
     Script posted over: github.com/MrAmbiG/vmware
-    https://communities.vmware.com/thread/519794?start=0&tstart=0 (inok)
 #>
 #Start of Script
 Write-Host "
@@ -228,30 +227,38 @@ $b     = [string]::Join(".",$a)
 $c     = $ip.Split('.')[3]
 $c     = [int]$c
 
-$vmhosts = (get-cluster $cluster | get-vmhost | sort)[0]
-
-  foreach ($vmhost in $vmhosts) {
-    $vmhost = (get-cluster $cluster | get-vmhost | sort)[0]
+$vmhosts = get-cluster $cluster | get-vmhost | sort
+  foreach ($vmhost in $vmhosts) {    
     $vmhost.name
+    $esxcli = get-vmhost $vmhost | get-esxcli -v2
     get-vmhost $vmhost | get-virtualswitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false
-    $esxcli = get-vmhost $vmhost | get-esxcli -v2
-    $esxcliset1 = $esxcli.network.ip.netstack.add
-    $args1 = $esxcliset1.CreateArgs()
-    $args1.disabled = $false
-    $args1.netstack = 'vmotion'
+    # add vmotion netstack
+    $esxcliset = $esxcli.network.ip.netstack.add
+    $args = $esxcliset.CreateArgs()
+    $args.disabled = $false
+    $args.netstack = 'vmotion'
     $esxcli.network.ip.netstack.add
-    $esxcliset1.Invoke($args1)
-
-    $esxcli = get-vmhost $vmhost | get-esxcli -v2
-    $esxcliset1 = $esxcli.network.ip.interface.add 
-    $args1 = $esxcliset1.CreateArgs()
-    $args1.interfacename = "$vmk"
-    $args1.netstack = 'vmotion'
-    $args1.mtu = "$mtu"
-    $args1.portgroupname = "$pg"
-    $esxcliset1.Invoke($args1)
+    $esxcliset.Invoke($args)
+    
+    # add vmkernel with netstack    
+    $esxcliset = $esxcli.network.ip.interface.add 
+    $args = $esxcliset.CreateArgs()
+    $args.interfacename = "$vmk"
+    $args.netstack = 'vmotion'
+    $args.mtu = "$mtu"    
+    $args.portgroupname = "$pg"    
+    $esxcliset.Invoke($args)   
+     
+    # update networking to the vmkernel
+    $esxcliset = $esxcli.network.ip.interface.ipv4.set
+    $args = $esxcliset.CreateArgs()
+    $args.interfacename = "$vmk"
+    $args.type = "static"
+    $args.ipv4 = "$b.$(($c++))"
+    $args.netmask = "$mask"
+    $esxcliset.Invoke($args)
  }
-}#End of function 
+}#End of function
 
 #Start of function
 function IpChanger 
@@ -4502,7 +4509,7 @@ Function PgMenu
 
      $user   = [Environment]::UserName
      $choice = Read-Host "choose one of the above"  # Get user's entry
-     $ok     = $choice -match '^[abcdefghijklmxyz]+$'
+     $ok     = $choice -match '^[abcdefghijklmnxyz]+$'
      if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
     } until ( $ok )
     switch -Regex ($choice) 

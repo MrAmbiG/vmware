@@ -44,27 +44,45 @@ $b     = [string]::Join(".",$a)
 $c     = $ip.Split('.')[3]
 $c     = [int]$c
 
-$vmhosts = (get-cluster $cluster | get-vmhost | sort)[0]
-
-  foreach ($vmhost in $vmhosts) {
-    $vmhost = (get-cluster $cluster | get-vmhost | sort)[0]
+$vmhosts = get-cluster $cluster | get-vmhost | sort
+  foreach ($vmhost in $vmhosts) {    
     $vmhost.name
     get-vmhost $vmhost | get-virtualswitch -Name $vss | New-VirtualPortGroup -Name $pg -VLanId $vlan -Confirm:$false
+    # add vmotion netstack
     $esxcli = get-vmhost $vmhost | get-esxcli -v2
-    $esxcliset1 = $esxcli.network.ip.netstack.add
-    $args1 = $esxcliset1.CreateArgs()
-    $args1.disabled = $false
-    $args1.netstack = 'vmotion'
+    $esxcliset = $esxcli.network.ip.netstack.add
+    $args = $esxcliset.CreateArgs()
+    $args.disabled = $false
+    $args.netstack = 'vmotion'
     $esxcli.network.ip.netstack.add
-    $esxcliset1.Invoke($args1)
+    $esxcliset.Invoke($args)
 
+    #add vmkernel with netstack
     $esxcli = get-vmhost $vmhost | get-esxcli -v2
-    $esxcliset1 = $esxcli.network.ip.interface.add 
-    $args1 = $esxcliset1.CreateArgs()
-    $args1.interfacename = "$vmk"
-    $args1.netstack = 'vmotion'
-    $args1.mtu = "$mtu"
-    $args1.portgroupname = "$pg"
-    $esxcliset1.Invoke($args1)
+    $esxcliset = $esxcli.network.ip.interface.add 
+    $args = $esxcliset.CreateArgs()
+    $args.interfacename = "$vmk"
+    $args.netstack = 'vmotion'
+    $args.mtu = "$mtu"
+    $args.portgroupname = "$pg"
+    $esxcliset.Invoke($args)
+
+    #update networking to the vmkernel
+    $esxcli = get-vmhost $vmhost | get-esxcli -v2
+    $esxcliset = $esxcli.network.ip.interface.add 
+    $args = $esxcliset.CreateArgs()
+    $args.interfacename = "$vmk"
+    $args.netstack = 'vmotion'
+    $args.mtu = "$mtu"
+    $args.portgroupname = "$pg"
+    $esxcliset.Invoke($args)
+
+    $esxcliset = $esxcli.network.ip.interface.ipv4.set 
+    $args = $esxcliset.CreateArgs()
+    $args.interfacename = "$vmk"
+    $args.type = "static"
+    $args.ipv4 = "$b.$(($c++))"
+    $args.netmask = "$mask"
+    $esxcliset.Invoke($args)
  }
 }#End of function
