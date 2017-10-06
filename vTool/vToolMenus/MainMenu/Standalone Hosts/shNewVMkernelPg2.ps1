@@ -40,21 +40,25 @@ $b     = [string]::Join(".",$a)
 $c     = $ip.Split('.')[3]
 $c     = [int]$c
 
- foreach ($vmhost in (get-vmhost | sort)){
+ foreach ($vmhost in (get-vmhost | sort)) {
           $esxcli = get-esxcli $vmhost -v2
-          $esxcliset1 = $esxcli.network.ip.interface.add   #add vmkernel to the portgroup
-          $args1 = $esxcliset1.CreateArgs()
-          $args1.mtu = 1500
-          $args1.portgroupname = $pg
-          $esxcliset1.Invoke($args1)
 
-          $esxcliset2 = $esxcli.network.ip.interface.ipv4.set  #update ip informaiton to the vmkernel
-          $args2 = $esxcliset2.CreateArgs()
-          $args2.interefacename = "$vmk"
-          $args2.type = "static"
-          $args2.ipv4 = "$b.$(($c++))"
-          $args2.netmask = "$mask"
-          $esxcliset2.Invoke($args2)
+          # add vmkernel   
+          $esxcliset = $esxcli.network.ip.interface.add 
+          $args = $esxcliset.CreateArgs()
+          $args.interfacename = "$vmk"
+          $args.mtu = "$mtu"    
+          $args.portgroupname = "$pg"    
+          $esxcliset.Invoke($args)        
+
+          # update networking to the vmkernel
+          $esxcliset = $esxcli.network.ip.interface.ipv4.set
+          $args = $esxcliset.CreateArgs()
+          $args.interfacename = "$vmk"
+          $args.type = "static"
+          $args.ipv4 = "$b.$(($c++))"
+          $args.netmask = "$mask"
+          $esxcliset.Invoke($args)  
 }
 $stopWatch.Stop()
 Write-Host "Elapsed Runtime:" $stopWatch.Elapsed.Hours "Hours" $stopWatch.Elapsed.Minutes "minutes and" $stopWatch.Elapsed.Seconds "seconds." -BackgroundColor White -ForegroundColor Black
