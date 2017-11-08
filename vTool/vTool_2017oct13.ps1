@@ -3944,7 +3944,7 @@ $a       = $ip.Split('.')[0..2]
 
         $esxcliset2 = $esxcli.network.ip.interface.ipv4.set 
         $args2 = $esxcliset2.CreateArgs()
-        $args2.interefacename = "$vmk"
+        $args2.interfacename = "$vmk"
         $args2.type = "static"
         $args2.ipv4 = "$b.$(($c++))"
         $args2.netmask = "$mask"
