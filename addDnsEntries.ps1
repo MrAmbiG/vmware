@@ -23,7 +23,7 @@ save & close the file,
 Hit Enter to proceed
 " -ForegroundColor Blue -BackgroundColor White
 $csv = "$PSScriptRoot/HostVds.csv"
-get-process | Select-Object hostname,ip,zone | Export-Csv -Path $csv -Encoding ASCII -NoTypeInformation
+get-process | Select-Object netbiosName,ip,zone | Export-Csv -Path $csv -Encoding ASCII -NoTypeInformation
 Start-Process $csv
 Read-Host "Hit Enter/Return to proceed"
 
@@ -31,7 +31,7 @@ $csv = Import-Csv $csv
 
 foreach ($line in $csv) 
     {  # importing data from csv and go line by line
-    $hostname = $($line.hostname)  
+    $hostname = $($line.netbiosName)  
     $ip  = $($line.ip)  
     $zone  = $($line.zone)
     add-dnsserverresourcerecordA -name $hostname -ipv4address $ip -zonename $zone -createptr
