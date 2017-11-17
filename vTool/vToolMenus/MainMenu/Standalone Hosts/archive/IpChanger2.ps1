@@ -20,9 +20,11 @@ $OldIp = Read-Host 'original ip?'
 $NewIp = Read-Host 'new ip?'
 $user = Read-Host 'username?'
 $pass = Read-Host 'password?'
-$vmk = Read-Host 'which vmk (ex: vmk0, vmk1)?'
+$vmk = Read-Host 'which vmk? ex:vmk0'
 $subnetMask = Read-Host 'subnet mask?'
 
+    Connect-VIServer $OldIp -User $user -Password $pass
+    $esxcli = Get-VMHost $OldIp | Get-EsxCli -v2
     $esxcliset = $esxcli.network.ip.interface.ipv4.set
     $args = $esxcliset.CreateArgs()
     $args.interfacename = "$vmk"
@@ -30,6 +32,7 @@ $subnetMask = Read-Host 'subnet mask?'
     $args.ipv4 = $NewIp
     $args.netmask = $subnetMask
     $esxcliset.Invoke($args)
+    Disconnect-VIServer * -Confirm:$false -ErrorAction SilentlyContinue
+ } #End of function
 
-Disconnect-VIServer * -Confirm:$false -ErrorAction SilentlyContinue
-} #End of function
+IpChanger

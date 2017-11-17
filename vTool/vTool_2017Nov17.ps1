@@ -4,7 +4,7 @@
 .DESCRIPTION
     This is an onging VMware tool to help those with an VMware environment to automate certain repetative tasks
 .NOTES
-    File Name      : vTool_2017Nov13.ps1
+    File Name      : vTool_2017Nov17.ps1
     Author         : gajendra d ambi
     updated        : 2017Nov13
     Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
@@ -16,7 +16,7 @@
 Clear-Host  #Clear the screen.
 
 #version
-$version = "2017Nov13"
+$version = "vTool_2017Nov17"
 
 #start of function
 function PcliPshell 
@@ -251,40 +251,23 @@ function IpChanger
     Script posted over: github.com/MrAmbig
 #>
 #Start of Script
-Write-Host "
-A CSV file will be opened (open in excel/spreadsheet)
-populate the values,
-save & close the file,
-Hit Enter to proceed
-" -ForegroundColor Blue -BackgroundColor White
-$csv = "$PSScriptRoot/HostVds.csv"
-get-process | Select-Object OldIp,NewIp,username,password,subnetMask | Export-Csv -Path $csv -Encoding ASCII -NoTypeInformation
-Start-Process $csv
-Read-Host "Hit Enter/Return to proceed"
-Write-Host "processing your entries from the csv file...."
-$csv = Import-Csv $csv
+$OldIp = Read-Host 'original ip?'
+$NewIp = Read-Host 'new ip?'
+$user = Read-Host 'username?'
+$pass = Read-Host 'password?'
+$vmk = Read-Host 'which vmk (ex: vmk0, vmk1)?'
+$subnetMask = Read-Host 'subnet mask?'
 
-  foreach ($line in $csv) 
- {  # importing data from csv and go line by line
-    $OldIp = $($line.OldIp)  
-    $user  = $($line.username)  
-    $pass  = $($line.password)
-    $NewIp  = $($line.NewIp)    
-    $subnetMask  = $($line.subnetMask)
-
-    # connect to each esxi host and update the ip and subnet mask for a given vmkernel
-    Connect-VIServer $OldIp -User $user -Password $pass
-    $esxcli = Get-VMHost $OldIp | Get-EsxCli -v2
     $esxcliset = $esxcli.network.ip.interface.ipv4.set
     $args = $esxcliset.CreateArgs()
-    $args.interfacename = 'vmk0'
+    $args.interfacename = "$vmk"
     $args.type = 'static'
     $args.ipv4 = $NewIp
     $args.netmask = $subnetMask
     $esxcliset.Invoke($args)
-    Disconnect-VIServer * -Confirm:$false -ErrorAction SilentlyContinue
-  }
- } #End of function
+
+Disconnect-VIServer * -Confirm:$false -ErrorAction SilentlyContinue
+} #End of function
 
 # start of function
 function checkIpConnectivity 
