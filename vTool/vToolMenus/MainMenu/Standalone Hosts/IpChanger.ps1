@@ -22,7 +22,7 @@ $user = Read-Host 'username?'
 $pass = Read-Host 'password?'
 $vmk = Read-Host 'which vmk (ex: vmk0, vmk1)?'
 $subnetMask = Read-Host 'subnet mask?'
-
+    Connect-VIServer $OldIp -User $user -Password $pass
     $esxcliset = $esxcli.network.ip.interface.ipv4.set
     $args = $esxcliset.CreateArgs()
     $args.interfacename = "$vmk"
