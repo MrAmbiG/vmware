@@ -88,6 +88,7 @@ vTool is a handy multi automation tool for VMware administrators and those who d
     -migrate vmkernel portgroup to vds
 
 > **Standalone Host[beta]:**
+
     -Connect to standalone hosts
     -Create virtual Standard Switch
     -Create virtual Machine Portgroup
