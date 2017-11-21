@@ -6,7 +6,7 @@
 .NOTES
     File Name      : vTool_2017Nov17.ps1
     Author         : gajendra d ambi
-    updated        : 2017Nov13
+    updated        : 2017Nov21
     Prerequisite   : PowerShell v4+, powercli 6+ over win7 and upper.
     Copyright      - None
 .LINK
@@ -16,7 +16,7 @@
 Clear-Host  #Clear the screen.
 
 #version
-$version = "vTool_2017Nov17"
+$version = "vTool_2017Nov21"
 
 #start of function
 function PcliPshell 
@@ -4144,6 +4144,9 @@ function othersMenu
 {
  do {
  do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'
      Write-Host "Make sure you are connected to a vCenter" -ForegroundColor Yellow
      Write-Host "`nothersMenu" -BackgroundColor White -ForegroundColor Black
      Write-Host "
@@ -4173,6 +4176,9 @@ function IscsiMenu
 {
  do {
  do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'
      Write-Host "Make sure you are connected to a vCenter" -ForegroundColor Yellow
      Write-Host "`nIscsiMenu" -BackgroundColor White -ForegroundColor Black
      Write-Host "
@@ -4205,7 +4211,10 @@ function IscsiMenu
 function NicMenu
 {
  do {
- do {     
+ do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'    
      Write-Host "`NicMenu" -BackgroundColor White -ForegroundColor Black
      Write-Host "
      A. vSwitch
@@ -4236,7 +4245,10 @@ function NicMenu
 function StandHostsMenu
 {
  do {
- do {     
+ do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'   
      Write-Host "`StandHostsMenu" -BackgroundColor White -ForegroundColor Black
      Write-Host "
      A. Connect to standalone hosts
@@ -4282,6 +4294,9 @@ function vdsLoadBalancingMenu
 {
  do {
  do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'
      Write-Host "Make sure you are connected to a vCenter" -ForegroundColor Yellow
      Write-Host "`nvdsLoadBalancingMenu" -BackgroundColor White -ForegroundColor Black
      Write-Host "
@@ -4319,6 +4334,9 @@ function VMKservicesMenu
 {
  do {
  do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'
      Write-Host "Make sure you are connected to a vCenter" -ForegroundColor Yellow
      Write-Host "`nVMKservicesMenu" -BackgroundColor White -ForegroundColor Black
      Write-Host "
@@ -4401,7 +4419,10 @@ function vdsMenu
 Function PgMenu
 {
  do {
- do {         
+ do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'       
      Write-Host -BackgroundColor White -ForegroundColor Black "`nVssMenu"
      Write-Host "
      A. Create VM Portgroup
@@ -4456,7 +4477,10 @@ Function PgMenu
 Function VssMenu
 {
  do {
- do {         
+ do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'     
      Write-Host -BackgroundColor White -ForegroundColor Black "`nVssMenu"
      Write-Host "
      A. Create vSwitch
@@ -4510,15 +4534,16 @@ function MainMenu
 {
  do {
  do {
-     Write-Host -BackgroundColor Black -ForegroundColor white  "your suggestions are welcome at
-     twitter/@MrAmbiG1
-     github.com/MrAmbiG"
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'
      Write-Host -BackgroundColor Black -ForegroundColor Cyan  "`n $version"
      Write-Host -BackgroundColor White -ForegroundColor Black "`nMain Menu"
      Write-Host "
      A. vCenter
      B. Standalone Hosts
      C. Update vTool
+     D. Give inputs to author
      " #options to choose from...
 
      write-host "
@@ -4526,13 +4551,16 @@ function MainMenu
 
      $user   = [Environment]::UserName     
      $choice = Read-Host "Hi $user, choose one of the above"  #Get user's entry
-     $ok     = $choice -match '^[abz]+$'
+     $ok     = $choice -match '^[abcdz]+$'
      if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
     } until ( $ok )
     switch -Regex ($choice) 
     {
     "A" { vCenterMenu }
     "B" { StandHostsMenu }
+    "C" { start-process "github.com/MrAmbiG/vmware/tree/master/vTool" }
+    "D" { start-process "http://twitter.com/mrambig1"
+          start-process "http://linkedin.com/in/mrambig/" }
     }
     } until ( $choice -match "Z" )
     #if ($choice -eq "z") { exit }
@@ -4544,6 +4572,9 @@ function DrsRulesMenu
 {
  do {
  do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'
      Write-Host "Make sure you are connected to a vCenter" -ForegroundColor Yellow
      Write-Host "`nDrsRulesMenu" -BackgroundColor White -ForegroundColor Black
      Write-Host "
@@ -4582,6 +4613,9 @@ function ClusterMenu
 {
  do {
  do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'
      Write-Host "Make sure you are connected to a vCenter" -ForegroundColor Yellow
      Write-Host "`nClusterMenu" -BackgroundColor White -ForegroundColor Black
      Write-Host "
@@ -4623,6 +4657,9 @@ function HostServicesMenu
 {
  do {
  do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'
      Write-Host "Make sure you are connected to a vCenter" -ForegroundColor Yellow
      Write-Host "`nHostServicesMenu" -BackgroundColor White -ForegroundColor Black
      Write-Host "
@@ -4677,6 +4714,9 @@ function HostMenu
 {
  do {
  do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'
      Write-Host "Make sure you are connected to a vCenter" -ForegroundColor Yellow
      Write-Host "`nHostMenu" -BackgroundColor White -ForegroundColor Black
      Write-Host "
@@ -4739,6 +4779,9 @@ function vCenterMenu
 {
  do {
  do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'
      Write-Host "Make sure you are connected to a vCenter" -ForegroundColor Yellow
      Write-Host "`nvCenterMenu" -BackgroundColor White -ForegroundColor Black
      Write-Host "

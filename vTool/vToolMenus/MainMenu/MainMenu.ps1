@@ -3,25 +3,33 @@ function MainMenu
 {
  do {
  do {
-     $version = '2016Aug'
-     Write-Host -BackgroundColor Black -ForegroundColor Cyan  "`nvTool $version"
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'
+     Write-Host -BackgroundColor Black -ForegroundColor Cyan  "`n $version"
      Write-Host -BackgroundColor White -ForegroundColor Black "`nMain Menu"
      Write-Host "
      A. vCenter
-     B. Standalone Hosts" #options to choose from...
+     B. Standalone Hosts
+     C. Update vTool
+     D. Give inputs to author
+     " #options to choose from...
 
      write-host "
      Z - Exit" -ForegroundColor Yellow #exits the script
 
      $user   = [Environment]::UserName     
      $choice = Read-Host "Hi $user, choose one of the above"  #Get user's entry
-     $ok     = $choice -match '^[abz]+$'
+     $ok     = $choice -match '^[abcdz]+$'
      if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
     } until ( $ok )
     switch -Regex ($choice) 
     {
     "A" { vCenterMenu }
     "B" { StandHostsMenu }
+    "C" { start-process "github.com/MrAmbiG/vmware/tree/master/vTool" }
+    "D" { start-process "http://twitter.com/mrambig1"
+          start-process "http://linkedin.com/in/mrambig/" }
     }
     } until ( $choice -match "Z" )
     #if ($choice -eq "z") { exit }

@@ -3,6 +3,9 @@ function DrsRulesMenu
 {
  do {
  do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'
      Write-Host "Make sure you are connected to a vCenter" -ForegroundColor Yellow
      Write-Host "`nDrsRulesMenu" -BackgroundColor White -ForegroundColor Black
      Write-Host "
@@ -33,4 +36,5 @@ function DrsRulesMenu
     "Y" { MainMenu }  
     }
     } until ( $choice -match "Z" )
-}#end of DrsRulesMenu
+}
+#end of DrsRulesMenu

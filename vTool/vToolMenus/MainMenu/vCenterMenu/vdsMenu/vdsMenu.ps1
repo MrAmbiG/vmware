@@ -1,5 +1,4 @@
-﻿
-#Start of vdsMenu
+﻿#Start of vdsMenu
 function vdsMenu
 {
  do {
@@ -10,8 +9,10 @@ function vdsMenu
      A. Create VDS
      B. Create dvPortgroup
      C. Add hosts to VDS
-     D. Load balancing
-     E. (L3)TCP/IP stack" #options to choose from
+     D. Load balancing     
+     E. (L3)TCP/IP stack
+     F. migrate vmkernel portgroup to vds
+     " #options to choose from
    
      Write-Host "
      X. Previous Menu
@@ -19,7 +20,7 @@ function vdsMenu
      Z. Exit" -BackgroundColor Black -ForegroundColor Green #return to main menu
     
      $choice = Read-Host "choose one of the above"  #Get user's entry
-     $ok     = $choice -match '^[abcdexyz]+$'
+     $ok     = $choice -match '^[abcdefxyz]+$'
      if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
     } until ( $ok )
     switch -Regex ($choice) 
@@ -29,6 +30,7 @@ function vdsMenu
     "C" { HostVds }
     "D" { vdsLoadBalancingMenu }
     "E" { Write-Host This feature is not available yet }
+    "F" { PgVssToVds }
     "X" { vCenterMenu }
     "Y" { MainMenu }  
     }

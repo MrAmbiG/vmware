@@ -3,6 +3,9 @@ function IscsiMenu
 {
  do {
  do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'
      Write-Host "Make sure you are connected to a vCenter" -ForegroundColor Yellow
      Write-Host "`nIscsiMenu" -BackgroundColor White -ForegroundColor Black
      Write-Host "

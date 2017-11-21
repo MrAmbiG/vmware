@@ -2,7 +2,10 @@
 Function VssMenu
 {
  do {
- do {         
+ do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'     
      Write-Host -BackgroundColor White -ForegroundColor Black "`nVssMenu"
      Write-Host "
      A. Create vSwitch

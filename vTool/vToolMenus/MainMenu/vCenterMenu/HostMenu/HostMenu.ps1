@@ -3,6 +3,9 @@ function HostMenu
 {
  do {
  do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'
      Write-Host "Make sure you are connected to a vCenter" -ForegroundColor Yellow
      Write-Host "`nHostMenu" -BackgroundColor White -ForegroundColor Black
      Write-Host "
@@ -51,7 +54,7 @@ function HostMenu
     "M" { VMKservicesMenu }
     "N" { WinSSH }
     "o" { vmkMtu }
-    "P" { setFnicQdepth }
+    "P" { setFnicQdepth2 }
     "W" { Write-Host you chose others. This is not implemented yet }
     "X" { vCenterMenu }
     "Y" { MainMenu }  

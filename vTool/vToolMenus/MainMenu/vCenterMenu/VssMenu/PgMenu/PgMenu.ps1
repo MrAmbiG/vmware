@@ -2,7 +2,10 @@
 Function PgMenu
 {
  do {
- do {         
+ do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'       
      Write-Host -BackgroundColor White -ForegroundColor Black "`nVssMenu"
      Write-Host "
      A. Create VM Portgroup
@@ -13,12 +16,11 @@ Function PgMenu
      F. Delete VMkernel Portgroup  
      G. Sync portgroup with vSwitch(inherit all properties of vswitch to portgroup)
      H. Add TCP/IP stack (vmotion, provisioning etc.)
-     I. L3 vMotion gateway (requires hostname resolution)
-     J. LoadBalanceIP
-     K. LoadBalanceSrcMac
-     L. LoadBalanceSrcId
-     M. ExplicitFailover 
-     N. L3 vmotion portgroup
+     I. LoadBalanceIP
+     J. LoadBalanceSrcMac
+     K. LoadBalanceSrcId
+     L. ExplicitFailover
+     M. L3 vmotion portgroup 
      " #options to choose from...
 
      Write-Host "
@@ -29,7 +31,7 @@ Function PgMenu
 
      $user   = [Environment]::UserName
      $choice = Read-Host "choose one of the above"  # Get user's entry
-     $ok     = $choice -match '^[abcdefghijklmxyz]+$'
+     $ok     = $choice -match '^[abcdefghijklmnxyz]+$'
      if ( -not $ok) { write-host "Invalid selection" -BackgroundColor Red }
     } until ( $ok )
     switch -Regex ($choice) 
@@ -42,12 +44,11 @@ Function PgMenu
      "F" { ShootVmkPg }
      "G" { PgSync }
      "H" { PgTcpIpStack }
-     "I" { L3VmotionGateway }
-     "J" { Pglbip }
-     "K" { Pglbsm }
-     "L" { Pglbsi }
-     "M" { Pgef }  
-     "N" { l3vmotion }   
+     "I" { Pglbip }
+     "J" { Pglbsm }
+     "K" { Pglbsi }
+     "L" { Pgef }
+     "M" { l3vmotion2 }   
         
      "X" { VssMenu }
      "Y" { MainMenu }      

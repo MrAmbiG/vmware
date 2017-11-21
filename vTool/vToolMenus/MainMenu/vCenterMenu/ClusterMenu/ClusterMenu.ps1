@@ -1,9 +1,11 @@
-﻿
-#Start of ClusterMenu
+﻿#Start of ClusterMenu
 function ClusterMenu
 {
  do {
  do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'
      Write-Host "Make sure you are connected to a vCenter" -ForegroundColor Yellow
      Write-Host "`nClusterMenu" -BackgroundColor White -ForegroundColor Black
      Write-Host "

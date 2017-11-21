@@ -2,7 +2,10 @@
 function NicMenu
 {
  do {
- do {     
+ do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'    
      Write-Host "`NicMenu" -BackgroundColor White -ForegroundColor Black
      Write-Host "
      A. vSwitch

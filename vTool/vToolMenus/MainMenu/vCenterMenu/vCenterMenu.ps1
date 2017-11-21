@@ -1,9 +1,11 @@
-﻿
-#Start of vCenterMenu
+﻿#Start of vCenterMenu
 function vCenterMenu
 {
  do {
  do {
+     write-Host -BackgroundColor Black -ForegroundColor White '
+     to offer suggestions, collaborate, please contact
+     twitter.com/@MrAmbiG1'
      Write-Host "Make sure you are connected to a vCenter" -ForegroundColor Yellow
      Write-Host "`nvCenterMenu" -BackgroundColor White -ForegroundColor Black
      Write-Host "
@@ -26,7 +28,7 @@ function vCenterMenu
     "B" { HostMenu }
     "C" { VssMenu }
     "D" { vdsMenu }
-    "Y" { MainMenu }
+    "Y" { HostMenu }
     }
     } until ( $choice -match "Z" )
 }
