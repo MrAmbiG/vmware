@@ -11,7 +11,7 @@ function MainMenu
      Write-Host "
      A. vCenter
      B. Standalone Hosts
-     C. Update vTool
+     C. Check vTool update
      D. Give inputs to author
      " #options to choose from...
 
@@ -27,7 +27,7 @@ function MainMenu
     {
     "A" { vCenterMenu }
     "B" { StandHostsMenu }
-    "C" { start-process "github.com/MrAmbiG/vmware/tree/master/vTool" }
+    "C" { vToolVerCheck }
     "D" { start-process "http://twitter.com/mrambig1"
           start-process "http://linkedin.com/in/mrambig/" }
     }
