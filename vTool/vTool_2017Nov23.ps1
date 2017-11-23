@@ -4634,7 +4634,7 @@ Function VssMenu
     } until ( $choice -match "Z" )
 } #End of VssMenu
 
-#Start of MainMenu
+# Start of MainMenu
 function MainMenu
 {
  do {
@@ -4670,7 +4670,7 @@ function MainMenu
     } until ( $choice -match "Z" )
     #if ($choice -eq "z") { exit }
 }
-#end of MainMenu
+# end of MainMenu
 
 #Start of DrsRulesMenu
 function DrsRulesMenu
