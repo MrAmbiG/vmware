@@ -10,6 +10,13 @@ vTool is a handy multi automation tool for VMware administrators and those who d
   - Add datastores
   - Highly scalable. you can add your own functions and menu entry for that
 
+>**How to update?**
+
+- Click the filename
+- click raw
+- copy paste the entire content of webpage to a .ps1 file
+- [optional] Try to keep the name of your vtool with the one which is online
+
 > **vCenter Automation:**
 
     -create cluster
